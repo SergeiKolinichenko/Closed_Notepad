@@ -7,11 +7,11 @@ interface NoteRepository {
 
     fun getListNote(): List<NoteEntry>
 
-    fun getNoteEntry(timeStamp: Int): NoteEntry
+    fun getNoteEntry(timeStamp: Long): NoteEntry
 
     fun addEntryToNote(noteEntry: NoteEntry)
 
-    fun editEntryAtNote(noteEntry: NoteEntry): NoteEntry
+    fun editEntryAtNote(noteEntry: NoteEntry)
 
     fun removeEntryFromNote(noteEntry: NoteEntry): TrashEntry
 

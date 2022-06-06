@@ -5,7 +5,7 @@ import info.sergeikolinichenko.closednotepad.repository.NoteRepository
 
 class GetNoteEntryUseCase(private val noteRepository: NoteRepository) {
 
-    operator fun invoke(timeStamp: Int): NoteEntry {
+    operator fun invoke(timeStamp: Long): NoteEntry {
         return noteRepository.getNoteEntry(timeStamp)
     }
 }
