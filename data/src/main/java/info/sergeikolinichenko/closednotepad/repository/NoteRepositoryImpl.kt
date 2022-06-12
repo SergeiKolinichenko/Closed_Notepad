@@ -1,7 +1,10 @@
 package info.sergeikolinichenko.closednotepad.repository
 
+import android.graphics.Color
+import android.util.Log
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.models.TrashEntry
+import info.sergeikolinichenko.data.R
 import java.util.*
 
 object NoteRepositoryImpl : NoteRepository {
@@ -9,21 +12,32 @@ object NoteRepositoryImpl : NoteRepository {
     private val noteList = mutableListOf<NoteEntry>()
 
     init {
-        for (element in 1..20) {
+        for (element in 1..200) {
             val timeStamp = Date().time
             val titleEntry = "My Title $element"
             val itselfEntry = "This is itself entry $element and itself entry $element too"
-            val colorIndex = Random().nextInt(256)
+            val colorIndex = getRandomColor()
+            val isLocked = Random().nextBoolean()
             noteList.add(
                 NoteEntry(
                     timeStamp,
                     timeStamp,
-                    timeStamp,
                     titleEntry,
                     itselfEntry,
-                    colorIndex
+                    colorIndex,
+                    isLocked
                 ))
         }
+    }
+
+    private fun getRandomColor(): Int {
+        val listColor = mutableListOf<Int>()
+        listColor.add(Color.RED)
+        listColor.add(Color.BLUE)
+        listColor.add(Color.CYAN)
+        listColor.add(Color.GREEN)
+        listColor.add(Color.MAGENTA)
+        return listColor[Random().nextInt(listColor.size)]
     }
 
     override fun getListNote(): List<NoteEntry> {

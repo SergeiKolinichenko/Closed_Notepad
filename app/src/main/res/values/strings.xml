@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Closed Notepad</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="remove_entry_from_note">Remove</string>
+    <string name="add_entry_in_note">Add</string>
+    <string name="settings_note">Settings</string>
+    <string name="title_note_list">Notepad</string>
 </resources>

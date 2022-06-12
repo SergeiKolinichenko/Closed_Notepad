@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/remove_entry"
+        android:icon="@drawable/outline_delete_outline_24"
+        android:title="@string/remove_entry_from_note"/>
+    <item
+        android:id="@+id/add_entry"
+        android:icon="@drawable/outline_add_24"
+        android:title="@string/add_entry_in_note"/>
+    <item
+        android:id="@+id/open_cog"
+        android:icon="@drawable/cog_outline"
+        android:title="@string/settings_note"/>
+</menu>
