@@ -1,9 +1,12 @@
 <resources>
-    <string name="app_name">Closed Notepad</string>
+    <string name="app_name">Very simple notepad</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="test_text_view">Test TextView</string>
     <string name="remove_entry_from_note">Remove</string>
     <string name="add_entry_in_note">Add</string>
     <string name="settings_note">Settings</string>
     <string name="title_note_list">Notepad</string>
+    <string name="confirm_deletion_entries">Confirm deletion of selected entries</string>
+    <string name="confirm_deletion_entry">Confirm deletion of selected entry </string>
+    <string name="snack_bar_note_list">Delete</string>
 </resources>

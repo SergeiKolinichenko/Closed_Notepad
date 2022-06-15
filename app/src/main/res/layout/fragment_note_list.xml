@@ -1,45 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tool_bar"
+        android:id="@+id/tool_bar_note_list"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="top"
-        android:layout_marginTop="2dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="4dp"
-        android:contextClickable="false"
         android:background="?android:attr/colorPrimary"
+        android:contextClickable="false"
         android:foregroundTint="@color/black"
         app:contentInsetEnd="4dp"
-        app:contentInsetStart="15dp" />
+        app:contentInsetStart="15dp">
+
+        <TextView
+            android:id="@+id/tv_toolbar_note_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:text="@string/title_note_list"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:paddingBottom="4dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
         android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/note_list_fragment_item" />
+        tools:listitem="@layout/note_list_item" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
+        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="bottom"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="2dp"
-        app:menu="@menu/bottom_navigation_menu"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"/>
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

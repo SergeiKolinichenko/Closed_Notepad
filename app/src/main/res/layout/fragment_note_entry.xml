@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tool_bar_note_list"
+        android:id="@+id/tool_bar_note_entry"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="top"
@@ -18,19 +17,22 @@
         android:background="?android:attr/colorPrimary"
         android:foregroundTint="@color/black"
         app:contentInsetEnd="4dp"
-        app:contentInsetStart="15dp" />
+        app:contentInsetStart="15dp">
+        <TextView
+            android:id="@+id/tv_toolbar_note_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_itself_entry_note"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_marginTop="?android:attr/actionBarSize"
         android:paddingBottom="4dp"
-        android:paddingTop="4dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/note_list_item" />
+        android:paddingTop="4dp" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation_view"

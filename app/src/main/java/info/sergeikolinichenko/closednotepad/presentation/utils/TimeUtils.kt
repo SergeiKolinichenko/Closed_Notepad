@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.utils
+package info.sergeikolinichenko.closednotepad.presentation.utils
 
 import java.text.SimpleDateFormat
 import java.util.*

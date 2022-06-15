@@ -1,43 +1,36 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
-import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
+import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
-import java.util.concurrent.TimeoutException
 
 class NoteListFragment : Fragment() {
 
-    private val toolbar by lazy {binding.toolBar }
-
-    private val viewModel by lazy {ViewModelProvider(this)[ViewModelNoteList::class.java]}
+    private val viewModel by lazy { ViewModelProvider(this)[ViewModelNoteList::class.java] }
     private val adapterNoteList by lazy { NoteListAdapter() }
 
     private var _binding: FragmentNoteListBinding? = null
     private val binding: FragmentNoteListBinding
-    get() = _binding ?: throw RuntimeException("FragmentNoteListBinding equals null")
+        get() = _binding ?: throw RuntimeException("FragmentNoteListBinding equals null")
 
-    // screen mode, title, detail, square or big square
-    private var screenMode: Int? = null
+    // field indicating whether the RecyclerView has selected elements
+    private var isSelectedEntries = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            screenMode = it.getInt(SCREEN_NODE)
-        }
-    }
+    private val toolbar by lazy { binding.toolBarNoteList }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,10 +44,10 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initToolbar()
+        initBottomNavigationView()
         initRecyclerView()
-        initEntryClickListener()
+        initEntryClickListeners()
         initNoteList()
     }
 
@@ -71,57 +64,79 @@ class NoteListFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        toolbar.setTitleTextColor(Color.WHITE)
-        toolbar.title = getString(R.string.title_note_list)
+        var isLightTheme = true
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> isLightTheme = true
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> isLightTheme = true
+            Configuration.UI_MODE_NIGHT_YES -> isLightTheme = false
+        }
+        if (isLightTheme) {
+            binding.tvToolbarNoteList?.setTextColor(Color.WHITE)
+        } else {
+            binding.tvToolbarNoteList?.setTextColor(Color.BLACK)
+        }
+    }
+
+    private fun initBottomNavigationView() {
+        binding.bottomNavigationView.selectedItemId = R.id.add_entry
+        binding.bottomNavigationView.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.remove_entries -> {
+                    removeEntriesFromNote()
+                }
+                R.id.add_entry -> true
+                R.id.open_cog -> true
+            }
+            return@setOnItemSelectedListener false
+        }
+    }
+
+    // Delete selected items from collections
+    private fun removeEntriesFromNote() {
+        if (isSelectedEntries) {
+            val snackBar = Snackbar.make(
+                requireActivity().findViewById(R.id.main_container),
+                resources.getString(R.string.confirm_deletion_entries),
+                Snackbar.LENGTH_LONG
+            )
+            snackBar.setAction(R.string.snack_bar_note_list) {
+                viewModel.removeEntriesFromNote()
+            }
+            snackBar.show()
+        }
     }
 
     private fun initRecyclerView() {
         val noteListRecyclerView: RecyclerView = binding.recyclerView
-        initItemTouchHelper(noteListRecyclerView)
-        with(noteListRecyclerView){
+        with(noteListRecyclerView) {
             adapter = adapterNoteList
         }
     }
 
-    private fun initEntryClickListener() {
+    private fun initEntryClickListeners() {
+        // Get an indicator whether there are selected elements collections
+        viewModel.isSelected.observe(viewLifecycleOwner) {
+            isSelectedEntries = it
+        }
         adapterNoteList.onEntryClick = {
-            Toast.makeText(requireContext(), "onEntryClickListener ${it.itselfEntry}", Toast.LENGTH_SHORT).show()
+            if (!isSelectedEntries) {
+                // Go to NoteEntryFragment
+                launchNoteEntryFragment()
+            } else{
+                // Deselecting elements collections
+                viewModel.resSelEntriesAtNote(it)
+            }
+        }
+        adapterNoteList.onEntryLongClick = {
+            // Selecting elements collections
+            viewModel.selectEntriesAtNote(it)
         }
     }
 
-    private fun initItemTouchHelper(recyclerView: RecyclerView) {
-        val callBack = object: ItemTouchHelper.SimpleCallback(
-            0,
-            ItemTouchHelper.END or ItemTouchHelper.START
-        ) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                //Log.d("MyLog", "direction = $direction")
-                //Log.d("MyLog", "position = ${viewHolder.layoutPosition}")
-                val item = adapterNoteList.currentList[viewHolder.adapterPosition]
-                viewModel.removeEntryFromNote(item)
-            }
-        }
-        val itemTouchHelper = ItemTouchHelper(callBack)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
-
-    companion object {
-        const val SCREEN_MODE_TITLE = 0
-        private const val SCREEN_NODE = "screen_mode"
-        @JvmStatic
-        fun newInstance() =
-            NoteListFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(SCREEN_NODE, SCREEN_MODE_TITLE)
-                }
-            }
+    private fun launchNoteEntryFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, NoteEntryFragment.newInstance("", ""))
+            .addToBackStack(null)
+            .commit()
     }
 }
