@@ -40,6 +40,12 @@ class ViewModelNoteList: ViewModel() {
         getNoteList()
     }
 
+    fun resSelEntriesAtNote() {
+        resSelEntriesNoteUseCase.invoke()
+        _isSelected.value = false
+        getNoteList()
+    }
+
     fun resSelEntriesAtNote(noteEntry: NoteEntry) {
         if (noteEntry.isSelected) {
             resSelEntriesNoteUseCase.invoke()

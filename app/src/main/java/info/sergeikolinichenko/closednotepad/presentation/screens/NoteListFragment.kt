@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.navigation.NavigationBarView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
-import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
 
@@ -80,7 +78,7 @@ class NoteListFragment : Fragment() {
     private fun initBottomNavigationView() {
         binding.bottomNavigationView.selectedItemId = R.id.add_entry
         binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId) {
+            when (it.itemId) {
                 R.id.remove_entries -> {
                     removeEntriesFromNote()
                 }
@@ -94,15 +92,21 @@ class NoteListFragment : Fragment() {
     // Delete selected items from collections
     private fun removeEntriesFromNote() {
         if (isSelectedEntries) {
-            val snackBar = Snackbar.make(
+            Snackbar.make(
                 requireActivity().findViewById(R.id.main_container),
                 resources.getString(R.string.confirm_deletion_entries),
                 Snackbar.LENGTH_LONG
             )
-            snackBar.setAction(R.string.snack_bar_note_list) {
-                viewModel.removeEntriesFromNote()
-            }
-            snackBar.show()
+                .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        super.onDismissed(transientBottomBar, event)
+                        viewModel.resSelEntriesAtNote()
+                    }
+                })
+                .setAction(R.string.snack_bar_note_list) {
+                    viewModel.removeEntriesFromNote()
+                }
+                .show()
         }
     }
 
@@ -122,7 +126,7 @@ class NoteListFragment : Fragment() {
             if (!isSelectedEntries) {
                 // Go to NoteEntryFragment
                 launchNoteEntryFragment()
-            } else{
+            } else {
                 // Deselecting elements collections
                 viewModel.resSelEntriesAtNote(it)
             }
