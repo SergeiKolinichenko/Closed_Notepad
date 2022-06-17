@@ -9,4 +9,7 @@
     <string name="confirm_deletion_entries">Confirm deletion of selected entries</string>
     <string name="confirm_deletion_entry">Confirm deletion of selected entry </string>
     <string name="snack_bar_note_list">Delete</string>
+    <string name="edit_entry">Edit</string>
+    <string name="copy_itsels_entry">Copy</string>
+    <string name="send_itself_entry">Send</string>
 </resources>

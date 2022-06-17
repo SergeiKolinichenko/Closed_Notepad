@@ -8,7 +8,7 @@ import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.repository.NoteRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.*
 
-class ViewModelNoteList: ViewModel() {
+class ViewModelNotebook: ViewModel() {
 
     private val repository = NoteRepositoryImpl
     val noteList = MutableLiveData<List<NoteEntry>>()

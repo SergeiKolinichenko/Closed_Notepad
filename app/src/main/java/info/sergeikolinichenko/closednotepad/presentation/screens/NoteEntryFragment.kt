@@ -1,52 +1,125 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import info.sergeikolinichenko.closednotepad.R
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
+import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEntryBinding
+import info.sergeikolinichenko.closednotepad.models.NoteEntry
+import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM2 = "param2"
+private const val NOTE_ENTRY = "note_entry"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [NoteEntryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NoteEntryFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var noteEntry: NoteEntry
+
+    private var _binding: FragmentNoteEntryBinding? = null
+    private val binding: FragmentNoteEntryBinding
+        get() = _binding ?: throw RuntimeException("FragmentNoteEntryBinding equals null")
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ENTRY_NOTE_TIMESTAMP)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        parseArgs()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_note_entry, container, false)
+        _binding = FragmentNoteEntryBinding
+            .inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initToolbar()
+        setEntryToViews()
+        initBackPressed()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun parseArgs() {
+        val args = requireArguments()
+        if (!args.containsKey(NOTE_ENTRY)) {
+            throw RuntimeException("Arguments don't contains note entry")
+        }
+        noteEntry = requireArguments().getSerializable(NOTE_ENTRY) as NoteEntry
+    }
+
+    private fun initToolbar() {
+        binding.toolBarNoteEntry.setBackgroundColor(noteEntry.colorIndex)
+        var isLightTheme = true
+        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
+            Configuration.UI_MODE_NIGHT_NO -> isLightTheme = true
+            Configuration.UI_MODE_NIGHT_UNDEFINED -> isLightTheme = true
+            Configuration.UI_MODE_NIGHT_YES -> isLightTheme = false
+        }
+        if (isLightTheme) {
+            binding.tvToolbarNoteEntry.setTextColor(Color.BLACK)
+            binding.ivOutlineNoteEntry.setColorFilter(Color.BLACK)
+        } else {
+            binding.tvToolbarNoteEntry.setTextColor(Color.WHITE)
+            binding.ivOutlineNoteEntry.setColorFilter(Color.WHITE)
+        }
+        binding.ivOutlineNoteEntry.setOnClickListener {
+            retryNoteEntryFragment()
+        }
+    }
+
+    private fun initBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    retryNoteEntryFragment()
+                }
+
+            }
+        )
+    }
+
+    private fun setEntryToViews() {
+        binding.cvEntryNoteTop.setCardBackgroundColor(noteEntry.colorIndex)
+        binding.cvToolbarNoteEntry.setCardBackgroundColor(noteEntry.colorIndex)
+        binding.cvFragmentNoteEntryItself.setBackgroundColor(noteEntry.colorIndex)
+        binding.tvFulldateEntry.text = TimeUtils.getFullDate(noteEntry.timeStamp)
+        binding.tvToolbarNoteEntry.text = noteEntry.titleEntry
+        binding.tvItselfEntryNote.text = noteEntry.itselfEntry
+        if (noteEntry.isLocked) {
+            binding.ivLockEntry.visibility = View.VISIBLE
+        } else {
+            binding.ivLockEntry.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun retryNoteEntryFragment() {
+        requireActivity().supportFragmentManager.popBackStack(
+            NoteListFragment.NAME,
+            0)
     }
 
     companion object {
 
-        private const val ENTRY_NOTE_TIMESTAMP = "entry_note_timestamp"
+        const val NAME = "note_entry_fragment"
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(noteEntry: NoteEntry) =
             NoteEntryFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ENTRY_NOTE_TIMESTAMP, param1)
-                    putString(ARG_PARAM2, param2)
+                    putSerializable(NOTE_ENTRY, noteEntry)
                 }
             }
     }

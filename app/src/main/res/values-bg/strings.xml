@@ -9,4 +9,7 @@
     <string name="confirm_deletion_entries">Потвърдете изтриването на избрани записи</string>
     <string name="snack_bar_note_list">Изтрий</string>
     <string name="confirm_deletion_entry">"Потвърдете изтриването на избрани запис "</string>
+    <string name="edit_entry">Редактиране</string>
+    <string name="copy_itsels_entry">Копие</string>
+    <string name="send_itself_entry">Изпратете</string>
 </resources>

@@ -1,11 +1,13 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -13,22 +15,31 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
+import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotebook
 
 class NoteListFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProvider(this)[ViewModelNoteList::class.java] }
+    private val viewModel by lazy { ViewModelProvider(this)[ViewModelNotebook::class.java] }
     private val adapterNoteList by lazy { NoteListAdapter() }
 
     private var _binding: FragmentNoteListBinding? = null
     private val binding: FragmentNoteListBinding
         get() = _binding ?: throw RuntimeException("FragmentNoteListBinding equals null")
 
-    // field indicating whether the RecyclerView has selected elements
+    private lateinit var finishApp: FinishApp
     private var isSelectedEntries = false
 
-    private val toolbar by lazy { binding.toolBarNoteList }
+    override fun onAttach(context: Context){
+        super.onAttach(context)
+        if(context is FinishApp) {
+            finishApp = context
+        } else {
+            throw RuntimeException("There is no implementation of the interface FinishApp" +
+                    " in the activity $context")
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +58,8 @@ class NoteListFragment : Fragment() {
         initRecyclerView()
         initEntryClickListeners()
         initNoteList()
+
+        initBackPressed()
     }
 
     override fun onDestroyView() {
@@ -70,8 +83,13 @@ class NoteListFragment : Fragment() {
         }
         if (isLightTheme) {
             binding.tvToolbarNoteList?.setTextColor(Color.WHITE)
+            binding.ivOutlineNoteList?.setColorFilter(Color.WHITE)
         } else {
             binding.tvToolbarNoteList?.setTextColor(Color.BLACK)
+            binding.ivOutlineNoteList?.setColorFilter(Color.BLACK)
+        }
+        binding.ivOutlineNoteList?.setOnClickListener {
+            finishApp.finishApp()
         }
     }
 
@@ -125,7 +143,7 @@ class NoteListFragment : Fragment() {
         adapterNoteList.onEntryClick = {
             if (!isSelectedEntries) {
                 // Go to NoteEntryFragment
-                launchNoteEntryFragment()
+                launchNoteEntryFragment(it)
             } else {
                 // Deselecting elements collections
                 viewModel.resSelEntriesAtNote(it)
@@ -137,10 +155,42 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    private fun launchNoteEntryFragment() {
+    private fun initBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    retryNoteListFragment()
+                }
+
+            }
+        )
+    }
+
+    private fun launchNoteEntryFragment(noteEntry: NoteEntry) {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, NoteEntryFragment.newInstance("", ""))
-            .addToBackStack(null)
+            .replace(R.id.main_container, NoteEntryFragment.newInstance(noteEntry))
+            .addToBackStack(NoteEntryFragment.NAME)
             .commit()
+    }
+
+
+    // needed to close the application on the button back
+    private fun retryNoteListFragment() {
+        requireActivity().supportFragmentManager.popBackStack(NAME, 1)
+        requireActivity().finish()
+    }
+
+    // needed to close the application
+    interface FinishApp {
+        fun finishApp()
+    }
+
+    companion object{
+
+        const val NAME = "note_list_fragment"
+
+        @JvmStatic
+        fun newInstance() = NoteListFragment()
     }
 }

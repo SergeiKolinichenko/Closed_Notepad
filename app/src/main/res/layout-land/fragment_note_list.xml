@@ -40,7 +40,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="2dp"
-        app:menu="@menu/bottom_navigation_menu"
+        app:menu="@menu/bnv_menu_note_list"
         style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

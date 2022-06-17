@@ -9,4 +9,7 @@
     <string name="confirm_deletion_entries">Подтвердите удаление выбранных записей</string>
     <string name="snack_bar_note_list">Удалить</string>
     <string name="confirm_deletion_entry">"Подтвердите удаление выбранных запись "</string>
+    <string name="edit_entry">Редактировать</string>
+    <string name="copy_itsels_entry">Копировать</string>
+    <string name="send_itself_entry">Отправить</string>
 </resources>

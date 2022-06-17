@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -19,13 +20,32 @@
         app:contentInsetEnd="4dp"
         app:contentInsetStart="15dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_outline_note_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/outline_arrow_back_ios_24"/>
+
         <TextView
             android:id="@+id/tv_toolbar_note_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:layout_marginStart="30dp"
             android:text="@string/title_note_list"/>
+        </LinearLayout>
+
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -49,6 +69,6 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="2dp"
         app:labelVisibilityMode="selected"
-        app:menu="@menu/bottom_navigation_menu" />
+        app:menu="@menu/bnv_menu_note_list" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/copy_itself_entry_note"
+        android:icon="@drawable/content_copy"
+        android:title="@string/copy_itsels_entry"/>
+    <item
+        android:id="@+id/send_itself_entry"
+        android:icon="@drawable/outline_send_24"
+        android:title="@string/send_itself_entry"/>
+    <item
+        android:id="@+id/edit_entry_note"
+        android:icon="@drawable/outline_edit_24"
+        android:title="@string/edit_entry"/>
+</menu>
