@@ -1,13 +1,9 @@
 package info.sergeikolinichenko.closednotepad.repository
 
 import android.app.Application
-import android.graphics.Color
-import android.util.Log
 import info.sergeikolinichenko.closednotepad.database.AppDatabase
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.models.TrashEntry
-import info.sergeikolinichenko.data.R
-import java.util.*
 
 class NoteRepositoryImpl(application: Application) : NoteRepository {
 
