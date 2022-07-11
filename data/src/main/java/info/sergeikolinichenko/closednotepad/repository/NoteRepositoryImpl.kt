@@ -1,70 +1,40 @@
 package info.sergeikolinichenko.closednotepad.repository
 
+import android.app.Application
 import android.graphics.Color
 import android.util.Log
+import info.sergeikolinichenko.closednotepad.database.AppDatabase
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.models.TrashEntry
 import info.sergeikolinichenko.data.R
 import java.util.*
 
-object NoteRepositoryImpl : NoteRepository {
+class NoteRepositoryImpl(application: Application) : NoteRepository {
+
+    private val noteEntriesDao = AppDatabase.getInstance(application).noteEntriesDao()
+    private val mapper = NoteEntryMapper()
 
     private val noteList =
         sortedSetOf<NoteEntry>({ o1, o2 -> o1.timeStamp.compareTo(o2.timeStamp) })
 
-    init {
-        for (element in 1..200) {
-            val timeStamp = Date().time
-            val titleEntry = "My Title $element"
-            val itselfEntry = "This is itself entry $element and itself entry $element too"
-            val colorIndex = getRandomColor()
-            val isLocked = Random().nextBoolean()
-            noteList.add(
-                NoteEntry(
-                    timeStamp,
-                    titleEntry,
-                    itselfEntry,
-                    colorIndex,
-                    isLocked,
-                    false
-                )
-            )
-            Thread.sleep(1)
-        }
-    }
-
-    private fun getRandomColor(): Int {
-        val listColor = mutableListOf<Int>()
-        listColor.add(Color.RED)
-        listColor.add(Color.BLUE)
-        listColor.add(Color.CYAN)
-        listColor.add(Color.GREEN)
-        listColor.add(Color.MAGENTA)
-        return listColor[Random().nextInt(listColor.size)]
-    }
-
     // Implementation of getting a collection of notebook entries
     override fun getListNote(): List<NoteEntry> {
-        return noteList.toList()
+        return mapper.mapListDbModelToListEntity(noteEntriesDao.getNoteList())
     }
 
     // Implementation of getting a notepad entry
     override fun getNoteEntry(timeStamp: Long): NoteEntry {
-        return noteList.find {
-            it.timeStamp == timeStamp
-        } ?: throw RuntimeException("Entry with timeStamp $timeStamp not find")
+        return mapper.mapDbModelToEntity(noteEntriesDao.getNoteEntry(timeStamp))
     }
 
     // Implementation of adding a notepad entry
     override fun addEntryToNote(noteEntry: NoteEntry) {
-        noteList.add(noteEntry)
+        noteEntriesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
     }
 
     // Implementation of editing a notepad entry
     override fun editEntryAtNote(noteEntry: NoteEntry) {
-        val oldEntry = getNoteEntry(noteEntry.timeStamp)
-        noteList.remove(oldEntry)
-        addEntryToNote(noteEntry)
+        noteEntriesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
     }
 
     // Implementation of selecting an entry in the notebook collection for further actions
@@ -84,7 +54,7 @@ object NoteRepositoryImpl : NoteRepository {
 
     // Implementation of removing note from notepad to trash
     override fun removeEntryFromNote(noteEntry: NoteEntry): TrashEntry {
-        noteList.remove(noteEntry)
+        noteEntriesDao.deleteNoteEntry(noteEntry.timeStamp)
         return TrashEntry(  // TODO() "need to rewrite it"
             0, "title", "itself", 0
         )
