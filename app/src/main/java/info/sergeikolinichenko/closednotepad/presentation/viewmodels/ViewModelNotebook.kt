@@ -23,9 +23,6 @@ class ViewModelNotebook: ViewModel() {
 
     private val getListNoteUseCase = GetListNoteUseCase(repository)
     private val removeEntryFromNoteUseCase = RemoveEntryFromNoteUseCase(repository)
-    private val removeEntriesFromNoteUseCase = RemoveEntriesFromNoteUseCase(repository)
-    private val selectEntryAtNoteUseCase = SelectEntryAtNoteUseCase(repository)
-    private val resSelEntriesNoteUseCase = ResSelEntriesNoteUseCase(repository)
 
 
     fun getNoteList() {
@@ -36,22 +33,22 @@ class ViewModelNotebook: ViewModel() {
             if (_isSelected.value == false) {
                 _isSelected.value = true
             }
-        selectEntryAtNoteUseCase.invoke(noteEntry)
+        //selectEntryAtNoteUseCase.invoke(noteEntry)
         getNoteList()
     }
 
     fun resSelEntriesAtNote() {
-        resSelEntriesNoteUseCase.invoke()
+        //resSelEntriesNoteUseCase.invoke()
         _isSelected.value = false
         getNoteList()
     }
 
     fun resSelEntriesAtNote(noteEntry: NoteEntry) {
         if (noteEntry.isSelected) {
-            resSelEntriesNoteUseCase.invoke()
+            //resSelEntriesNoteUseCase.invoke()
             _isSelected.value = false
         } else{
-            selectEntryAtNoteUseCase.invoke(noteEntry)
+            //selectEntryAtNoteUseCase.invoke(noteEntry)
         }
         getNoteList()
     }
@@ -62,7 +59,7 @@ class ViewModelNotebook: ViewModel() {
     }
 
     fun removeEntriesFromNote() {
-        removeEntriesFromNoteUseCase.invoke()
+        //removeEntriesFromNoteUseCase.invoke()
         _isSelected.value = false
         getNoteList()
     }

@@ -9,4 +9,4 @@ data class NoteEntry(
     val colorIndex: Int,
     val isLocked: Boolean,
     val isSelected: Boolean
-): Serializable
+)
