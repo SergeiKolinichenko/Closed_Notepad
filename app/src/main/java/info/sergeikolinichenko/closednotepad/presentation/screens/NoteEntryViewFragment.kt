@@ -8,16 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.FragmentManager
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEntryBinding
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
-private const val NOTE_ENTRY = "note_entry"
+private const val TIME_STAMP = "time_stamp"
 
-class NoteEntryFragment : Fragment() {
+class NoteEntryViewFragment : Fragment() {
 
     private lateinit var noteEntry: NoteEntry
+
+    private var _timeStamp: Long? = null
+    private val timeStamp: Long
+    get() = _timeStamp ?: throw RuntimeException("timeStamp equals null")
 
     private var _binding: FragmentNoteEntryBinding? = null
     private val binding: FragmentNoteEntryBinding
@@ -53,10 +56,10 @@ class NoteEntryFragment : Fragment() {
 
     private fun parseArgs() {
         val args = requireArguments()
-        if (!args.containsKey(NOTE_ENTRY)) {
-            throw RuntimeException("Arguments don't contains note entry")
+        if (!args.containsKey(TIME_STAMP)) {
+            throw RuntimeException("Arguments don't contains time_stamp")
         }
-        noteEntry = requireArguments().getSerializable(NOTE_ENTRY) as NoteEntry
+        _timeStamp = requireArguments().getLong(TIME_STAMP)
     }
 
     private fun initToolbar() {
@@ -116,10 +119,10 @@ class NoteEntryFragment : Fragment() {
         const val NAME = "note_entry_fragment"
 
         @JvmStatic
-        fun newInstance(noteEntry: NoteEntry) =
-            NoteEntryFragment().apply {
+        fun newInstance(timeStamp: Long) =
+            NoteEntryViewFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(NOTE_ENTRY, noteEntry)
+                    putLong(TIME_STAMP, timeStamp)
                 }
             }
     }

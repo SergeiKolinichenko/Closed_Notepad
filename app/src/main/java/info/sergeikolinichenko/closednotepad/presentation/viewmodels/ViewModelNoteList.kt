@@ -1,17 +1,19 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
-import info.sergeikolinichenko.closednotepad.repository.NoteRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.*
 
-class ViewModelNotebook: ViewModel() {
+class ViewModelNoteList(
+    private val getListNoteUseCase: GetListNoteUseCase,
+    private val removeEntryFromNoteUseCase: RemoveEntryFromNoteUseCase
+): ViewModel() {
 
-    private val repository = NoteRepositoryImpl
-    val noteList = MutableLiveData<List<NoteEntry>>()
+    private var _noteList = MutableLiveData<List<NoteEntry>>()
+    val noteList: LiveData<List<NoteEntry>>
+    get() = _noteList
 
     private val _isSelected = MutableLiveData(false)
     val isSelected : LiveData<Boolean>
@@ -21,12 +23,8 @@ class ViewModelNotebook: ViewModel() {
         _isSelected.value = false
     }
 
-    private val getListNoteUseCase = GetListNoteUseCase(repository)
-    private val removeEntryFromNoteUseCase = RemoveEntryFromNoteUseCase(repository)
-
-
     fun getNoteList() {
-        noteList.value = getListNoteUseCase.invoke()
+        _noteList.value = getListNoteUseCase.invoke()
     }
 
     fun selectEntriesAtNote(noteEntry: NoteEntry) {

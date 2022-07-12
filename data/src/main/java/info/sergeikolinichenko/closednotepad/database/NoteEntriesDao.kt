@@ -1,10 +1,12 @@
 package info.sergeikolinichenko.closednotepad.database
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import info.sergeikolinichenko.closednotepad.dbmodels.NoteEntryDbModel
 
+@Dao
 interface NoteEntriesDao {
 
     @Query("SELECT * FROM note_entries")

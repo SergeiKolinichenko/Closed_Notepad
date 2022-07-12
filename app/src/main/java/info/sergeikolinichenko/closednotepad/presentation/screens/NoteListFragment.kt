@@ -17,11 +17,16 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotebook
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteListFactory
 
 class NoteListFragment : Fragment() {
 
-    private val viewModel by lazy { ViewModelProvider(this)[ViewModelNotebook::class.java] }
+    private val viewModelFactory by lazy {
+        ViewModelNoteListFactory(requireActivity().application)
+    }
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ViewModelNoteList::class.java] }
     private val adapterNoteList by lazy { NoteListAdapter() }
 
     private var _binding: FragmentNoteListBinding? = null
@@ -58,7 +63,6 @@ class NoteListFragment : Fragment() {
         initRecyclerView()
         initEntryClickListeners()
         initNoteList()
-
         initBackPressed()
     }
 
@@ -168,9 +172,10 @@ class NoteListFragment : Fragment() {
     }
 
     private fun launchNoteEntryFragment(noteEntry: NoteEntry) {
+        val timeStamp = noteEntry.timeStamp
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, NoteEntryFragment.newInstance(noteEntry))
-            .addToBackStack(NoteEntryFragment.NAME)
+            .replace(R.id.main_container, NoteEntryViewFragment.newInstance(timeStamp))
+            .addToBackStack(NoteEntryViewFragment.NAME)
             .commit()
     }
 
