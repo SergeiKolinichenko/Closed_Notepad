@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         style="@style/MyToolbar"
         android:id="@+id/tool_bar_note_list"
         android:layout_width="match_parent"
@@ -50,7 +50,7 @@
             android:backgroundTint="?attr/colorPrimary"
             android:src="@drawable/ic_filter_variant_black_36dp"/>
 
-    </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -119,13 +119,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_plus_thick_black_48dp"
-        app:layout_anchor="@id/bab_note_list"
-
-        />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="left" />
+        app:layout_anchor="@id/bab_note_list" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

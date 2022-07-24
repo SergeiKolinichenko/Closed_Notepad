@@ -1,53 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/MyToolbar"
         android:id="@+id/tool_bar_note_list"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:layout_gravity="top"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:contextClickable="false"
         android:background="?android:attr/colorPrimary"
-        android:foregroundTint="@color/black"
         app:contentInsetEnd="4dp"
-        app:contentInsetStart="15dp" />
+        app:contentInsetStart="10dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_outline_note_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_exit_to_app_black_36dp"
+                android:tint="?attr/colorOnPrimary" />
+
+            <TextView
+                android:id="@+id/tv_toolbar_note_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="@string/title_note_list"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_note_list_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:backgroundTint="?attr/colorPrimary"
+            android:src="@drawable/ic_filter_variant_black_36dp"/>
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:paddingBottom="4dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
         android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2"
         tools:listitem="@layout/note_list_item" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bab_note_list"
+        style="@style/MyBottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
         app:fabAlignmentMode="center"
         app:fabAnimationMode="scale"
         app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+        app:hideOnScroll="true">
 
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_cog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_cog_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_palette"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="65dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_palette_grey600_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_delete_grey600_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_magnify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_magnify_black_36dp" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_note_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_plus_thick_black_48dp"
-        app:layout_anchor="@id/bab_note_list"/>
+        app:layout_anchor="@id/bab_note_list" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
