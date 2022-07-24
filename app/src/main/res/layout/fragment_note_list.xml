@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
+        style="@style/MyToolbar"
         android:id="@+id/tool_bar_note_list"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:layout_gravity="top"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="4dp"
         android:background="?android:attr/colorPrimary"
-        android:contextClickable="false"
-        android:foregroundTint="@color/black"
         app:contentInsetEnd="4dp"
-        app:contentInsetStart="15dp">
+        app:contentInsetStart="10dp">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_outline_note_list"
@@ -34,17 +28,27 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/outline_arrow_back_ios_24"/>
+                android:src="@drawable/ic_exit_to_app_black_36dp"
+                android:tint="?attr/colorOnPrimary" />
 
-        <TextView
-            android:id="@+id/tv_toolbar_note_list"
+            <TextView
+                android:id="@+id/tv_toolbar_note_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:text="@string/title_note_list"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ib_note_list_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:layout_marginStart="30dp"
-            android:text="@string/title_note_list"/>
-        </LinearLayout>
+            android:layout_gravity="end|center_vertical"
+            android:backgroundTint="?attr/colorPrimary"
+            android:src="@drawable/ic_filter_variant_black_36dp"/>
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -53,22 +57,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize"
-        android:layout_marginBottom="?android:attr/actionBarSize"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/note_list_item" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+    <com.google.android.material.bottomappbar.BottomAppBar
+        style="@style/MyBottomAppBar"
+        android:id="@+id/bab_note_list"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="2dp"
-        app:labelVisibilityMode="selected"
-        app:menu="@menu/bnv_menu_note_list" />
+        android:layout_height="wrap_content"
+        app:fabAlignmentMode="center"
+        app:fabAnimationMode="scale"
+        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+        app:hideOnScroll="true"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_cog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_cog_black_36dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_palette"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_palette_grey600_36dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="65dp"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_delete_grey600_36dp"
+                android:layout_weight="1"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_magnify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_magnify_black_36dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_note_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_plus_thick_black_48dp"
+        app:layout_anchor="@id/bab_note_list"
+
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="left" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

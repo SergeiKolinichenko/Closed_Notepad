@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,7 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
+import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteListFactory
 
@@ -26,8 +29,11 @@ class NoteListFragment : Fragment() {
         ViewModelNoteListFactory(requireActivity().application)
     }
     private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[ViewModelNoteList::class.java] }
+        ViewModelProvider(this, viewModelFactory)[ViewModelNoteList::class.java]
+    }
+
     private val adapterNoteList by lazy { NoteListAdapter() }
+    private var isNight = false
 
     private var _binding: FragmentNoteListBinding? = null
     private val binding: FragmentNoteListBinding
@@ -36,13 +42,15 @@ class NoteListFragment : Fragment() {
     private lateinit var finishApp: FinishApp
     private var isSelectedEntries = false
 
-    override fun onAttach(context: Context){
+    override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is FinishApp) {
+        if (context is FinishApp) {
             finishApp = context
         } else {
-            throw RuntimeException("There is no implementation of the interface FinishApp" +
-                    " in the activity $context")
+            throw RuntimeException(
+                "There is no implementation of the interface FinishApp" +
+                        " in the activity $context"
+            )
         }
     }
 
@@ -58,11 +66,12 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        isNightMode()
         initToolbar()
-        initBottomNavigationView()
+        initBottomAppBar()
+        initNoteList()
         initRecyclerView()
         initEntryClickListeners()
-        initNoteList()
         initBackPressed()
     }
 
@@ -79,35 +88,23 @@ class NoteListFragment : Fragment() {
     }
 
     private fun initToolbar() {
-        var isLightTheme = true
-        when (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK)) {
-            Configuration.UI_MODE_NIGHT_NO -> isLightTheme = true
-            Configuration.UI_MODE_NIGHT_UNDEFINED -> isLightTheme = true
-            Configuration.UI_MODE_NIGHT_YES -> isLightTheme = false
-        }
-        if (isLightTheme) {
-            binding.tvToolbarNoteList?.setTextColor(Color.WHITE)
-            binding.ivOutlineNoteList?.setColorFilter(Color.WHITE)
+        if (isNight){
+            binding.ibNoteListFilter?.setImageResource(R.drawable.ic_filter_variant_white_36dp)
         } else {
-            binding.tvToolbarNoteList?.setTextColor(Color.BLACK)
-            binding.ivOutlineNoteList?.setColorFilter(Color.BLACK)
+            binding.ibNoteListFilter?.setImageResource(R.drawable.ic_filter_variant_black_36dp)
         }
         binding.ivOutlineNoteList?.setOnClickListener {
             finishApp.finishApp()
         }
     }
 
-    private fun initBottomNavigationView() {
-        binding.bottomNavigationView.selectedItemId = R.id.add_entry
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.remove_entries -> {
-                    removeEntriesFromNote()
-                }
-                R.id.add_entry -> true
-                R.id.open_cog -> true
-            }
-            return@setOnItemSelectedListener false
+    private fun initBottomAppBar(){
+        if (isNight) {
+            binding.ibNoteListCog?.setImageResource(R.drawable.ic_cog_white_36dp)
+            binding.ibNoteListMagnify?.setImageResource(R.drawable.ic_magnify_white_36dp)
+        } else {
+            binding.ibNoteListCog?.setImageResource(R.drawable.ic_cog_black_36dp)
+            binding.ibNoteListMagnify?.setImageResource(R.drawable.ic_magnify_black_36dp)
         }
     }
 
@@ -134,9 +131,7 @@ class NoteListFragment : Fragment() {
 
     private fun initRecyclerView() {
         val noteListRecyclerView: RecyclerView = binding.recyclerView
-        with(noteListRecyclerView) {
-            adapter = adapterNoteList
-        }
+        noteListRecyclerView.adapter = adapterNoteList
     }
 
     private fun initEntryClickListeners() {
@@ -191,11 +186,17 @@ class NoteListFragment : Fragment() {
         fun finishApp()
     }
 
-    companion object{
+    companion object {
 
         const val NAME = "note_list_fragment"
 
         @JvmStatic
         fun newInstance() = NoteListFragment()
+    }
+
+    private fun isNightMode() {
+        isNight = (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) ==
+            Configuration.UI_MODE_NIGHT_YES)
+        adapterNoteList.isNight = isNight
     }
 }

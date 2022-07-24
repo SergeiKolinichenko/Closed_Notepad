@@ -3,27 +3,20 @@ package info.sergeikolinichenko.closednotepad.presentation.adapters.notelist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
+import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
-class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteEntryDiffCallback()) {
+class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteListDiffCallback()) {
 
     var onEntryClick: ((NoteEntry) -> Unit)? = null
     var onEntryLongClick: ((NoteEntry) -> Unit)? = null
-
-//    var noteList = listOf<NoteEntry>()
-//    set(value) {
-//        field = value
-//        notifyDataSetChanged()
-//    }
-
-    //var count = 0
+    var isNight: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
-        //Log.d("MyLog", "onCreateViewHolder ${++count}")
+
         val layoutType = when (viewType) {
             SELECTED_ENTRY -> R.layout.selected_note_list_item
             UNSELECTED_ENTRY -> R.layout.note_list_item
@@ -37,11 +30,16 @@ class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteEntryDiff
 
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         val entry = getItem(position)
+        val colorBack = if (isNight) {
+            EntriesColors.entriesColor[EntriesColors.DARK_COLOR][entry.colorIndex]
+        } else {
+            EntriesColors.entriesColor[EntriesColors.LIGHT_COLOR][entry.colorIndex]
+        }
         with(holder) {
             tvDateEntryNote.text = TimeUtils.getDate(entry.timeStamp)
             tvTimeEntryNote.text = TimeUtils.getTime(entry.timeStamp)
             tvTitleEntryNote.text = entry.titleEntry
-            cvEntryNote.setCardBackgroundColor(entry.colorIndex)
+            cvEntryNote.setBackgroundResource(colorBack)
             if (entry.isLocked) {
                 isLocked.visibility = View.VISIBLE
             } else {

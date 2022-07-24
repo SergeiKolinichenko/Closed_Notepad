@@ -1,4 +1,11 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Это новая строчка, после таго как стал зависать на компиляции, помотрим, что будет дальше
+//buildscript {
+//    dependencies {
+//        classpath 'com.google.gms:google-services:4.3.13'
+//        // other dependencies you wanna add
+//    }
+//}
 plugins {
     id 'com.android.application' version '7.2.1' apply false
     id 'com.android.library' version '7.2.1' apply false

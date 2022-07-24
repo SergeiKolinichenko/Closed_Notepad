@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:layout_gravity">top</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:contextClickable">false</item>
+    </style>
+
+    <style name="MyBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+</resources>

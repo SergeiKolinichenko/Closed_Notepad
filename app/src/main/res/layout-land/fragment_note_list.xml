@@ -32,15 +32,22 @@
         app:spanCount="2"
         tools:listitem="@layout/note_list_item" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_view"
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_list"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="2dp"
-        app:menu="@menu/bnv_menu_note_list"
-        style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"/>
+        app:fabAlignmentMode="center"
+        app:fabAnimationMode="scale"
+        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_note_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_plus_thick_black_48dp"
+        app:layout_anchor="@id/bab_note_list"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
