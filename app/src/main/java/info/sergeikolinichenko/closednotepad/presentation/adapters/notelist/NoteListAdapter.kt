@@ -3,6 +3,7 @@ package info.sergeikolinichenko.closednotepad.presentation.adapters.notelist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.ListAdapter
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
@@ -30,21 +31,23 @@ class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteListDiffC
 
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         val entry = getItem(position)
-        val colorBack = if (isNight) {
+        val colorBack = if (isNight)
             EntriesColors.entriesColor[EntriesColors.DARK_COLOR][entry.colorIndex]
-        } else {
+        else
             EntriesColors.entriesColor[EntriesColors.LIGHT_COLOR][entry.colorIndex]
-        }
+
+        val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
+        else R.drawable.ic_lock_black_36dp
+
         with(holder) {
             tvDateEntryNote.text = TimeUtils.getDate(entry.timeStamp)
             tvTimeEntryNote.text = TimeUtils.getTime(entry.timeStamp)
             tvTitleEntryNote.text = entry.titleEntry
             cvEntryNote.setBackgroundResource(colorBack)
-            if (entry.isLocked) {
-                isLocked.visibility = View.VISIBLE
-            } else {
-                isLocked.visibility = View.INVISIBLE
-            }
+            isLocked.setImageResource(imgLock)
+
+            if (entry.isLocked) isLocked.visibility = View.VISIBLE
+            else isLocked.visibility = View.INVISIBLE
 
             itemView.setOnClickListener {
                 onEntryClick?.invoke(entry)
@@ -55,6 +58,9 @@ class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteListDiffC
                 true
             }
         }
+        holder.cvEntryNote.animation = AnimationUtils.loadAnimation(
+            holder.itemView.context, R.anim.anim_note_entry
+        )
     }
 
     override fun getItemViewType(position: Int): Int {

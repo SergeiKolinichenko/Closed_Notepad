@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        style="@style/MyToolbar"
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/tool_bar_note_list"
+        style="@style/MyToolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="?android:attr/colorPrimary"
@@ -48,29 +48,29 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:backgroundTint="?attr/colorPrimary"
-            android:src="@drawable/ic_filter_variant_black_36dp"/>
+            android:src="@drawable/ic_filter_variant_black_36dp" />
 
-    </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="?android:attr/actionBarSize"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/note_list_item" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        style="@style/MyBottomAppBar"
         android:id="@+id/bab_note_list"
+        style="@style/MyBottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
         app:fabAlignmentMode="center"
         app:fabAnimationMode="scale"
         app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
-        app:hideOnScroll="true"
-        app:contentInsetEnd="5dp"
-        app:contentInsetStart="5dp">
+        app:hideOnScroll="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,34 +82,34 @@
                 android:id="@+id/ib_note_list_cog"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_cog_black_36dp"
-                android:layout_weight="1"/>
+                android:src="@drawable/ic_cog_black_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_palette"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_palette_grey600_36dp"
+                android:layout_marginEnd="65dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="65dp"/>
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_palette_grey600_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_delete_grey600_36dp"
-                android:layout_weight="1"/>
+                android:src="@drawable/ic_delete_grey600_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_magnify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_magnify_black_36dp"
-                android:layout_weight="1"/>
+                android:src="@drawable/ic_magnify_black_36dp" />
         </LinearLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -118,6 +118,8 @@
         android:id="@+id/fab_add_note_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="?attr/colorSecondary"
+        android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_plus_thick_black_48dp"
         app:layout_anchor="@id/bab_note_list" />
 

@@ -1,137 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/cl_note_entry_view"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        style="@style/MyToolbar"
-        android:id="@+id/tool_bar_note_entry_view"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:background="?android:attr/colorPrimary"
-        android:backgroundTint="@android:color/darker_gray"
-        android:backgroundTintMode="multiply"
-        android:contextClickable="false"
-        app:contentInsetEnd="4dp"
-        app:contentInsetStart="4dp">
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_toolbar_note_entry_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTintMode="add"
-            android:elevation="5dp"
-            app:cardCornerRadius="5dp"
-            app:cardUseCompatPadding="true">
-
-            <TextView
-                android:id="@+id/tv_toolbar_note_entry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textStyle="bold" />
-        </com.google.android.material.card.MaterialCardView>
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_note_entry_itself"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="?android:attr/actionBarSize"
-        android:background="@android:color/transparent"
-        android:orientation="vertical">
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cv_note_entry_itself"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:elevation="5dp"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
-            app:layout_anchor="@id/tool_bar_note_entry_view"
-            app:layout_anchorGravity="bottom|center_horizontal">
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_toolbar_note_entry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent"
-                android:orientation="vertical">
+                android:layout_height="5dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="?android:attr/colorPrimary" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_entry_note_view"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_note_entry_view_date_lock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:backgroundTint="@android:color/darker_gray"
-                    android:backgroundTintMode="screen"
-                    android:elevation="5dp"
-                    app:cardCornerRadius="5dp">
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_fulldate_entry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="start|center_vertical"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"
+                        tools:text="13.10.1961 23:23" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_lock_entry_note_view"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/ic_lock_black_36dp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_entry_note_itself"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fillViewport="true"
+                    android:scrollbars="vertical">
+
+                    <view
+                        android:id="@+id/tv_itself_entry_note"
+                        class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:background="@android:color/transparent"
-                        android:orientation="horizontal">
+                        android:textSize="24sp" />
+                </ScrollView>
+            </com.google.android.material.card.MaterialCardView>
 
-                        <TextView
-                            android:id="@+id/tv_fulldate_entry"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="4dp"
-                            android:layout_marginBottom="4dp"
-                            android:gravity="start|center_vertical"
-                            android:textSize="18sp"
-                            android:textStyle="bold|italic"
-                            tools:text="13.10.1961 23:23" />
-
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/iv_lock_entry"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="4dp"
-                            android:scaleType="fitEnd"
-                            android:src="@drawable/ic_lock_black_36dp"
-                            android:visibility="visible" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/tv_itself_entry_note"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="4dp"
-                    android:textSize="24sp" />
-
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        style="@style/MyBottomAppBar"
         android:id="@+id/bab_note_entry_view"
+        style="@style/MyBottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
         app:fabAlignmentMode="end"
         app:fabAnimationMode="scale"
         app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
-        app:hideOnScroll="true"
-        app:contentInsetEnd="5dp"
-        app:contentInsetStart="5dp">
+        app:hideOnScroll="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -143,34 +137,34 @@
                 android:id="@+id/ib_note_entry_view_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_delete_black_36dp"
-                android:layout_weight="1"/>
+                android:src="@drawable/ic_delete_black_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_entry_view_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_send_black_36dp"
-                android:layout_weight="1" />
+                android:src="@drawable/ic_send_black_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_entry_view_copy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_content_copy_black_36dp"
-                android:layout_weight="1"/>
+                android:src="@drawable/ic_content_copy_black_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_entry_view_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_application_edit_outline_black_36dp"
+                android:layout_marginEnd="100dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="100dp"/>
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_application_edit_outline_black_36dp" />
         </LinearLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -179,6 +173,7 @@
         android:id="@+id/fab_note_entry_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         app:layout_anchor="@id/bab_note_entry_view" />
 
@@ -186,17 +181,19 @@
         android:id="@+id/fab_note_entry_view_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        android:visibility="invisible"
         app:layout_anchor="@id/fab_note_entry_view"
-        app:layout_anchorGravity="center"/>
+        app:layout_anchorGravity="center" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_note_entry_view_not_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        android:visibility="invisible"
         app:layout_anchor="@id/fab_note_entry_view"
         app:layout_anchorGravity="center" />
 

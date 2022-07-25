@@ -169,6 +169,10 @@ class NoteListFragment : Fragment() {
     private fun launchNoteEntryFragment(noteEntry: NoteEntry) {
         val timeStamp = noteEntry.timeStamp
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_right, R.anim.exit_to_left,
+                R.anim.enter_from_left, R.anim.exit_to_right
+            )
             .replace(R.id.main_container, NoteEntryViewFragment.newInstance(timeStamp))
             .addToBackStack(NoteEntryViewFragment.NAME)
             .commit()
@@ -179,6 +183,12 @@ class NoteListFragment : Fragment() {
     private fun retryNoteListFragment() {
         requireActivity().supportFragmentManager.popBackStack(NAME, 1)
         requireActivity().finish()
+    }
+
+    private fun isNightMode() {
+        isNight = (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) ==
+                Configuration.UI_MODE_NIGHT_YES)
+        adapterNoteList.isNight = isNight
     }
 
     // needed to close the application
@@ -194,9 +204,4 @@ class NoteListFragment : Fragment() {
         fun newInstance() = NoteListFragment()
     }
 
-    private fun isNightMode() {
-        isNight = (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) ==
-            Configuration.UI_MODE_NIGHT_YES)
-        adapterNoteList.isNight = isNight
-    }
 }
