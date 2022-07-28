@@ -6,7 +6,16 @@ object EntriesColors {
     
     const val LIGHT_COLOR = 0
     const val DARK_COLOR = 1
-    
+
+    const val PINK = 0
+    const val PURPLE = 1
+    const val INDIGO = 2
+    const val GREEN = 3
+    const val ORANGE = 4
+    const val BROWN = 5
+    const val GRAY = 6
+    const val BLUE_GRAY = 7
+
     
     val entriesColor = arrayOf(
         intArrayOf(

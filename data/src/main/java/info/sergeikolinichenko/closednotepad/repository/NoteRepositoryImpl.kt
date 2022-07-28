@@ -1,6 +1,9 @@
 package info.sergeikolinichenko.closednotepad.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import info.sergeikolinichenko.closednotepad.database.AppDatabase
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
 import info.sergeikolinichenko.closednotepad.models.TrashEntry
@@ -9,9 +12,6 @@ class NoteRepositoryImpl(application: Application) : NoteRepository {
 
     private val noteEntriesDao = AppDatabase.getInstance(application).noteEntriesDao()
     private val mapper = NoteEntryMapper()
-
-//    private val noteList =
-//        sortedSetOf<NoteEntry>({ o1, o2 -> o1.timeStamp.compareTo(o2.timeStamp) })
 
     // Implementation of getting a collection of notebook entries
     override fun getListNote(): List<NoteEntry> {

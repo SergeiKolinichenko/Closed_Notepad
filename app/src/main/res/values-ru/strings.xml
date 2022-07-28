@@ -12,4 +12,12 @@
     <string name="edit_entry">Редактировать</string>
     <string name="copy_itsels_entry">Копировать</string>
     <string name="send_itself_entry">Отправить</string>
+    <string name="entry_color_pink">Розовый</string>
+    <string name="entry_color_purple">Пурпурный</string>
+    <string name="entry_color_indigo">Индиго</string>
+    <string name="entry_color_green">Зеленый</string>
+    <string name="entry_color_orange">Оранжевый</string>
+    <string name="entry_color_brown">Коричневый</string>
+    <string name="entry_color_gray">Серый</string>
+    <string name="entry_color_blue_gray">" Серо-голубой"</string>
 </resources>

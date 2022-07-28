@@ -12,4 +12,12 @@
     <string name="edit_entry">Редактиране</string>
     <string name="copy_itsels_entry">Копие</string>
     <string name="send_itself_entry">Изпратете</string>
+    <string name="entry_color_pink">Розово</string>
+    <string name="entry_color_purple">Лилаво</string>
+    <string name="entry_color_indigo">Индиго</string>
+    <string name="entry_color_green">Зелено</string>
+    <string name="entry_color_orange">Портокал</string>
+    <string name="entry_color_brown">Кафяво</string>
+    <string name="entry_color_gray">Сив</string>
+    <string name="entry_color_blue_gray">Сиво-синьо</string>
 </resources>

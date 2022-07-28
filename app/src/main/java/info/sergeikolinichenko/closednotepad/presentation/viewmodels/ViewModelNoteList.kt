@@ -1,30 +1,40 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import info.sergeikolinichenko.closednotepad.models.NoteEntry
-import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddEntryToNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.notepad.EditEntryAtNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveEntryFromNoteUseCase
 import java.util.*
-import kotlin.random.Random
 
 class ViewModelNoteList(
     private val getListNoteUseCase: GetListNoteUseCase,
     private val removeEntryFromNoteUseCase: RemoveEntryFromNoteUseCase,
+    private val editEntryAtNoteUseCase: EditEntryAtNoteUseCase,
     private val addEntryToNoteUseCase: AddEntryToNoteUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private var _noteList = MutableLiveData<List<NoteEntry>>()
     val noteList: LiveData<List<NoteEntry>>
-    get() = _noteList
+        get() = _noteList
+
 
     private val _isSelected = MutableLiveData(false)
-    val isSelected : LiveData<Boolean>
+    val isSelected: LiveData<Boolean>
         get() = _isSelected
+
+    private val _colorIndex = MutableLiveData<Int>()
+    val colorIndex: LiveData<Int>
+    get() = _colorIndex
+
+    private lateinit var sortedSet: SortedSet<NoteEntry>
+    private val selectedNoteEntries = mutableListOf<NoteEntry>()
+
+    init {
+        sortedSet = getSortedTimeStampList()
+    }
+
 
 //    init {
 //        _isSelected.value = false
@@ -45,41 +55,67 @@ class ViewModelNoteList(
 //    }
 
     fun getNoteList() {
-        _noteList.value = getListNoteUseCase.invoke()
+        sortedSet.addAll(getListNoteUseCase.invoke())
+        updateNoteList()
     }
 
     fun selectEntriesAtNote(noteEntry: NoteEntry) {
-            if (_isSelected.value == false) {
-                _isSelected.value = true
-            }
-        //selectEntryAtNoteUseCase.invoke(noteEntry)
-        getNoteList()
-    }
-
-    fun resSelEntriesAtNote() {
-        //resSelEntriesNoteUseCase.invoke()
-        _isSelected.value = false
-        getNoteList()
-    }
-
-    fun resSelEntriesAtNote(noteEntry: NoteEntry) {
-        if (noteEntry.isSelected) {
-            //resSelEntriesNoteUseCase.invoke()
-            _isSelected.value = false
-        } else{
-            //selectEntryAtNoteUseCase.invoke(noteEntry)
+        if (isSelected.value == false) {
+            _isSelected.value = true
         }
-        getNoteList()
+        if (selectedNoteEntries.contains(noteEntry)) {
+            resetSelectedEntries()
+        } else {
+            val newItem = noteEntry.copy(isSelected = !noteEntry.isSelected)
+            selectedNoteEntries.add(newItem)
+            sortedSet.remove(noteEntry)
+            sortedSet.add(newItem)
+            updateNoteList()
+        }
     }
 
-    fun removeEntryFromNote(noteEntry: NoteEntry) {
-        removeEntryFromNoteUseCase.invoke(noteEntry)
-        getNoteList()
+    fun resetSelectedEntries() {
+        for (item in selectedNoteEntries) {
+            val newItem = item.copy(isSelected = !item.isSelected)
+            sortedSet.remove(item)
+            sortedSet.add(newItem)
+        }
+        clearSelectedNoteEntries()
     }
 
     fun removeEntriesFromNote() {
-        //removeEntriesFromNoteUseCase.invoke()
+        for (item in selectedNoteEntries) {
+            removeEntryFromNoteUseCase.invoke(item)
+            sortedSet.remove(item)
+        }
+        clearSelectedNoteEntries()
+    }
+
+    fun setColorIndex(colorIndex: Int) {
+        _colorIndex.value = colorIndex
+        for (item in selectedNoteEntries) {
+            val newItem = item.copy(colorIndex = colorIndex, isSelected = !item.isSelected)
+            editEntryAtNoteUseCase.invoke(newItem)
+            sortedSet.remove(item)
+            sortedSet.add(newItem)
+        }
+        clearSelectedNoteEntries()
+    }
+
+    private fun clearSelectedNoteEntries() {
+        selectedNoteEntries.clear()
         _isSelected.value = false
-        getNoteList()
+        updateNoteList()
+    }
+
+    private fun getSortedTimeStampList(): SortedSet<NoteEntry> {
+        return sortedSetOf<NoteEntry>(
+            { i1, i2 -> i1.timeStamp.compareTo(i2.timeStamp) }
+        )
+    }
+
+
+    private fun updateNoteList() {
+        _noteList.value = sortedSet.toList()
     }
 }
