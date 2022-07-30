@@ -1,48 +1,42 @@
 package info.sergeikolinichenko.closednotepad.repository
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import info.sergeikolinichenko.closednotepad.database.AppDatabase
-import info.sergeikolinichenko.closednotepad.models.NoteEntry
-import info.sergeikolinichenko.closednotepad.models.TrashEntry
+import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.models.RemovedNote
 
-class NoteRepositoryImpl(application: Application) : NoteRepository {
+class NoteRepositoryImpl(application: Application) : NotesRepository {
 
     private val noteEntriesDao = AppDatabase.getInstance(application).noteEntriesDao()
-    private val mapper = NoteEntryMapper()
+    private val mapper = NoteMapper()
 
     // Implementation of getting a collection of notebook entries
-    override fun getListNote(): List<NoteEntry> {
+    override suspend fun getListNotes(): List<Note> {
         return mapper.mapListDbModelToListEntity(noteEntriesDao.getNoteList())
     }
 
     // Implementation of getting a notepad entry
-    override fun getNoteEntry(timeStamp: Long): NoteEntry {
+    override suspend fun getNote(timeStamp: Long): Note {
         return mapper.mapDbModelToEntity(noteEntriesDao.getNoteEntry(timeStamp))
     }
 
     // Implementation of adding a notepad entry
-    override fun addEntryToNote(noteEntry: NoteEntry) {
+    override suspend fun addNote(noteEntry: Note) {
         noteEntriesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
     }
 
     // Implementation of editing a notepad entry
-    override fun editEntryAtNote(noteEntry: NoteEntry) {
+    override suspend fun editNote(noteEntry: Note) {
         noteEntriesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
     }
 
     // Implementation of removing note from notepad to trash
-    override fun removeEntryFromNote(noteEntry: NoteEntry): TrashEntry {
+    override suspend fun removeNote(noteEntry: Note) {
         noteEntriesDao.deleteNoteEntry(noteEntry.timeStamp)
-        return TrashEntry(  // TODO() "need to rewrite it"
-            0, "title", "itself", 0
-        )
     }
 
     // Implementation of searching for a required note in a notebook
-    override fun searchEntryAtNote(str: String): List<NoteEntry> {
+    override suspend fun searchNote(str: String): List<Note> {
         TODO("Not yet implemented")
     }
 }

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_note_entry_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_note_entry_edit_itself"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="?android:attr/actionBarSize"
+        android:elevation="5dp"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_title_note_entry_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_note_entry_edit_date_lock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_fulldate_entry_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:gravity="start|center_vertical"
+                        android:textSize="18sp"
+                        android:textStyle="bold|italic"
+                        tools:text="13.10.1961 23:23" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_lock_entry_note_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="4dp"
+                        android:scaleType="fitEnd"
+                        android:src="@drawable/ic_lock_black_36dp"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_entry_note_edit_itself"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_itself_note_entry_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@android:color/transparent"
+                    android:textSize="24sp" />
+
+                <view
+                    android:id="@+id/tv_itself_note_entry_edit"
+                    class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="4dp"
+                    android:background="@android:color/transparent"
+                    android:textSize="24sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_entry_edit"
+        style="@style/MyBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
+        app:fabAlignmentMode="end"
+        app:fabAnimationMode="scale"
+        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+        app:hideOnScroll="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_entry_edit_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_content_copy_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_entry_edit_pallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_palette_black_36dp" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_entry_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondary"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        app:layout_anchor="@id/bab_note_entry_edit" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_entry_edit_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondary"
+        android:src="@drawable/ic_content_save_off_black_48dp"
+        android:visibility="invisible"
+        android:clickable="false"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_entry_edit_not_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondary"
+        android:src="@drawable/ic_content_save_black_48dp"
+        android:clickable="false"
+        android:visibility="invisible"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

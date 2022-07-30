@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -19,7 +18,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
-import info.sergeikolinichenko.closednotepad.models.NoteEntry
+import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
@@ -302,7 +301,7 @@ class NoteListFragment : Fragment() {
 //        }
     }
 
-    private fun launchNoteEntryFragment(noteEntry: NoteEntry) {
+    private fun launchNoteEntryFragment(noteEntry: Note) {
         val timeStamp = noteEntry.timeStamp
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(

@@ -6,14 +6,14 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.ListAdapter
 import info.sergeikolinichenko.closednotepad.R
-import info.sergeikolinichenko.closednotepad.models.NoteEntry
+import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
-class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteListDiffCallback()) {
+class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallback()) {
 
-    var onEntryClick: ((NoteEntry) -> Unit)? = null
-    var onEntryLongClick: ((NoteEntry) -> Unit)? = null
+    var onEntryClick: ((Note) -> Unit)? = null
+    var onEntryLongClick: ((Note) -> Unit)? = null
     var isNight: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
@@ -42,7 +42,7 @@ class NoteListAdapter : ListAdapter<NoteEntry, NoteListViewHolder>(NoteListDiffC
         with(holder) {
             tvDateEntryNote.text = TimeUtils.getDate(entry.timeStamp)
             tvTimeEntryNote.text = TimeUtils.getTime(entry.timeStamp)
-            tvTitleEntryNote.text = entry.titleEntry
+            tvTitleEntryNote.text = entry.titleNote
             cvEntryNote.setBackgroundResource(colorBack)
             isLocked.setImageResource(imgLock)
 

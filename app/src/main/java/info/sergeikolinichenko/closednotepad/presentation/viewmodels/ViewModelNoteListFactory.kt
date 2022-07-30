@@ -4,21 +4,21 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repository.NoteRepositoryImpl
-import info.sergeikolinichenko.closednotepad.usecases.notepad.AddEntryToNoteUseCase
-import info.sergeikolinichenko.closednotepad.usecases.notepad.EditEntryAtNoteUseCase
-import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNoteUseCase
-import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveEntryFromNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
+import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 
 class ViewModelNoteListFactory(application: Application): ViewModelProvider.Factory {
 
     private val repository = NoteRepositoryImpl(application)
 
-    private val getListNoteUseCase = GetListNoteUseCase(repository)
-    private val removeEntryFromNoteUseCase = RemoveEntryFromNoteUseCase(repository)
-    private val editEntryAtNoteUseCase = EditEntryAtNoteUseCase(repository)
-    private val addEntryToNoteUseCase = AddEntryToNoteUseCase(repository)
+    private val getListNoteUseCase = GetListNotesUseCase(repository)
+    private val removeEntryFromNoteUseCase = RemoveNoteUseCase(repository)
+    private val editEntryAtNoteUseCase = EditNoteUseCase(repository)
+    private val addEntryToNoteUseCase = AddNoteUseCase(repository)
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelNoteList::class.java)) {
             @Suppress("UNCHECKED_CAST")
             ViewModelNoteList(

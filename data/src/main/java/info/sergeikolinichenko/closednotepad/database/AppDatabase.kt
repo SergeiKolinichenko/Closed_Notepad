@@ -4,14 +4,14 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import info.sergeikolinichenko.closednotepad.dbmodels.NoteEntryDbModel
-import info.sergeikolinichenko.closednotepad.dbmodels.TrashEntryDbModel
+import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
+import info.sergeikolinichenko.closednotepad.dbmodels.RemovedNoteDbModel
 
-@Database(entities = [NoteEntryDbModel::class,
-    TrashEntryDbModel::class], version = 1, exportSchema = false)
+@Database(entities = [NoteDbModel::class,
+    RemovedNoteDbModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
-    abstract fun noteEntriesDao(): NoteEntriesDao
+    abstract fun noteEntriesDao(): NotesDao
 
     companion object{
 
@@ -32,7 +32,6 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     DB_NAME
                 )
-                    .allowMainThreadQueries() // TODO delete string after debugging
                     .build()
                 INSTANCE = db
                 return db

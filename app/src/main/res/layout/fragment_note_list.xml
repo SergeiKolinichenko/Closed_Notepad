@@ -91,8 +91,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="65dp"
                 android:layout_weight="1"
-                android:clickable="false"
                 android:backgroundTint="?attr/colorPrimary"
+                android:clickable="false"
                 android:src="@drawable/ic_palette_grey600_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -100,8 +100,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:clickable="false"
                 android:backgroundTint="?attr/colorPrimary"
+                android:clickable="false"
                 android:src="@drawable/ic_delete_grey600_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
@@ -121,19 +121,19 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSecondary"
         android:backgroundTint="?attr/colorSecondary"
-        android:src="@drawable/ic_plus_thick_black_48dp"
         android:elevation="10dp"
+        android:src="@drawable/ic_plus_thick_black_48dp"
         app:layout_anchor="@id/bab_note_list"
         app:layout_behavior=".presentation.utils.FabHideOnScroll" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_note_list_color_pink"
-            style="@style/ColorButton"
-            android:layout_marginBottom="80dp"
-            android:text="@string/entry_color_pink"
-            app:cornerRadius="5dp"
-            app:strokeWidth="1dp"
-            app:strokeColor="?attr/colorPrimary"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_note_list_color_pink"
+        style="@style/ColorButton"
+        android:layout_marginBottom="80dp"
+        android:text="@string/entry_color_pink"
+        app:cornerRadius="5dp"
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_purple"
@@ -141,8 +141,8 @@
         android:layout_marginBottom="145dp"
         android:text="@string/entry_color_purple"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_indigo"
@@ -150,8 +150,8 @@
         android:layout_marginBottom="210dp"
         android:text="@string/entry_color_indigo"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_green"
@@ -159,8 +159,8 @@
         android:layout_marginBottom="275dp"
         android:text="@string/entry_color_green"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_orange"
@@ -168,8 +168,8 @@
         android:layout_marginBottom="340dp"
         android:text="@string/entry_color_orange"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_brown"
@@ -177,8 +177,8 @@
         android:layout_marginBottom="405dp"
         android:text="@string/entry_color_brown"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_gray"
@@ -186,8 +186,8 @@
         android:layout_marginBottom="470dp"
         android:text="@string/entry_color_gray"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_blue_gray"
@@ -195,7 +195,7 @@
         android:layout_marginBottom="535dp"
         android:text="@string/entry_color_blue_gray"
         app:cornerRadius="5dp"
-        app:strokeWidth="1dp"
-        app:strokeColor="?attr/colorPrimary"/>
+        app:strokeColor="?attr/colorPrimary"
+        app:strokeWidth="1dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

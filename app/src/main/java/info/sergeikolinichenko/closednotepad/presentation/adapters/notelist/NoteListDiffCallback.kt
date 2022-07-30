@@ -1,15 +1,15 @@
 package info.sergeikolinichenko.closednotepad.presentation.adapters.notelist
 
 import androidx.recyclerview.widget.DiffUtil
-import info.sergeikolinichenko.closednotepad.models.NoteEntry
+import info.sergeikolinichenko.closednotepad.models.Note
 
-class NoteListDiffCallback: DiffUtil.ItemCallback<NoteEntry>() {
+class NoteListDiffCallback: DiffUtil.ItemCallback<Note>() {
 
-    override fun areItemsTheSame(oldItem: NoteEntry, newItem: NoteEntry): Boolean {
+    override fun areItemsTheSame(oldItem: Note, newItem: Note): Boolean {
         return oldItem.timeStamp == newItem.timeStamp
     }
 
-    override fun areContentsTheSame(oldItem: NoteEntry, newItem: NoteEntry): Boolean {
+    override fun areContentsTheSame(oldItem: Note, newItem: Note): Boolean {
         return oldItem == newItem
     }
 }
