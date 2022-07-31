@@ -11,12 +11,11 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCas
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.random.Random
 
 class ViewModelNoteList(
     private val getListNoteUseCase: GetListNotesUseCase,
-    private val removeEntryFromNoteUseCase: RemoveNoteUseCase,
-    private val editEntryAtNoteUseCase: EditNoteUseCase,
+    private val removeNoteUseCase: RemoveNoteUseCase,
+    private val editNoteUseCase: EditNoteUseCase,
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
@@ -34,7 +33,7 @@ class ViewModelNoteList(
     get() = _colorIndex
 
     private lateinit var sortedSet: SortedSet<Note>
-    private val selectedNoteEntries = mutableListOf<Note>()
+    private val selectedNotes = mutableListOf<Note>()
 
     init {
         sortedSet = getSortedTimeStampList()
@@ -71,51 +70,62 @@ class ViewModelNoteList(
         if (isSelected.value == false) {
             _isSelected.value = true
         }
-        if (selectedNoteEntries.contains(noteEntry)) {
-            resetSelectedEntries()
+        if (selectedNotes.contains(noteEntry)) {
+            resetSelectedNotes()
         } else {
             val newItem = noteEntry.copy(isSelected = !noteEntry.isSelected)
-            selectedNoteEntries.add(newItem)
+            selectedNotes.add(newItem)
             sortedSet.remove(noteEntry)
             sortedSet.add(newItem)
             updateNoteList()
         }
     }
 
-    fun resetSelectedEntries() {
-        for (item in selectedNoteEntries) {
+    fun resetSelectedNotes() {
+        for (item in selectedNotes) {
             val newItem = item.copy(isSelected = !item.isSelected)
             sortedSet.remove(item)
             sortedSet.add(newItem)
         }
-        clearSelectedNoteEntries()
+        clearSelectedNotes()
     }
 
-    fun removeEntriesFromNote() {
-        for (item in selectedNoteEntries) {
+    fun removeNote(timeStamp: Long) {
+        val note = sortedSet.find { it.timeStamp == timeStamp }
+        note?.let {
             viewModelScope.launch {
-                removeEntryFromNoteUseCase.invoke(item)
+                removeNoteUseCase.invoke(it)
+                sortedSet.remove(it)
+                updateNoteList()
+            }
+        }
+    }
+
+    fun removeNotes() {
+        for (item in selectedNotes) {
+            viewModelScope.launch {
+                removeNoteUseCase.invoke(item)
             }
             sortedSet.remove(item)
         }
-        clearSelectedNoteEntries()
+        clearSelectedNotes()
     }
 
     fun setColorIndex(colorIndex: Int) {
         _colorIndex.value = colorIndex
-        for (item in selectedNoteEntries) {
+        for (item in selectedNotes) {
             val newItem = item.copy(colorIndex = colorIndex, isSelected = !item.isSelected)
             viewModelScope.launch {
-                editEntryAtNoteUseCase.invoke(newItem)
+                editNoteUseCase.invoke(newItem)
             }
             sortedSet.remove(item)
             sortedSet.add(newItem)
         }
-        clearSelectedNoteEntries()
+        clearSelectedNotes()
     }
 
-    private fun clearSelectedNoteEntries() {
-        selectedNoteEntries.clear()
+    private fun clearSelectedNotes() {
+        selectedNotes.clear()
         _isSelected.value = false
         updateNoteList()
     }

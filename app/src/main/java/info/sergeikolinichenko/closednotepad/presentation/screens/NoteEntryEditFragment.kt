@@ -120,7 +120,7 @@ class NoteEntryEditFragment : Fragment() {
 
     private fun retryToEntryViewFragment() {
         requireActivity().supportFragmentManager.popBackStack(
-            NoteEntryViewFragment.NAME,
+            NoteViewFragment.NAME,
             0
         )
     }

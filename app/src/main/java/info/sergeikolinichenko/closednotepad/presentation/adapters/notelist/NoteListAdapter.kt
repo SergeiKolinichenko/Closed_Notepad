@@ -40,10 +40,10 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
         else R.drawable.ic_lock_black_36dp
 
         with(holder) {
-            tvDateEntryNote.text = TimeUtils.getDate(entry.timeStamp)
-            tvTimeEntryNote.text = TimeUtils.getTime(entry.timeStamp)
-            tvTitleEntryNote.text = entry.titleNote
-            cvEntryNote.setBackgroundResource(colorBack)
+            tvNoteDate.text = TimeUtils.getDate(entry.timeStamp)
+            tvNoteTime.text = TimeUtils.getTime(entry.timeStamp)
+            tvNoteTitle.text = entry.titleNote
+            cvNote.setBackgroundResource(colorBack)
             isLocked.setImageResource(imgLock)
 
             if (entry.isLocked) isLocked.visibility = View.VISIBLE
@@ -58,7 +58,7 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
                 true
             }
         }
-        holder.cvEntryNote.animation = AnimationUtils.loadAnimation(
+        holder.cvNote.animation = AnimationUtils.loadAnimation(
             holder.itemView.context, R.anim.anim_note_entry
         )
     }

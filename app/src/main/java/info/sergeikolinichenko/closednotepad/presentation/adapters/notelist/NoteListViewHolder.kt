@@ -8,9 +8,9 @@ import com.google.android.material.card.MaterialCardView
 import info.sergeikolinichenko.closednotepad.R
 
 class NoteListViewHolder(view: View): RecyclerView.ViewHolder(view) {
-    val tvDateEntryNote: TextView = view.findViewById(R.id.tv_date_entry_note)
-    val tvTimeEntryNote: TextView = view.findViewById(R.id.tv_time_entry_note)
-    val tvTitleEntryNote: TextView = view.findViewById(R.id.tv_title_entry_note)
-    val isLocked: AppCompatImageView = view.findViewById(R.id.iv_lock_entry_note)
-    val cvEntryNote: MaterialCardView = view.findViewById(R.id.cv_entry_note)
+    val tvNoteDate: TextView = view.findViewById(R.id.tv_note_date)
+    val tvNoteTime: TextView = view.findViewById(R.id.tv_note_time)
+    val tvNoteTitle: TextView = view.findViewById(R.id.tv_note_title)
+    val isLocked: AppCompatImageView = view.findViewById(R.id.iv_note_lock)
+    val cvNote: MaterialCardView = view.findViewById(R.id.cv_note)
 }

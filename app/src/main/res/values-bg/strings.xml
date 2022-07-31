@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Много прост бележник</string>
-    <string name="remove_entry_from_note">Изтрий</string>
-    <string name="add_entry_in_note">Добавете</string>
-    <string name="settings_note">Настройки</string>
+    <string name="remove_note_from_notes">Изтрий</string>
+    <string name="add_note_in_notes">Добавете</string>
+    <string name="settings_notes">Настройки</string>
     <string name="title_note_list">Бележник</string>
     <string name="test_text_view">Тествайте TextView</string>
-    <string name="confirm_deletion_entries">Потвърдете изтриването на избрани записи</string>
-    <string name="snack_bar_note_list">Изтрий</string>
-    <string name="confirm_deletion_entry">"Потвърдете изтриването на избрани запис "</string>
-    <string name="edit_entry">Редактиране</string>
-    <string name="copy_itsels_entry">Копие</string>
-    <string name="send_itself_entry">Изпратете</string>
+    <string name="confirm_deletion_notes">Потвърдете изтриването на избрани записи</string>
+    <string name="delete_note">Изтрий</string>
+    <string name="confirm_deletion_note">"Потвърдете изтриването на избрани запис "</string>
+    <string name="edit_note">Редактиране</string>
+    <string name="copy_itsels_note">Копие</string>
+    <string name="send_itself_note">Изпратете</string>
     <string name="entry_color_pink">Розово</string>
     <string name="entry_color_purple">Лилаво</string>
     <string name="entry_color_indigo">Индиго</string>
@@ -20,4 +20,5 @@
     <string name="entry_color_brown">Кафяво</string>
     <string name="entry_color_gray">Сив</string>
     <string name="entry_color_blue_gray">Сиво-синьо</string>
+    <string name="copy_text_clipboard">Текстът на бележката е копиран в клипборда</string>
 </resources>

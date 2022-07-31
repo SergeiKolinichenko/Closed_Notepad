@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Очень простой блокнот</string>
-    <string name="remove_entry_from_note">Удалить</string>
-    <string name="add_entry_in_note">Добавить</string>
-    <string name="settings_note">Настройки</string>
+    <string name="remove_note_from_notes">Удалить</string>
+    <string name="add_note_in_notes">Добавить</string>
+    <string name="settings_notes">Настройки</string>
     <string name="title_note_list">Блокнот</string>
     <string name="test_text_view">Тест TextView</string>
-    <string name="confirm_deletion_entries">Подтвердите удаление выбранных записей</string>
-    <string name="snack_bar_note_list">Удалить</string>
-    <string name="confirm_deletion_entry">"Подтвердите удаление выбранных запись "</string>
-    <string name="edit_entry">Редактировать</string>
-    <string name="copy_itsels_entry">Копировать</string>
-    <string name="send_itself_entry">Отправить</string>
+    <string name="confirm_deletion_notes">Подтвердите удаление выбранных записей</string>
+    <string name="delete_note">Удалить</string>
+    <string name="confirm_deletion_note">"Подтвердите удаление выбранных запись "</string>
+    <string name="edit_note">Редактировать</string>
+    <string name="copy_itsels_note">Копировать</string>
+    <string name="send_itself_note">Отправить</string>
     <string name="entry_color_pink">Розовый</string>
     <string name="entry_color_purple">Пурпурный</string>
     <string name="entry_color_indigo">Индиго</string>
@@ -20,4 +20,5 @@
     <string name="entry_color_brown">Коричневый</string>
     <string name="entry_color_gray">Серый</string>
     <string name="entry_color_blue_gray">" Серо-голубой"</string>
+    <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
 </resources>

@@ -1,16 +1,19 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.widget.NestedScrollView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
@@ -20,7 +23,7 @@ import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNo
 
 private const val TIME_STAMP = "time_stamp"
 
-class NoteEntryViewFragment : Fragment() {
+class NoteViewFragment : Fragment() {
 
     private val viewModelFactory by lazy {
         ViewModelNoteViewFactory(requireActivity().application)
@@ -29,6 +32,7 @@ class NoteEntryViewFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteView::class.java]
     }
 
+    private lateinit var sendNoteTo: SendNoteTo
     private var isNight = false
 
     private var _timeStamp: Long? = null
@@ -37,8 +41,19 @@ class NoteEntryViewFragment : Fragment() {
 
     private var _binding: FragmentNoteViewBinding? = null
     private val binding: FragmentNoteViewBinding
-        get() = _binding ?: throw RuntimeException("FragmentNoteEntryBinding equals null")
+        get() = _binding ?: throw RuntimeException("FragmentNoteViewBinding equals null")
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is SendNoteTo) {
+            sendNoteTo = context
+        } else {
+            throw RuntimeException(
+                "There is no implementation of the interface SendNoteTo" +
+                        " in the activity $context"
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,10 +78,17 @@ class NoteEntryViewFragment : Fragment() {
         initFab()
         observeNoteEntry()
         onScrollChangeListener()
+        observeCopyContent()
+        observeSendNoteTo()
+        observeViewToast()
+        observeDeleteNote()
+        observeEndUsingFragment()
+        observeNoteToNoteListFrag()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.svNoteView.viewTreeObserver.removeOnGlobalLayoutListener(null)
         _binding = null
     }
 
@@ -81,45 +103,97 @@ class NoteEntryViewFragment : Fragment() {
     private fun initBottomAppBar() {
         if (isNight) {
             with(binding) {
-                ibNoteEntryViewDelete.setImageResource(
+                ibNoteViewDeleteNote.setImageResource(
                     R.drawable.ic_delete_white_36dp
                 )
-                ibNoteEntryViewSend.setImageResource(
+                ibNoteViewSendNote.setImageResource(
                     R.drawable.ic_send_white_36dp
                 )
-                ibNoteEntryViewCopy.setImageResource(
+                ibNoteViewCopyContent.setImageResource(
                     R.drawable.ic_content_copy_white_36dp
                 )
-                ibNoteEntryViewEdit.setImageResource(
+                ibNoteViewEditNote.setImageResource(
                     R.drawable.ic_application_edit_outline_white_36dp
                 )
             }
         } else {
             with(binding) {
-                ibNoteEntryViewDelete.setImageResource(
+                ibNoteViewDeleteNote.setImageResource(
                     R.drawable.ic_delete_black_36dp
                 )
-                ibNoteEntryViewSend.setImageResource(
+                ibNoteViewSendNote.setImageResource(
                     R.drawable.ic_send_black_36dp
                 )
-                ibNoteEntryViewCopy.setImageResource(
+                ibNoteViewCopyContent.setImageResource(
                     R.drawable.ic_content_copy_black_36dp
                 )
-                ibNoteEntryViewEdit.setImageResource(
+                ibNoteViewEditNote.setImageResource(
                     R.drawable.ic_application_edit_outline_black_36dp
                 )
             }
         }
         with(binding) {
-            ibNoteEntryViewEdit.setOnClickListener {
+            ibNoteViewEditNote.setOnClickListener {
                 launchNoteEntryEditFragment()
             }
+            ibNoteViewCopyContent.setOnClickListener {
+                viewModel.pushButtonCopyContent()
+            }
+            ibNoteViewSendNote.setOnClickListener {
+                viewModel.pushButtonSendNote()
+            }
+            ibNoteViewDeleteNote.setOnClickListener {
+                viewModel.pushButtonDelete()
+            }
+        }
+    }
+
+    private fun observeCopyContent() {
+        viewModel.buttonCopyContent.observe(viewLifecycleOwner) {
+            val textToCopy = binding.tvNoteViewItselfNote.text
+            val clipboardManager = requireActivity()
+                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText(null, textToCopy)
+            clipboardManager.setPrimaryClip(clip)
+            viewModel.showToast(getString(R.string.copy_text_clipboard))
+        }
+    }
+
+    private fun observeSendNoteTo() {
+        viewModel.buttonSendNote.observe(viewLifecycleOwner) {
+            val txtTitleNote = binding.tvNoteViewTitleNote.toString()
+            val txtItselfNote = binding.tvNoteViewItselfNote.toString()
+            sendNoteTo.sendNoteTO(txtTitleNote, txtItselfNote)
+        }
+    }
+
+    private fun observeDeleteNote() {
+        viewModel.buttonDeleteNote.observe(viewLifecycleOwner) {
+            Snackbar.make(
+                requireActivity().findViewById(R.id.main_container),
+                resources.getString(R.string.confirm_deletion_note),
+                Snackbar.LENGTH_LONG
+            )
+                .setAction(R.string.delete_note) {
+                    viewModel.removeNote()
+                }
+                .show()
+        }
+    }
+
+    private fun observeNoteToNoteListFrag() {
+        viewModel.noteToNoteListFrag.observe(viewLifecycleOwner){
+            requireActivity().supportFragmentManager.setFragmentResult(
+                NoteListFragment.BUNDLE_KEY_NOTE,
+                bundleOf(NoteListFragment.BUNDLE_KEY_NOTE to it.timeStamp)
+            )
+            retryNoteListFragment()
         }
     }
 
     private fun initFab() {
         binding.fabNoteEntryView.setOnClickListener {
-            retryToNoteListFragment()
+            viewModel.endUsingFragment()
         }
     }
 
@@ -128,7 +202,7 @@ class NoteEntryViewFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    retryToNoteListFragment()
+                    retryNoteListFragment()
                 }
 
             }
@@ -136,7 +210,7 @@ class NoteEntryViewFragment : Fragment() {
     }
 
     private fun observeNoteEntry() {
-        viewModel.noteEntry.observe(viewLifecycleOwner) {
+        viewModel.note.observe(viewLifecycleOwner) {
 
             val colorEntry =
                 if (isNight) EntriesColors.entriesColor[EntriesColors.DARK_COLOR][it.colorIndex]
@@ -146,8 +220,6 @@ class NoteEntryViewFragment : Fragment() {
             else R.drawable.ic_lock_black_36dp
 
             with(binding) {
-//                clNoteView.setBackgroundResource(colorEntry)
-                //               cvNoteView.setBackgroundResource(colorEntry)
                 cvNoteViewItselfNote.setBackgroundResource(colorEntry)
                 cvNoteViewTitle.setBackgroundResource(colorEntry)
                 ivNoteViewLock.setImageResource(imgLock)
@@ -166,19 +238,34 @@ class NoteEntryViewFragment : Fragment() {
 
     private fun onScrollChangeListener() {
         binding.svNoteView.viewTreeObserver.addOnScrollChangedListener {
-            with(binding) {
-                if (svNoteView.scrollY > 0) {
-                    babNoteView.performHide()
-                    fabNoteEntryView.hide()
-                } else {
-                    babNoteView.performShow()
-                    fabNoteEntryView.show()
+            if (_binding != null) {
+                with(binding) {
+                    if (svNoteView.scrollY > 0) {
+                        babNoteView.performHide()
+                        fabNoteEntryView.hide()
+                    } else {
+                        babNoteView.performShow()
+                        fabNoteEntryView.show()
+                    }
                 }
             }
         }
     }
 
-    private fun retryToNoteListFragment() {
+    private fun observeViewToast() {
+        viewModel.toast.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+
+    private fun observeEndUsingFragment() {
+        viewModel.endUsingFragment.observe(viewLifecycleOwner) {
+            retryNoteListFragment()
+        }
+    }
+
+    private fun retryNoteListFragment() {
         requireActivity().supportFragmentManager.popBackStack(
             NoteListFragment.NAME,
             0
@@ -201,13 +288,17 @@ class NoteEntryViewFragment : Fragment() {
                 Configuration.UI_MODE_NIGHT_YES)
     }
 
+    interface SendNoteTo {
+        fun sendNoteTO(txtTitleNote: String, txtItselfNote: String)
+    }
+
     companion object {
 
-        const val NAME = "note_entry_fragment"
+        const val NAME = "note_view_fragment"
 
         @JvmStatic
         fun newInstance(timeStamp: Long) =
-            NoteEntryViewFragment().apply {
+            NoteViewFragment().apply {
                 arguments = Bundle().apply {
                     putLong(TIME_STAMP, timeStamp)
                 }
