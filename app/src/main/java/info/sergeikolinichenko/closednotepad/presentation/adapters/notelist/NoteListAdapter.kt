@@ -7,13 +7,13 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.ListAdapter
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
-import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
 class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallback()) {
 
-    var onEntryClick: ((Note) -> Unit)? = null
-    var onEntryLongClick: ((Note) -> Unit)? = null
+    var onNoteClick: ((Note) -> Unit)? = null
+    var onNoteLongClick: ((Note) -> Unit)? = null
     var isNight: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
@@ -32,9 +32,9 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         val entry = getItem(position)
         val colorBack = if (isNight)
-            EntriesColors.entriesColor[EntriesColors.DARK_COLOR][entry.colorIndex]
+            NoteColors.entriesColor[NoteColors.DARK_COLOR][entry.colorIndex]
         else
-            EntriesColors.entriesColor[EntriesColors.LIGHT_COLOR][entry.colorIndex]
+            NoteColors.entriesColor[NoteColors.LIGHT_COLOR][entry.colorIndex]
 
         val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
         else R.drawable.ic_lock_black_36dp
@@ -50,11 +50,11 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
             else isLocked.visibility = View.INVISIBLE
 
             itemView.setOnClickListener {
-                onEntryClick?.invoke(entry)
+                onNoteClick?.invoke(entry)
             }
 
             itemView.setOnLongClickListener {
-                onEntryLongClick?.invoke(entry)
+                onNoteLongClick?.invoke(entry)
                 true
             }
         }

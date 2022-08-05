@@ -10,33 +10,17 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import kotlinx.coroutines.launch
 
 class ViewModelNoteView(
-    private val getNoteEntryUseCase: GetNoteUseCase
+    private val getNoteEntryUseCase: GetNoteUseCase,
+    private val removeNoteUseCase: RemoveNoteUseCase
 ) : ViewModel() {
 
     private var _note = MutableLiveData<Note>()
     val note: LiveData<Note>
         get() = _note
 
-    var noteToNoteListFrag = MutableLiveData<Note>()
-
     private var _endUsingFragment = MutableLiveData<Unit>()
     val endUsingFragment: LiveData<Unit>
         get() = _endUsingFragment
-
-    private var _buttonDeleteNote = MutableLiveData<Unit>()
-    val buttonDeleteNote: LiveData<Unit>
-        get() = _buttonDeleteNote
-
-
-    private var _buttonSendNote = MutableLiveData<Unit>()
-    val buttonSendNote: LiveData<Unit>
-        get() = _buttonSendNote
-
-    private var _buttonCopyContent = MutableLiveData<Unit>()
-    val buttonCopyContent: LiveData<Unit>
-        get() = _buttonCopyContent
-
-    var buttonEditNote = MutableLiveData<Unit>()
 
     private var _toast = MutableLiveData<String>()
     val toast: LiveData<String>
@@ -49,23 +33,12 @@ class ViewModelNoteView(
     }
 
     fun removeNote() {
-        noteToNoteListFrag.value = note.value
-    }
-
-    fun endUsingFragment() {
+        note.value?.let {
+            viewModelScope.launch {
+                removeNoteUseCase.invoke(it)
+            }
+        }
         _endUsingFragment.value = Unit
-    }
-
-    fun pushButtonCopyContent() {
-        _buttonCopyContent.value = Unit
-    }
-
-    fun pushButtonSendNote() {
-        _buttonSendNote.value = Unit
-    }
-
-    fun pushButtonDelete() {
-        _buttonDeleteNote.value = Unit
     }
 
     fun showToast(str: String) {

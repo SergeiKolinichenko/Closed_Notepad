@@ -128,7 +128,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_pink"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="80dp"
         android:text="@string/entry_color_pink"
         app:cornerRadius="5dp"
@@ -137,7 +137,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_purple"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="145dp"
         android:text="@string/entry_color_purple"
         app:cornerRadius="5dp"
@@ -146,7 +146,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_indigo"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="210dp"
         android:text="@string/entry_color_indigo"
         app:cornerRadius="5dp"
@@ -155,7 +155,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_green"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="275dp"
         android:text="@string/entry_color_green"
         app:cornerRadius="5dp"
@@ -164,7 +164,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_orange"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="340dp"
         android:text="@string/entry_color_orange"
         app:cornerRadius="5dp"
@@ -173,7 +173,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_brown"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="405dp"
         android:text="@string/entry_color_brown"
         app:cornerRadius="5dp"
@@ -182,7 +182,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_gray"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="470dp"
         android:text="@string/entry_color_gray"
         app:cornerRadius="5dp"
@@ -191,7 +191,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mb_note_list_color_blue_gray"
-        style="@style/ColorButton"
+        style="@style/ColorButtonNoteList"
         android:layout_marginBottom="535dp"
         android:text="@string/entry_color_blue_gray"
         app:cornerRadius="5dp"

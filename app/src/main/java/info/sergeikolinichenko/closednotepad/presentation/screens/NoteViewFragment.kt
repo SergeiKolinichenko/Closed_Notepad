@@ -10,13 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
-import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteView
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteViewFactory
@@ -32,7 +31,7 @@ class NoteViewFragment : Fragment() {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteView::class.java]
     }
 
-    private lateinit var sendNoteTo: SendNoteTo
+    private lateinit var sendNoteTo: SendNoteTo // It is Intent.ACTION_SEND
     private var isNight = false
 
     private var _timeStamp: Long? = null
@@ -45,8 +44,9 @@ class NoteViewFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
         if (context is SendNoteTo) {
-            sendNoteTo = context
+            sendNoteTo = context    // It is Intent.ACTION_SEND
         } else {
             throw RuntimeException(
                 "There is no implementation of the interface SendNoteTo" +
@@ -73,17 +73,13 @@ class NoteViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeNoteEntry()
+        onScrollChangeListener()
+        observeViewToast()
+        observeEndUsingFragment()
         initBackPressed()
         initBottomAppBar()
         initFab()
-        observeNoteEntry()
-        onScrollChangeListener()
-        observeCopyContent()
-        observeSendNoteTo()
-        observeViewToast()
-        observeDeleteNote()
-        observeEndUsingFragment()
-        observeNoteToNoteListFrag()
     }
 
     override fun onDestroyView() {
@@ -137,63 +133,53 @@ class NoteViewFragment : Fragment() {
                 launchNoteEntryEditFragment()
             }
             ibNoteViewCopyContent.setOnClickListener {
-                viewModel.pushButtonCopyContent()
+                copyContent()
             }
             ibNoteViewSendNote.setOnClickListener {
-                viewModel.pushButtonSendNote()
+                sendNoteTo()
             }
             ibNoteViewDeleteNote.setOnClickListener {
-                viewModel.pushButtonDelete()
+                removeNote()
             }
         }
     }
 
-    private fun observeCopyContent() {
-        viewModel.buttonCopyContent.observe(viewLifecycleOwner) {
-            val textToCopy = binding.tvNoteViewItselfNote.text
-            val clipboardManager = requireActivity()
-                .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip = ClipData.newPlainText(null, textToCopy)
-            clipboardManager.setPrimaryClip(clip)
-            viewModel.showToast(getString(R.string.copy_text_clipboard))
-        }
+    private fun copyContent() {
+        val textToCopy = binding.tvNoteViewItselfNote.text
+
+        val clipboardManager = requireActivity()
+            .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+        val clip = ClipData.newPlainText(null, textToCopy)
+
+        clipboardManager.setPrimaryClip(clip)
+
+        showToast(getString(R.string.copy_text_clipboard))
     }
 
-    private fun observeSendNoteTo() {
-        viewModel.buttonSendNote.observe(viewLifecycleOwner) {
-            val txtTitleNote = binding.tvNoteViewTitleNote.toString()
-            val txtItselfNote = binding.tvNoteViewItselfNote.toString()
-            sendNoteTo.sendNoteTO(txtTitleNote, txtItselfNote)
-        }
+    private fun sendNoteTo() {
+        val txtTitleNote = binding.tvNoteViewTitleNote.toString()
+
+        val txtItselfNote = binding.tvNoteViewItselfNote.toString()
+
+        sendNoteTo.sendNoteTO(txtTitleNote, txtItselfNote)
     }
 
-    private fun observeDeleteNote() {
-        viewModel.buttonDeleteNote.observe(viewLifecycleOwner) {
-            Snackbar.make(
-                requireActivity().findViewById(R.id.main_container),
-                resources.getString(R.string.confirm_deletion_note),
-                Snackbar.LENGTH_LONG
-            )
-                .setAction(R.string.delete_note) {
-                    viewModel.removeNote()
-                }
-                .show()
-        }
-    }
-
-    private fun observeNoteToNoteListFrag() {
-        viewModel.noteToNoteListFrag.observe(viewLifecycleOwner){
-            requireActivity().supportFragmentManager.setFragmentResult(
-                NoteListFragment.BUNDLE_KEY_NOTE,
-                bundleOf(NoteListFragment.BUNDLE_KEY_NOTE to it.timeStamp)
-            )
-            retryNoteListFragment()
-        }
+    private fun removeNote() {
+        Snackbar.make(
+            requireActivity().findViewById(R.id.main_container),
+            resources.getString(R.string.confirm_deletion_note),
+            Snackbar.LENGTH_LONG
+        )
+            .setAction(R.string.delete_note) {
+                viewModel.removeNote()
+            }
+            .show()
     }
 
     private fun initFab() {
         binding.fabNoteEntryView.setOnClickListener {
-            viewModel.endUsingFragment()
+            retryNoteListFragment()
         }
     }
 
@@ -212,16 +198,16 @@ class NoteViewFragment : Fragment() {
     private fun observeNoteEntry() {
         viewModel.note.observe(viewLifecycleOwner) {
 
-            val colorEntry =
-                if (isNight) EntriesColors.entriesColor[EntriesColors.DARK_COLOR][it.colorIndex]
-                else EntriesColors.entriesColor[EntriesColors.LIGHT_COLOR][it.colorIndex]
+            val colorNote =
+                if (isNight) NoteColors.entriesColor[NoteColors.DARK_COLOR][it.colorIndex]
+                else NoteColors.entriesColor[NoteColors.LIGHT_COLOR][it.colorIndex]
 
             val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
             else R.drawable.ic_lock_black_36dp
 
             with(binding) {
-                cvNoteViewItselfNote.setBackgroundResource(colorEntry)
-                cvNoteViewTitle.setBackgroundResource(colorEntry)
+                cvNoteViewItselfNote.setBackgroundResource(colorNote)
+                cvNoteViewTitle.setBackgroundResource(colorNote)
                 ivNoteViewLock.setImageResource(imgLock)
                 tvNoteViewFulldate.text = TimeUtils.getFullDate(it.timeStamp)
                 tvNoteViewTitleNote.text = it.titleNote
@@ -259,6 +245,10 @@ class NoteViewFragment : Fragment() {
         }
     }
 
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     private fun observeEndUsingFragment() {
         viewModel.endUsingFragment.observe(viewLifecycleOwner) {
             retryNoteListFragment()
@@ -278,8 +268,8 @@ class NoteViewFragment : Fragment() {
                 R.anim.enter_from_right, R.anim.exit_to_left,
                 R.anim.enter_from_left, R.anim.exit_to_right
             )
-            .replace(R.id.main_container, NoteEntryEditFragment.newInstanceEditMode(timeStamp))
-            .addToBackStack(NoteEntryEditFragment.NAME)
+            .replace(R.id.main_container, NoteEditFragment.newInstanceEditMode(timeStamp))
+            .addToBackStack(NoteEditFragment.NAME)
             .commit()
     }
 
@@ -288,6 +278,7 @@ class NoteViewFragment : Fragment() {
                 Configuration.UI_MODE_NIGHT_YES)
     }
 
+    // It is Intent.ACTION_SEND
     interface SendNoteTo {
         fun sendNoteTO(txtTitleNote: String, txtItselfNote: String)
     }

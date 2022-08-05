@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,7 +11,7 @@ import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 interface NotesDao {
 
     @Query("SELECT * FROM notes")
-    suspend fun getNoteList(): List<NoteDbModel>
+    fun getNoteList():LiveData<List<NoteDbModel>>
 
     @Query("SELECT * FROM notes WHERE timeStamp = :timeStamp LIMIT 1")
     suspend fun getNoteEntry(timeStamp: Long): NoteDbModel

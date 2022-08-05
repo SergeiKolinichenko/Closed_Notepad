@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +11,6 @@ import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -23,7 +20,7 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
-import info.sergeikolinichenko.closednotepad.presentation.utils.EntriesColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteListFactory
 
@@ -44,7 +41,7 @@ class NoteListFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("NoteListFragmentBinding equals null")
 
     private lateinit var finishApp: FinishApp
-    private var isSelectedEntries = false
+    private var isNotesSelected = false
 
     private var imgDelete = 0   // id ib_note_list_delete AppCompatImageView
     private var imgPallet = 0   // id ib_note_list_palette AppCompatImageView
@@ -77,13 +74,12 @@ class NoteListFragment : Fragment() {
         observeNoteList()
         isNightMode()
         initToolbar()
+        initFabAddNote()
         initBottomAppBar()
         initRecyclerView()
-        initEntryClickListeners()
+        initNoteClickListeners()
         initColorButtons()
         initBackPressed()
-        initNoteList()
-        initFragmentResult()
     }
 
     override fun onDestroyView() {
@@ -93,12 +89,12 @@ class NoteListFragment : Fragment() {
 
     private fun observeNoteList() {
         viewModel.noteList.observe(viewLifecycleOwner) {
-            adapterNoteList.submitList(it)
+            adapterNoteList.submitList(sortListNotes(it))
         }
     }
 
-    private fun initNoteList() {
-        viewModel.getNoteList()
+    private fun sortListNotes(list: List<Note>): List<Note> {
+        return list.sortedBy { it.timeStamp }
     }
 
     private fun initToolbar() {
@@ -109,6 +105,12 @@ class NoteListFragment : Fragment() {
         }
         binding.ivOutlineNoteList.setOnClickListener {
             finishApp.finishApp()
+        }
+    }
+
+    private fun initFabAddNote() {
+        binding.fabAddNoteList.setOnClickListener {
+            launchNoteEditFragment()
         }
     }
 
@@ -128,24 +130,15 @@ class NoteListFragment : Fragment() {
             TODO()
         }
         binding.ibNoteListPalette.setOnClickListener {
-            if (isSelectedEntries) {
+            if (isNotesSelected) {
                 showColorButtons()
             }
         }
         binding.ibNoteListDelete.setOnClickListener {
-            removeEntriesFromNote()
+            removeNotes()
         }
         binding.ibNoteListMagnify.setOnClickListener {
             TODO()
-        }
-    }
-    private fun initFragmentResult() {
-        parentFragmentManager.setFragmentResultListener(
-            BUNDLE_KEY_NOTE
-            , viewLifecycleOwner) { _, bundle ->
-            val timeStamp = bundle.get(BUNDLE_KEY_NOTE) as Long
-//            Log.d("MyLog", "bundle $note")
-            viewModel.removeNote(timeStamp)
         }
     }
 
@@ -172,8 +165,8 @@ class NoteListFragment : Fragment() {
     }
 
     // Delete selected items from collections
-    private fun removeEntriesFromNote() {
-        if (isSelectedEntries) {
+    private fun removeNotes() {
+        if (isNotesSelected) {
             Snackbar.make(
                 requireActivity().findViewById(R.id.main_container),
                 resources.getString(R.string.confirm_deletion_notes),
@@ -197,10 +190,10 @@ class NoteListFragment : Fragment() {
         noteListRecyclerView.adapter = adapterNoteList
     }
 
-    private fun initEntryClickListeners() {
+    private fun initNoteClickListeners() {
         // Get an indicator whether there are selected elements collections
         viewModel.isSelected.observe(viewLifecycleOwner) {
-            isSelectedEntries = it
+            isNotesSelected = it
             if (it) {
                 with(binding) {
                     ibNoteListDelete.setImageResource(imgDelete)
@@ -217,75 +210,76 @@ class NoteListFragment : Fragment() {
                 }
             }
         }
-        adapterNoteList.onEntryClick = {
-            if (!isSelectedEntries) {
-                // Go to NoteEntryFragment
-                launchNoteEntryFragment(it)
+        adapterNoteList.onNoteClick = {
+            if (!isNotesSelected) {
+                // Go to NoteViewFragment
+                launchNoteViewFragment(it)
             } else {
                 // Deselecting elements collections
-                viewModel.selectEntriesAtNote(it)
+                viewModel.selectNotesAtNote(it)
             }
         }
-        adapterNoteList.onEntryLongClick = {
+        adapterNoteList.onNoteLongClick = {
             // Selecting elements collections
-            viewModel.selectEntriesAtNote(it)
+            viewModel.selectNotesAtNote(it)
         }
     }
 
     private fun initColorButtons() {
-        val shadeColor = if (isNight) EntriesColors.DARK_COLOR
-        else EntriesColors.LIGHT_COLOR
+        val shadeColor = if (isNight) NoteColors.DARK_COLOR
+        else NoteColors.LIGHT_COLOR
         with(binding) {
             mbNoteListColorPink.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.PINK]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK]))
             mbNoteListColorPurple.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.PURPLE]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE]))
             mbNoteListColorIndigo.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.INDIGO]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO]))
             mbNoteListColorGreen.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.GREEN]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN]))
             mbNoteListColorOrange.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.ORANGE]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE]))
             mbNoteListColorBrown.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.BROWN]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN]))
             mbNoteListColorGray.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.GRAY]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY]))
             mbNoteListColorBlueGray.backgroundTintList = ColorStateList.valueOf(requireContext()
-                .getColor(EntriesColors.entriesColor[shadeColor][EntriesColors.BLUE_GRAY]))
+                .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY]))
+
             mbNoteListColorPink.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.PINK)
+                viewModel.setColorIndex(NoteColors.PINK)
                 hideColorButtons()
             }
             mbNoteListColorPink.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.PINK)
+                viewModel.setColorIndex(NoteColors.PINK)
                 hideColorButtons()
             }
             mbNoteListColorPurple.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.PURPLE)
+                viewModel.setColorIndex(NoteColors.PURPLE)
                 hideColorButtons()
             }
             mbNoteListColorIndigo.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.INDIGO)
+                viewModel.setColorIndex(NoteColors.INDIGO)
                 hideColorButtons()
             }
             mbNoteListColorGreen.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.GREEN)
+                viewModel.setColorIndex(NoteColors.GREEN)
                 hideColorButtons()
             }
             mbNoteListColorOrange.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.ORANGE)
+                viewModel.setColorIndex(NoteColors.ORANGE)
                 hideColorButtons()
             }
             mbNoteListColorBrown.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.BROWN)
+                viewModel.setColorIndex(NoteColors.BROWN)
                 hideColorButtons()
             }
             mbNoteListColorGray.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.GRAY)
+                viewModel.setColorIndex(NoteColors.GRAY)
                 hideColorButtons()
             }
             mbNoteListColorBlueGray.setOnClickListener {
-                viewModel.setColorIndex(EntriesColors.BLUE_GRAY)
+                viewModel.setColorIndex(NoteColors.BLUE_GRAY)
                 hideColorButtons()
             }
         }
@@ -314,7 +308,7 @@ class NoteListFragment : Fragment() {
 //        }
     }
 
-    private fun launchNoteEntryFragment(noteEntry: Note) {
+    private fun launchNoteViewFragment(noteEntry: Note) {
         val timeStamp = noteEntry.timeStamp
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(
@@ -326,6 +320,16 @@ class NoteListFragment : Fragment() {
             .commit()
     }
 
+    private fun launchNoteEditFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_left, R.anim.exit_to_right,
+                R.anim.enter_from_right, R.anim.exit_to_left
+            )
+            .replace(R.id.main_container, NoteEditFragment.newInstanceAddMode())
+            .addToBackStack(NoteEditFragment.NAME)
+            .commit()
+    }
 
     // needed to close the application on the button back
     private fun finishNoteListFragment() {
@@ -345,85 +349,85 @@ class NoteListFragment : Fragment() {
 
     private fun showPinkButton() {
         val mb = binding.mbNoteListColorPink
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hidePinkButton() {
         val mb = binding.mbNoteListColorPink
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showPurpleButton() {
         val mb = binding.mbNoteListColorPurple
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hidePurpleButton() {
         val mb = binding.mbNoteListColorPurple
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showIndigoButton() {
         val mb = binding.mbNoteListColorIndigo
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideIndigoButton() {
         val mb = binding.mbNoteListColorIndigo
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showGreenButton() {
         val mb = binding.mbNoteListColorGreen
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideGreenButton() {
         val mb = binding.mbNoteListColorGreen
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showOrangeButton() {
         val mb = binding.mbNoteListColorOrange
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideOrangeButton() {
         val mb = binding.mbNoteListColorOrange
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showBrownButton() {
         val mb = binding.mbNoteListColorBrown
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideBrownButton() {
         val mb = binding.mbNoteListColorBrown
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showGrayButton() {
         val mb = binding.mbNoteListColorGray
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideGrayButton() {
         val mb = binding.mbNoteListColorGray
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
     private fun showBlueGrayButton() {
         val mb = binding.mbNoteListColorBlueGray
-        showColorFab(mb)
+        showColorButtons(mb)
     }
 
     private fun hideBlueGrayButton() {
         val mb = binding.mbNoteListColorBlueGray
-        hideColorFab(mb)
+        hideColorButtons(mb)
     }
 
-    private fun showColorFab(mb: MaterialButton?) {
+    private fun showColorButtons(mb: MaterialButton?) {
         val showButton = AnimationUtils.loadAnimation(requireContext(), R.anim.show_color_button)
         val layoutParams = mb?.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.marginEnd += (mb.width * 1.05).toInt()
@@ -433,7 +437,7 @@ class NoteListFragment : Fragment() {
         mb.isClickable = true
     }
 
-    private fun hideColorFab(mb: MaterialButton?) {
+    private fun hideColorButtons(mb: MaterialButton?) {
         val hideButton = AnimationUtils.loadAnimation(requireContext(), R.anim.hide_color_button)
         val layoutParams = mb?.layoutParams as CoordinatorLayout.LayoutParams
         layoutParams.marginEnd -= (mb.width * 1.05).toInt()
@@ -445,8 +449,6 @@ class NoteListFragment : Fragment() {
 
     companion object {
         const val NAME = "note_list_fragment"
-        const val REQUEST_KEY_NOTE = "request_key_note"
-        const val BUNDLE_KEY_NOTE = "bundle_key_note"
 
         @JvmStatic
         fun newInstance() = NoteListFragment()

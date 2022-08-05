@@ -12,6 +12,9 @@
     <string name="edit_note">Редактировать</string>
     <string name="copy_itsels_note">Копировать</string>
     <string name="send_itself_note">Отправить</string>
+    <string name="lock_note">Заблокировать</string>
+    <string name="unlock_note">Разблокировать</string>
+
     <string name="entry_color_pink">Розовый</string>
     <string name="entry_color_purple">Пурпурный</string>
     <string name="entry_color_indigo">Индиго</string>
@@ -21,4 +24,6 @@
     <string name="entry_color_gray">Серый</string>
     <string name="entry_color_blue_gray">" Серо-голубой"</string>
     <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
+    <string name="select_text_to_copy">Необходимо выделить текст для копирования</string>
+    <string name="sel_text_copied_clipboard">Выделенный текст копируется в буфер обмена</string>
 </resources>

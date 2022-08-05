@@ -11,6 +11,7 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCas
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.random.Random
 
 class ViewModelNoteList(
     private val getListNoteUseCase: GetListNotesUseCase,
@@ -19,30 +20,21 @@ class ViewModelNoteList(
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
-    private var _noteList = MutableLiveData<List<Note>>()
+    private var _noteList: MutableLiveData<List<Note>> =
+        getListNoteUseCase.invoke()
     val noteList: LiveData<List<Note>>
-        get() = _noteList
-
+    get() = _noteList
 
     private val _isSelected = MutableLiveData(false)
     val isSelected: LiveData<Boolean>
         get() = _isSelected
 
-    private val _colorIndex = MutableLiveData<Int>()
-    val colorIndex: LiveData<Int>
-    get() = _colorIndex
-
-    private lateinit var sortedSet: SortedSet<Note>
     private val selectedNotes = mutableListOf<Note>()
-
-    init {
-        sortedSet = getSortedTimeStampList()
-    }
 
 //    init {
 //        _isSelected.value = false
 //        var tempCount = 0
-//        for (i in 0..50) {
+//        for (i in 0..100) {
 //            if (tempCount == 7) tempCount = 0
 //            val note = Note(
 //                timeStamp = Date().time,
@@ -59,44 +51,43 @@ class ViewModelNoteList(
 //        }
 //    }
 
-    fun getNoteList() {
-        viewModelScope.launch {
-            sortedSet.addAll(getListNoteUseCase.invoke())
-            updateNoteList()
-        }
-    }
+    fun selectNotesAtNote(noteEntry: Note) {
+        val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
+        throw RuntimeException("noteList equals null")
 
-    fun selectEntriesAtNote(noteEntry: Note) {
         if (isSelected.value == false) {
             _isSelected.value = true
         }
+
         if (selectedNotes.contains(noteEntry)) {
             resetSelectedNotes()
         } else {
             val newItem = noteEntry.copy(isSelected = !noteEntry.isSelected)
             selectedNotes.add(newItem)
-            sortedSet.remove(noteEntry)
-            sortedSet.add(newItem)
-            updateNoteList()
+            notes.remove(noteEntry)
+            notes.add(newItem)
+            _noteList.value = notes
         }
     }
 
     fun resetSelectedNotes() {
+        val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
+        throw RuntimeException("noteList equals null")
+
         for (item in selectedNotes) {
             val newItem = item.copy(isSelected = !item.isSelected)
-            sortedSet.remove(item)
-            sortedSet.add(newItem)
+            notes.remove(item)
+            notes.add(newItem)
+            _noteList.value = notes
         }
         clearSelectedNotes()
     }
 
     fun removeNote(timeStamp: Long) {
-        val note = sortedSet.find { it.timeStamp == timeStamp }
+        val note = noteList.value?.find { it.timeStamp == timeStamp }
         note?.let {
             viewModelScope.launch {
                 removeNoteUseCase.invoke(it)
-                sortedSet.remove(it)
-                updateNoteList()
             }
         }
     }
@@ -106,20 +97,16 @@ class ViewModelNoteList(
             viewModelScope.launch {
                 removeNoteUseCase.invoke(item)
             }
-            sortedSet.remove(item)
         }
         clearSelectedNotes()
     }
 
     fun setColorIndex(colorIndex: Int) {
-        _colorIndex.value = colorIndex
         for (item in selectedNotes) {
             val newItem = item.copy(colorIndex = colorIndex, isSelected = !item.isSelected)
             viewModelScope.launch {
                 editNoteUseCase.invoke(newItem)
             }
-            sortedSet.remove(item)
-            sortedSet.add(newItem)
         }
         clearSelectedNotes()
     }
@@ -127,17 +114,6 @@ class ViewModelNoteList(
     private fun clearSelectedNotes() {
         selectedNotes.clear()
         _isSelected.value = false
-        updateNoteList()
     }
 
-    private fun getSortedTimeStampList(): SortedSet<Note> {
-        return sortedSetOf<Note>(
-            { i1, i2 -> i1.timeStamp.compareTo(i2.timeStamp) }
-        )
-    }
-
-
-    private fun updateNoteList() {
-        _noteList.value = sortedSet.toList()
-    }
 }

@@ -12,6 +12,9 @@
     <string name="edit_note">Редактиране</string>
     <string name="copy_itsels_note">Копие</string>
     <string name="send_itself_note">Изпратете</string>
+    <string name="lock_note">Заключете</string>
+    <string name="unlock_note">Отключете</string>
+
     <string name="entry_color_pink">Розово</string>
     <string name="entry_color_purple">Лилаво</string>
     <string name="entry_color_indigo">Индиго</string>
@@ -21,4 +24,6 @@
     <string name="entry_color_gray">Сив</string>
     <string name="entry_color_blue_gray">Сиво-синьо</string>
     <string name="copy_text_clipboard">Текстът на бележката е копиран в клипборда</string>
+    <string name="select_text_to_copy">Изберете текст за копиране</string>
+    <string name="sel_text_copied_clipboard">Избраният текст е копиран в клипборда</string>
 </resources>

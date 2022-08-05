@@ -5,7 +5,7 @@ import info.sergeikolinichenko.closednotepad.repository.NotesRepository
 
 class GetListNotesUseCase(private val noteRepository: NotesRepository) {
 
-    suspend operator fun invoke (): List<Note> {
+    operator fun <T> invoke (): T {
         return noteRepository.getListNotes()
     }
 }

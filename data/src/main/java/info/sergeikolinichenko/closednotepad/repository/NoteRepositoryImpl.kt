@@ -1,6 +1,8 @@
 package info.sergeikolinichenko.closednotepad.repository
 
 import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import info.sergeikolinichenko.closednotepad.database.AppDatabase
 import info.sergeikolinichenko.closednotepad.models.Note
 
@@ -10,8 +12,13 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
     private val mapper = NoteMapper()
 
     // Implementation of getting a collection of notebook entries
-    override suspend fun getListNotes(): List<Note> {
-        return mapper.mapListDbModelToListEntity(notesDao.getNoteList())
+
+
+    override fun <T> getListNotes(): T {
+        val noteList: LiveData<List<Note>> = Transformations.map(notesDao.getNoteList()) {
+            mapper.mapListDbModelToListEntity(it)
+        }
+        return noteList as T
     }
 
     // Implementation of getting a notepad entry
@@ -20,18 +27,18 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
     }
 
     // Implementation of adding a notepad entry
-    override suspend fun addNote(noteEntry: Note) {
-        notesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
+    override suspend fun addNote(note: Note) {
+        notesDao.addNoteEntry(mapper.mapEntityToDbModel(note))
     }
 
     // Implementation of editing a notepad entry
-    override suspend fun editNote(noteEntry: Note) {
-        notesDao.addNoteEntry(mapper.mapEntityToDbModel(noteEntry))
+    override suspend fun editNote(note: Note) {
+        notesDao.addNoteEntry(mapper.mapEntityToDbModel(note))
     }
 
     // Implementation of removing note from notepad to trash
-    override suspend fun removeNote(noteEntry: Note) {
-        notesDao.deleteNoteEntry(noteEntry.timeStamp)
+    override suspend fun removeNote(note: Note) {
+        notesDao.deleteNoteEntry(note.timeStamp)
     }
 
     // Implementation of searching for a required note in a notebook

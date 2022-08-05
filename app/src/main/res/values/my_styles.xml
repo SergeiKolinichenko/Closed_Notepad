@@ -16,7 +16,7 @@
         <item name="backgroundTint">?attr/colorPrimary</item>
     </style>
 
-    <style name="ColorButton" parent="Widget.AppCompat.Button">
+    <style name="ColorButtonNoteList" parent="Widget.AppCompat.Button">
         <item name="android:layout_width">220dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_gravity">end|bottom</item>
@@ -24,7 +24,39 @@
         <item name="android:textStyle">italic|bold</item>
         <item name="android:textSize">24sp</item>
         <item name="android:elevation">5dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
     </style>
+
+    <style name="FabColorNoteEditOneLine" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+    </style>
+
+    <style name="ColorButtonNoteEditRight" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+
+    </style>
+
+    <!--
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+        -->
 
     <style name="ColorButtonLand" parent="Widget.AppCompat.Button">
         <item name="android:layout_width">220dp</item>

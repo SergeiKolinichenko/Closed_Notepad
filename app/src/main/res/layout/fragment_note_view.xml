@@ -25,6 +25,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
                     android:orientation="vertical">
 
                     <com.google.android.material.textview.MaterialTextView
@@ -39,7 +40,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="3dp"
                         android:background="?attr/colorPrimary"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
@@ -49,14 +50,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:padding="3dp"
                         android:background="@android:color/transparent"
                         android:orientation="horizontal">
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tv_note_view_fulldate"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:textSize="18sp"

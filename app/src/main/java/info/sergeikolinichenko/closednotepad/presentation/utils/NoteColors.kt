@@ -2,7 +2,7 @@ package info.sergeikolinichenko.closednotepad.presentation.utils
 
 import info.sergeikolinichenko.closednotepad.R
 
-object EntriesColors {
+object NoteColors {
     
     const val LIGHT_COLOR = 0
     const val DARK_COLOR = 1
