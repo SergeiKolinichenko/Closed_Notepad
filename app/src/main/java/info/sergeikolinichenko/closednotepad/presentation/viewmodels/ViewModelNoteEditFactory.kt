@@ -3,7 +3,7 @@ package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import info.sergeikolinichenko.closednotepad.repository.NoteRepositoryImpl
+import info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase

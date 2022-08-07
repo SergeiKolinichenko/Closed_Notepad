@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="MyToolbar" parent="Widget.MaterialComponents.AppBarLayout.Primary">
         <item name="android:layout_gravity">top</item>
         <item name="android:layout_marginTop">2dp</item>
@@ -17,15 +18,14 @@
     </style>
 
     <style name="ColorButtonNoteList" parent="Widget.AppCompat.Button">
-        <item name="android:layout_width">220dp</item>
-        <item name="android:layout_height">60dp</item>
-        <item name="android:layout_gravity">end|bottom</item>
-        <item name="android:layout_marginEnd">-220dp</item>
-        <item name="android:textStyle">italic|bold</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:elevation">5dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal|bottom</item>
         <item name="android:visibility">invisible</item>
         <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
     </style>
 
     <style name="FabColorNoteEditOneLine" parent="Widget.AppCompat.Button">
@@ -38,7 +38,7 @@
         <item name="android:alpha">0</item>
     </style>
 
-    <style name="ColorButtonNoteEditRight" parent="Widget.AppCompat.Button">
+    <style name="ColorButtonNoteTwoLine" parent="Widget.AppCompat.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">20dp</item>

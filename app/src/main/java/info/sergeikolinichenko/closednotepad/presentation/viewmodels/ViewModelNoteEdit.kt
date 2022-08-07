@@ -40,6 +40,10 @@ class ViewModelNoteEdit(
     val getSaveOption: LiveData<Unit>
         get() = _getSaveOption
 
+    private var _isShowColorFabs = MutableLiveData<Boolean>()
+    val isShowColorFabs: LiveData<Boolean>
+    get() = _isShowColorFabs
+
     fun getNoteEntry() {
         viewModelScope.launch {
             _note.value = getNoteEntryUseCase.invoke(timeStamp)
@@ -161,6 +165,11 @@ class ViewModelNoteEdit(
 
     fun setColorIndex(index: Int) {
         _colorIndex.value = index
+        setShowColorFabs(false)
+    }
+
+    fun setShowColorFabs(state: Boolean) {
+        _isShowColorFabs.value = state
     }
 
     fun retryNoteListFrag() {

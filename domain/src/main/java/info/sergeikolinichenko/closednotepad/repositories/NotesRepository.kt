@@ -1,7 +1,6 @@
-package info.sergeikolinichenko.closednotepad.repository
+package info.sergeikolinichenko.closednotepad.repositories
 
 import info.sergeikolinichenko.closednotepad.models.Note
-import info.sergeikolinichenko.closednotepad.models.RemovedNote
 
 interface NotesRepository {
 

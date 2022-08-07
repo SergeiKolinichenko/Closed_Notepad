@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.repository
+package info.sergeikolinichenko.closednotepad.repositories
 
 import android.app.Application
 import androidx.lifecycle.LiveData

@@ -7,6 +7,8 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.R
@@ -45,7 +48,6 @@ class NoteEditFragment : Fragment() {
 
     private var isNight = false
     private var workingMode: String = MODE_UNKNOWN
-    private var isShowColorFabs = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,7 @@ class NoteEditFragment : Fragment() {
         observeNote()
         observeRetryNoteListFrag()
         observeGetSaveOption()
+        observeIsShowColorButtons()
         initLockButton()
         initBackPressed()
         initBottomAppBar()
@@ -75,6 +78,7 @@ class NoteEditFragment : Fragment() {
         initFabSave()
         initFabNoSave()
         initColorButtons()
+        initSoftKeyListener()
         launchModes()
     }
 
@@ -119,8 +123,8 @@ class NoteEditFragment : Fragment() {
                 MODE_ADD -> viewModel.addNoteToBase()
                 MODE_EDIT -> viewModel.editNoteToBase()
             }
-            hideSaveFab()
-            hideNoSaveFab()
+//            hideSaveFab()
+//            hideNoSaveFab()
         }
     }
 
@@ -167,25 +171,24 @@ class NoteEditFragment : Fragment() {
                 val extractedString = getExtractedStr()
                 extractedString?.let {
                     getCutString()
-                    copySelToClipBoard(extractedString)
+                    copySelToClip(extractedString)
                 }
             }
             ibNoteEditCopy.setOnClickListener {
                 val extractedString = getExtractedStr()
                 extractedString?.let {
-                    copySelToClipBoard(extractedString)
+                    copySelToClip(extractedString)
                 }
             }
             ibNoteEditPaste.setOnClickListener {
                 setCopyFromClip()
             }
             ibNoteEditPallet.setOnClickListener {
-                isShowColorFabs = if (isShowColorFabs) {
-                    showColorButtons()
-                    false
+                val isShow = viewModel.isShowColorFabs.value
+                if (isShow == null || !isShow) {
+                    viewModel.setShowColorFabs(true)
                 } else {
-                    hideColorButtons()
-                    true
+                    viewModel.setShowColorFabs(false)
                 }
             }
         }
@@ -206,15 +209,19 @@ class NoteEditFragment : Fragment() {
     private fun getCutString() {
         val startIndex = binding.etNoteEditItself.selectionStart
         val endIndex = binding.etNoteEditItself.selectionEnd
+
         val string = binding.etNoteEditItself.text
         val startString = string?.substring(0, startIndex)
         val endString = string?.substring(endIndex)
         val fullString = startString + endString
+        val editableString = Editable.Factory.getInstance().newEditable(fullString)
+
         binding.etNoteEditItself.text?.clear()
-        binding.etNoteEditItself.text = Editable.Factory.getInstance().newEditable(fullString)
+        binding.etNoteEditItself.text = editableString
+        binding.etNoteEditItself.setSelection(startIndex)
     }
 
-    private fun copySelToClipBoard(extractedString: String) {
+    private fun copySelToClip(extractedString: String) {
         val clipboardManager = requireActivity()
             .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(null, extractedString)
@@ -231,12 +238,17 @@ class NoteEditFragment : Fragment() {
 
         val startIndex = binding.etNoteEditItself.selectionStart
         val endIndex = binding.etNoteEditItself.selectionEnd
+
         val string = binding.etNoteEditItself.text
         val startString = string?.substring(0, startIndex)
         val endString = string?.substring(endIndex)
         val fullString = startString + copyString + endString
+
+        val newCursorPosition = startIndex + copyString.length
+
         binding.etNoteEditItself.text?.clear()
         binding.etNoteEditItself.text = Editable.Factory.getInstance().newEditable(fullString)
+        binding.etNoteEditItself.setSelection(newCursorPosition)
     }
 
     private fun initColorButtons() {
@@ -276,65 +288,58 @@ class NoteEditFragment : Fragment() {
                 requireContext()
                     .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
             )
-
             fabNoteEditColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
-                hideColorButtons()
             }
             fabNoteEditColorPurple.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PURPLE)
-                hideColorButtons()
             }
             fabNoteEditColorIndigo.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.INDIGO)
-                hideColorButtons()
             }
             fabNoteEditColorGreen.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GREEN)
-                hideColorButtons()
             }
             fabNoteEditColorOrange.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.ORANGE)
-                hideColorButtons()
             }
             fabNoteEditColorBrown.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BROWN)
-                hideColorButtons()
             }
             fabNoteEditColorGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GRAY)
-                hideColorButtons()
             }
             fabNoteEditColorBlueGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BLUE_GRAY)
-                hideColorButtons()
             }
         }
     }
 
-    private fun showColorButtons() {
-        with(binding) {
-            showColorButton(fabNoteEditColorPink)
-            showColorButton(fabNoteEditColorPurple)
-            showColorButton(fabNoteEditColorIndigo)
-            showColorButton(fabNoteEditColorGreen)
-            showColorButton(fabNoteEditColorOrange)
-            showColorButton(fabNoteEditColorBrown)
-            showColorButton(fabNoteEditColorGray)
-            showColorButton(fabNoteEditColorBlueGray)
-        }
-    }
-
-    private fun hideColorButtons() {
-        with(binding) {
-            hideColorButton(fabNoteEditColorPink)
-            hideColorButton(fabNoteEditColorPurple)
-            hideColorButton(fabNoteEditColorIndigo)
-            hideColorButton(fabNoteEditColorGreen)
-            hideColorButton(fabNoteEditColorOrange)
-            hideColorButton(fabNoteEditColorBrown)
-            hideColorButton(fabNoteEditColorGray)
-            hideColorButton(fabNoteEditColorBlueGray)
+    private fun observeIsShowColorButtons() {
+        viewModel.isShowColorFabs.observe(viewLifecycleOwner) {
+            if (it) {
+                with(binding) {
+                    showColorButton(fabNoteEditColorPink)
+                    showColorButton(fabNoteEditColorPurple)
+                    showColorButton(fabNoteEditColorIndigo)
+                    showColorButton(fabNoteEditColorGreen)
+                    showColorButton(fabNoteEditColorOrange)
+                    showColorButton(fabNoteEditColorBrown)
+                    showColorButton(fabNoteEditColorGray)
+                    showColorButton(fabNoteEditColorBlueGray)
+                }
+            } else {
+                with(binding) {
+                    hideColorButton(fabNoteEditColorPink)
+                    hideColorButton(fabNoteEditColorPurple)
+                    hideColorButton(fabNoteEditColorIndigo)
+                    hideColorButton(fabNoteEditColorGreen)
+                    hideColorButton(fabNoteEditColorOrange)
+                    hideColorButton(fabNoteEditColorBrown)
+                    hideColorButton(fabNoteEditColorGray)
+                    hideColorButton(fabNoteEditColorBlueGray)
+                }
+            }
         }
     }
 
@@ -473,53 +478,41 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun showSaveFab() {
-        val animShowFabSave = AnimationUtils.loadAnimation(requireContext(), R.anim.fab_save_show)
-        with(binding) {
-            val layoutParams = fabNoteEditSave.layoutParams as CoordinatorLayout.LayoutParams
-            layoutParams.marginEnd -= (fabNoteEditSave.width * 0.25).toInt()
-            layoutParams.bottomMargin += (fabNoteEditSave.width * 1.7).toInt()
-            fabNoteEditSave.layoutParams = layoutParams
-            fabNoteEditSave.startAnimation(animShowFabSave)
-            fabNoteEditSave.isClickable = true
-        }
-    }
-
-    private fun hideSaveFab() {
-        val animHideFabSave = AnimationUtils.loadAnimation(requireContext(), R.anim.fab_save_hide)
-        with(binding) {
-            val layoutParams = fabNoteEditSave.layoutParams as CoordinatorLayout.LayoutParams
-            layoutParams.marginEnd += (fabNoteEditSave.width * 0.25).toInt()
-            layoutParams.bottomMargin -= (fabNoteEditSave.width * 1.7).toInt()
-            fabNoteEditSave.layoutParams = layoutParams
-            fabNoteEditSave.startAnimation(animHideFabSave)
-            fabNoteEditSave.isClickable = false
-        }
-    }
-
-    private fun showNoSaveFab() {
-        val animShowFabSave =
-            AnimationUtils.loadAnimation(requireContext(), R.anim.fab_no_save_show)
-        with(binding.fabNoteEditNotSave) {
-            val layoutParams = layoutParams as CoordinatorLayout.LayoutParams
-            layoutParams.marginEnd += (width * 1.5).toInt()
-            layoutParams.bottomMargin += (width * 1)
-            binding.fabNoteEditNotSave.layoutParams = layoutParams
+        val animShowFabSave = AnimationUtils.loadAnimation(context, R.anim.fab_save_show)
+        with(binding.fabNoteEditSave) {
+            val lLayoutParams = layoutParams as CoordinatorLayout.LayoutParams
+            lLayoutParams.marginEnd -= (width * 0.25).toInt()
+            lLayoutParams.bottomMargin += (height * 1.7).toInt()
+            layoutParams = lLayoutParams
             startAnimation(animShowFabSave)
             isClickable = true
         }
     }
 
-    private fun hideNoSaveFab() {
-        val animHideFabSave =
-            AnimationUtils.loadAnimation(requireContext(), R.anim.fab_no_save_hide)
+    private fun showNoSaveFab() {
+        val animShowFabSave =
+            AnimationUtils.loadAnimation(context, R.anim.fab_no_save_show)
         with(binding.fabNoteEditNotSave) {
-            val layoutParams = layoutParams as CoordinatorLayout.LayoutParams
-            layoutParams.marginEnd -= (width * 1.5).toInt()
-            layoutParams.bottomMargin -= (width * 1)
-            binding.fabNoteEditNotSave.layoutParams = layoutParams
-            startAnimation(animHideFabSave)
-            isClickable = false
+            val lLayoutParams = layoutParams as CoordinatorLayout.LayoutParams
+            lLayoutParams.marginEnd += (width * 1.5).toInt()
+            lLayoutParams.bottomMargin += (height * 1)
+            layoutParams = lLayoutParams
+            startAnimation(animShowFabSave)
+            isClickable = true
         }
+    }
+
+    private fun initSoftKeyListener() {
+//        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
+//            val heightDiff = binding.root.rootView.height - binding.root.height
+//            if (heightDiff > 500) {
+//                Toast.makeText(requireContext(), "keyboard opened", Toast.LENGTH_SHORT).show()
+//                Log.e("MyLog", "keyboard opened")
+//            } else {
+//                Toast.makeText(requireContext(), "keyboard closed", Toast.LENGTH_SHORT).show()
+//                Log.d("MyLog", "keyboard closed")
+//            }
+//        }
     }
 
     private fun showToast(message: String) {

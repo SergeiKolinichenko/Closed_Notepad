@@ -129,77 +129,84 @@
         app:layout_anchor="@id/bab_note_list"
         app:layout_behavior=".presentation.utils.FabHideOnScroll"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_pink"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="50dp"
-        android:text="@string/entry_color_pink"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_pink"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="65dp"
+        android:layout_marginEnd="240dp"
+        android:contentDescription="@string/set_note_color_to_pink"
+        android:backgroundTint="@color/pink_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_purple"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="85dp"
-        android:text="@string/entry_color_purple"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_purple"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="125dp"
+        android:layout_marginEnd="225dp"
+        android:contentDescription="@string/set_note_color_to_purple"
+        android:backgroundTint="@color/purple_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_indigo"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="120dp"
-        android:text="@string/entry_color_indigo"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_indigo"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="175dp"
+        android:layout_marginEnd="165dp"
+        android:contentDescription="@string/set_note_color_indigo"
+        android:backgroundTint="@color/indigo_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_green"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="155dp"
-        android:text="@string/entry_color_green"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_green"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="200dp"
+        android:layout_marginEnd="60dp"
+        android:contentDescription="@string/set_note_color_green"
+        android:backgroundTint="@color/green_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_orange"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="190dp"
-        android:text="@string/entry_color_orange"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_orange"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="200dp"
+        android:layout_marginStart="60dp"
+        android:contentDescription="@string/set_note_color_orange"
+        android:backgroundTint="@color/orange_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_brown"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="225dp"
-        android:text="@string/entry_color_brown"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_brown"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="175dp"
+        android:layout_marginStart="165dp"
+        android:contentDescription="@string/set_note_color_brown"
+        android:backgroundTint="@color/brown_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp"/>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_gray"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="260dp"
-        android:text="@string/entry_color_gray"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_gray"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="125dp"
+        android:layout_marginStart="225dp"
+        android:contentDescription="@string/set_note_color_gray"
+        android:backgroundTint="@color/gray_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_note_list_color_blue_gray"
-        style="@style/ColorButtonLand"
-        android:layout_marginBottom="295dp"
-        android:text="@string/entry_color_blue_gray"
-        app:cornerRadius="5dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp" />
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_list_color_blue_gray"
+        style="@style/ColorButtonNoteList"
+        android:layout_marginBottom="65dp"
+        android:layout_marginStart="240dp"
+        android:contentDescription="@string/set_note_color_blue_gray"
+        android:backgroundTint="@color/blue_gray_100"
+        app:backgroundTint="?attr/colorPrimary"
+        app:borderWidth="3dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -26,4 +26,15 @@
     <string name="copy_text_clipboard">Текстът на бележката е копиран в клипборда</string>
     <string name="select_text_to_copy">Изберете текст за копиране</string>
     <string name="sel_text_copied_clipboard">Избраният текст е копиран в клипборда</string>
+    <string name="exit_fragment">Изходен фрагмент</string>
+    <string name="save_note">Запазете бележката</string>
+    <string name="don_t_save_note">Не запазвайте бележката</string>
+    <string name="set_note_color_to_pink">Задайте розов цвят на бележката</string>
+    <string name="set_note_color_to_purple">Задайте лилав цвят на бележката</string>
+    <string name="set_note_color_indigo">Задайте индиго цвят на бележката</string>
+    <string name="set_note_color_green">Задайте зелен цвят на бележката</string>
+    <string name="set_note_color_orange">Задайте оранжев цвят на бележката</string>
+    <string name="set_note_color_brown">Задайте кафяв цвят на бележката</string>
+    <string name="set_note_color_gray">Задайте сив цвят на бележката</string>
+    <string name="set_note_color_blue_gray">Задайте синьо сив цвят на бележката</string>
 </resources>

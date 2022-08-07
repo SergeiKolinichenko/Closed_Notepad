@@ -97,7 +97,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:gravity="end|center_vertical"
-                                android:textSize="18sp"
+                                android:textSize="14sp"
                                 android:textStyle="bold|italic"
                                 tools:text="@string/lock_note" />
 
@@ -220,6 +220,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        android:contentDescription="@string/exit_fragment"
         app:layout_anchor="@id/bab_note_edit" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -232,6 +233,7 @@
         android:backgroundTint="?attr/colorSecondary"
         android:clickable="false"
         android:src="@drawable/ic_content_save_black_48dp"
+        android:contentDescription="@string/save_note"
         android:visibility="invisible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -244,6 +246,7 @@
         android:backgroundTint="?attr/colorSecondary"
         android:clickable="false"
         android:src="@drawable/ic_content_save_off_black_48dp"
+        android:contentDescription="@string/don_t_save_note"
         android:visibility="invisible" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -262,6 +265,7 @@
             android:id="@+id/fab_note_edit_color_pink"
             style="@style/FabColorNoteEditOneLine"
             android:backgroundTint="@color/pink_100"
+            android:contentDescription="@string/set_note_color_to_pink"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -272,6 +276,7 @@
             android:id="@+id/fab_note_edit_color_purple"
             style="@style/FabColorNoteEditOneLine"
             android:backgroundTint="@color/purple_100"
+            android:contentDescription="@string/set_note_color_to_purple"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -282,6 +287,7 @@
             android:id="@+id/fab_note_edit_color_indigo"
             style="@style/FabColorNoteEditOneLine"
             android:backgroundTint="@color/indigo_100"
+            android:contentDescription="@string/set_note_color_indigo"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -292,6 +298,7 @@
             android:id="@+id/fab_note_edit_color_green"
             style="@style/FabColorNoteEditOneLine"
             android:backgroundTint="@color/green_100"
+            android:contentDescription="@string/set_note_color_green"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -300,8 +307,9 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_note_edit_color_orange"
-            style="@style/ColorButtonNoteEditRight"
+            style="@style/ColorButtonNoteTwoLine"
             android:backgroundTint="@color/orange_100"
+            android:contentDescription="@string/set_note_color_orange"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -311,8 +319,9 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_note_edit_color_brown"
-            style="@style/ColorButtonNoteEditRight"
+            style="@style/ColorButtonNoteTwoLine"
             android:backgroundTint="@color/brown_100"
+            android:contentDescription="@string/set_note_color_brown"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -321,8 +330,9 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_note_edit_color_gray"
-            style="@style/ColorButtonNoteEditRight"
+            style="@style/ColorButtonNoteTwoLine"
             android:backgroundTint="@color/gray_100"
+            android:contentDescription="@string/set_note_color_gray"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -331,8 +341,9 @@
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_note_edit_color_blue_gray"
-            style="@style/ColorButtonNoteEditRight"
+            style="@style/ColorButtonNoteTwoLine"
             android:backgroundTint="@color/blue_gray_100"
+            android:contentDescription="@string/set_note_color_blue_gray"
             app:backgroundTint="?attr/colorPrimary"
             app:borderWidth="3dp"
             app:layout_constraintTop_toTopOf="parent"

@@ -26,4 +26,15 @@
     <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
     <string name="select_text_to_copy">Необходимо выделить текст для копирования</string>
     <string name="sel_text_copied_clipboard">Выделенный текст копируется в буфер обмена</string>
+    <string name="exit_fragment">Выйти из фрагмента</string>
+    <string name="save_note">Сохранить заметку</string>
+    <string name="don_t_save_note">Не сохранять заметку</string>
+    <string name="set_note_color_to_pink">Установить розовый цвет заметки</string>
+    <string name="set_note_color_to_purple">Установить фиолетовый цвет заметки</string>
+    <string name="set_note_color_indigo">Установить цвет заметки индиго</string>
+    <string name="set_note_color_green">Установить зеленый цвет заметки</string>
+    <string name="set_note_color_orange">Установить оранжевый цвет заметки</string>
+    <string name="set_note_color_brown">Установить коричневый цвет заметки</string>
+    <string name="set_note_color_gray">Установить светло - серый цвет заметки</string>
+    <string name="set_note_color_blue_gray">Установить серый цвет заметки</string>
 </resources>

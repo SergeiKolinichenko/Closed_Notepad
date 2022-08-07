@@ -27,5 +27,16 @@
     <string name="entry_color_blue_gray">Blue-gray</string>
     <string name="copy_text_clipboard">Note text copied to clipboard</string>
     <string name="sel_text_copied_clipboard">Selected text copied to clipboard</string>
+    <string name="exit_fragment">Exit fragment</string>
+    <string name="save_note">Save note</string>
+    <string name="don_t_save_note">Don\'t save note</string>
+    <string name="set_note_color_to_pink">Set note color pink</string>
+    <string name="set_note_color_to_purple">Set note color purple</string>
+    <string name="set_note_color_indigo">Set note color indigo</string>
+    <string name="set_note_color_green">Set note color green</string>
+    <string name="set_note_color_orange">Set note color orange</string>
+    <string name="set_note_color_brown">Set note color brown</string>
+    <string name="set_note_color_gray">Set note color gray</string>
+    <string name="set_note_color_blue_gray">Set note color blue gray</string>
 
 </resources>

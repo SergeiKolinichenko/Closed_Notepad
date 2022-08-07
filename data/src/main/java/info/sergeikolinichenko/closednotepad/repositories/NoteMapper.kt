@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.repository
+package info.sergeikolinichenko.closednotepad.repositories
 
 import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 import info.sergeikolinichenko.closednotepad.models.Note
