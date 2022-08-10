@@ -17,19 +17,22 @@
     <string name="select_text_to_copy">Select text to copy</string>
 
     <!-- Entries Colors -->
-    <string name="entry_color_pink">Pink</string>
-    <string name="entry_color_purple">Purple</string>
-    <string name="entry_color_indigo">Indigo</string>
-    <string name="entry_color_green">Green</string>
-    <string name="entry_color_orange">Orange</string>
-    <string name="entry_color_brown">Brown</string>
-    <string name="entry_color_gray">Gray</string>
-    <string name="entry_color_blue_gray">Blue-gray</string>
+    <string name="note_color_pink">Pink</string>
+    <string name="note_color_purple">Purple</string>
+    <string name="note_color_indigo">Indigo</string>
+    <string name="note_color_green">Green</string>
+    <string name="note_color_orange">Orange</string>
+    <string name="note_color_brown">Brown</string>
+    <string name="note_color_gray">Gray</string>
+    <string name="note_color_blue_gray">Blue-gray</string>
+
+
     <string name="copy_text_clipboard">Note text copied to clipboard</string>
     <string name="sel_text_copied_clipboard">Selected text copied to clipboard</string>
     <string name="exit_fragment">Exit fragment</string>
     <string name="save_note">Save note</string>
     <string name="don_t_save_note">Don\'t save note</string>
+
     <string name="set_note_color_to_pink">Set note color pink</string>
     <string name="set_note_color_to_purple">Set note color purple</string>
     <string name="set_note_color_indigo">Set note color indigo</string>
@@ -39,4 +42,14 @@
     <string name="set_note_color_gray">Set note color gray</string>
     <string name="set_note_color_blue_gray">Set note color blue gray</string>
 
+    <!-- Sort notes -->
+    <string name="sort_shown_by_time_stamp">Time of creation</string>
+    <string name="sort_shown_by_title">Title</string>
+    <string name="sort_shown_by_palette">Color</string>
+    <string name="description_sort_time_stamp_ascending">Sort the list by creation time in ascending order</string>
+    <string name="description_sort_time_stamp_descending">Sort the list by creation time in descending order</string>
+    <string name="description_sort_title_ascending">Sort the list by titles in ascending order</string>
+    <string name="description_sort_title_descending">Sort the list by titles in descending order</string>
+    <string name="sort_list_by_palette">Sort list by note color</string>
+    <string name="description_add_note">Add note</string>
 </resources>

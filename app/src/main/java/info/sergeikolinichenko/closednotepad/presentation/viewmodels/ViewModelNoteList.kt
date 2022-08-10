@@ -9,19 +9,20 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
+import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.random.Random
 
 class ViewModelNoteList(
-    private val getListNoteUseCase: GetListNotesUseCase,
-    private val removeNoteUseCase: RemoveNoteUseCase,
-    private val editNoteUseCase: EditNoteUseCase,
+    getListNote: GetListNotesUseCase,
+    getPrefOrderListNote: GetPrefOrderNoteListUseCase,
+    private val removeNote: RemoveNoteUseCase,
+    private val editNote: EditNoteUseCase,
+    private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
-    private var _noteList: MutableLiveData<List<Note>> =
-        getListNoteUseCase.invoke()
+    private var _noteList: MutableLiveData<List<Note>> = getListNote.invoke()
     val noteList: LiveData<List<Note>>
     get() = _noteList
 
@@ -29,9 +30,16 @@ class ViewModelNoteList(
     val isSelected: LiveData<Boolean>
         get() = _isSelected
 
+    private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
+    val orderViewNoteList: String
+    get() = _orderViewNoteList ?: throw RuntimeException("orderViewNoteList equal null")
+
     private val selectedNotes = mutableListOf<Note>()
 
 //    init {
+//        _noteList = getListNote.invoke()
+//    }
+
 //        _isSelected.value = false
 //        var tempCount = 0
 //        for (i in 0..100) {
@@ -87,7 +95,7 @@ class ViewModelNoteList(
         val note = noteList.value?.find { it.timeStamp == timeStamp }
         note?.let {
             viewModelScope.launch {
-                removeNoteUseCase.invoke(it)
+                removeNote.invoke(it)
             }
         }
     }
@@ -95,7 +103,7 @@ class ViewModelNoteList(
     fun removeNotes() {
         for (item in selectedNotes) {
             viewModelScope.launch {
-                removeNoteUseCase.invoke(item)
+                removeNote.invoke(item)
             }
         }
         clearSelectedNotes()
@@ -105,7 +113,7 @@ class ViewModelNoteList(
         for (item in selectedNotes) {
             val newItem = item.copy(colorIndex = colorIndex, isSelected = !item.isSelected)
             viewModelScope.launch {
-                editNoteUseCase.invoke(newItem)
+                editNote.invoke(newItem)
             }
         }
         clearSelectedNotes()
@@ -114,6 +122,12 @@ class ViewModelNoteList(
     private fun clearSelectedNotes() {
         selectedNotes.clear()
         _isSelected.value = false
+    }
+
+    fun setOrderViewNoteList(order: String) {
+        _orderViewNoteList = order
+        setPrefOrderListNote.invoke(order)
+        _noteList.value = noteList.value
     }
 
 }

@@ -7,26 +7,26 @@ class PreferencesRepositoryImpl(application: Application): PreferencesRepository
 
     private val sharPref = SharedPrefNotes.getInstance(application)
 
-    override fun setOrderViewNoteList(order: String) {
+    override fun setPrefOrderNoteList(order: String) {
         sharPref.edit().putString(ORDER_VIEW_NOTE_LIST, order).apply()
     }
 
-    override fun getOrderViewNoteList() =
+    override fun getPrefOrderNoteList() =
         sharPref.getString(ORDER_VIEW_NOTE_LIST, ERROR_GET_STRING) ?:
         throw RuntimeException("preferences ORDER_VIEW_NOTE_LIST isn't exist")
 
 
-    override fun setDefColorIndex(index: Int) {
+    override fun setPrefColorIndex(index: Int) {
         sharPref.edit().putInt(DEFAULT_COLOR_INDEX, index).apply()
     }
 
-    override fun getDefColorIndex() = sharPref.getInt(DEFAULT_COLOR_INDEX, ERROR_GET_INT)
+    override fun getPrefColorIndex() = sharPref.getInt(DEFAULT_COLOR_INDEX, ERROR_GET_INT)
 
     companion object{
         private const val DEFAULT_COLOR_INDEX = "default_color_index"
         private const val ORDER_VIEW_NOTE_LIST = "order_view_note_list"
-        private const val ERROR_GET_INT = -1
-        private const val ERROR_GET_STRING = "error_shar_pref"
+        const val ERROR_GET_INT = -1
+        const val ERROR_GET_STRING = "error_shar_pref"
 
     }
 }

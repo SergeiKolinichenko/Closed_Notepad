@@ -2,11 +2,11 @@ package info.sergeikolinichenko.closednotepad.repositories
 
 interface PreferencesRepository {
 
-    fun setOrderViewNoteList(order: String)
+    fun setPrefOrderNoteList(order: String)
 
-    fun getOrderViewNoteList(): String
+    fun getPrefOrderNoteList(): String
 
-    fun setDefColorIndex(index: Int)
+    fun setPrefColorIndex(index: Int)
 
-    fun getDefColorIndex(): Int
+    fun getPrefColorIndex(): Int
 }

@@ -11,9 +11,11 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
@@ -23,7 +25,6 @@ import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.Note
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteListFactory
-import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
 
 class NoteListFragment : Fragment() {
 
@@ -32,10 +33,6 @@ class NoteListFragment : Fragment() {
     }
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteList::class.java]
-    }
-
-    private val sharedPref by lazy {
-        PreferencesRepositoryImpl(application = requireActivity().application)
     }
 
     private val adapterNoteList by lazy { NoteListAdapter() }
@@ -86,6 +83,7 @@ class NoteListFragment : Fragment() {
         initNoteClickListeners()
         initColorButtons()
         initBackPressed()
+        initOrderButtons()
     }
 
     override fun onDestroyView() {
@@ -93,27 +91,71 @@ class NoteListFragment : Fragment() {
         _binding = null
     }
 
-    private fun observeNoteList() {
-        viewModel.noteList.observe(viewLifecycleOwner) {
-            adapterNoteList.submitList(sortListNotes(it))
+    private fun initOrderButtons() {
+        with(binding) {
+            fabTimeStampSortAscending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TIME_STAMP_ASCENDING)
+                hideOrderButtons()
+            }
+            fabTimeStampSortDescending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
+                hideOrderButtons()
+            }
+            fabTitleAlphabetSortAscending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TITLE_ASCENDING)
+                hideOrderButtons()
+            }
+            fabTitleAlphabetSortDescending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
+                hideOrderButtons()
+            }
+            fabPaletteSort.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_PALETTE)
+                hideOrderButtons()
+            }
         }
     }
 
-    private fun sortListNotes(list: List<Note>): List<Note> {
-        // return list.sortedBy { it.timeStamp }
-        // return list.sortedBy { it.colorIndex }
-        return list.sortedByDescending { it.timeStamp }
+    private fun observeNoteList() {
+        viewModel.noteList.observe(viewLifecycleOwner) {
+            adapterNoteList.submitList(orderViewNoteList(it))
+
+        }
+    }
+
+    private fun goToTopRecycleView() {
+        //binding.recyclerView.layoutManager?.scrollToPosition(0)
+    }
+
+    private fun orderViewNoteList(list: List<Note>): List<Note> {
+        return when (viewModel.orderViewNoteList) {
+            SORT_TIME_STAMP_ASCENDING -> list.sortedBy { it.timeStamp }
+            SORT_TIME_STAMP_DESCENDING -> list.sortedByDescending { it.timeStamp }
+            SORT_TITLE_ASCENDING -> list.sortedBy { it.titleNote }
+            SORT_TITLE_DESCENDING -> list.sortedByDescending { it.titleNote }
+            SORT_PALETTE -> list.sortedBy { it.colorIndex }
+            else -> {
+                return list.sortedBy { it.timeStamp }
+            }
+        }
     }
 
     private fun initToolbar() {
-        if (isNight) {
-            binding.ibNoteListFilter.setImageResource(R.drawable.ic_filter_variant_white_36dp)
-        } else {
-            binding.ibNoteListFilter.setImageResource(R.drawable.ic_filter_variant_black_36dp)
-        }
+        with(binding) {
+            if (isNight) {
+                ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_white_36dp)
+                ivNoteListSortShown.setImageResource(R.drawable.ic_filter_variant_white_36dp)
+            } else {
+                ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_black_36dp)
+                ivNoteListSortShown.setImageResource(R.drawable.ic_filter_variant_black_36dp)
+            }
 
-        binding.ivOutlineNoteList.setOnClickListener {
-            finishApp.finishApp()
+            ivOutlineNoteList.setOnClickListener {
+                finishApp.finishApp()
+            }
+            ivNoteListSortShown.setOnClickListener {
+                showOrderButtons()
+            }
         }
     }
 
@@ -238,6 +280,67 @@ class NoteListFragment : Fragment() {
                 }
                 hideFabAndBab()
             }
+        }
+    }
+
+    private fun getListOrderButtons(): List<FloatingActionButton> {
+        val list = mutableListOf<FloatingActionButton?>()
+        with(binding) {
+            list.add(fabTimeStampSortAscending)
+            list.add(fabTimeStampSortDescending)
+            list.add(fabTitleAlphabetSortAscending)
+            list.add(fabTitleAlphabetSortDescending)
+            list.add(fabPaletteSort)
+        }
+        return list.filterNotNull()
+    }
+
+    private fun showOrderButtons() {
+        val orient = requireActivity().resources.configuration.orientation
+        val list = getListOrderButtons()
+        var transY: Float
+        var transX: Float
+        var plusX = 0F
+        var plusY = 0F
+        if (orient == Configuration.ORIENTATION_PORTRAIT) {
+            transY = 250F
+            transX = -100F
+            plusY = transY
+        } else {
+            transY = 200F
+            transX = -100F
+            plusX = -200F
+        }
+        for (item in list) {
+            item.visibility = View.VISIBLE
+            item.isClickable = true
+            item.animate()
+                .translationY(transY)
+                .translationX(transX)
+                .setDuration(500)
+                .scaleX(1F)
+                .scaleY(1F)
+                .alpha(1F)
+                .setInterpolator(LinearInterpolator())
+                .start()
+            transY += plusY
+            transX += plusX
+        }
+    }
+
+    private fun hideOrderButtons() {
+        val list = getListOrderButtons()
+        for (item in list) {
+            item.isClickable = false
+            item.animate()
+                .translationY(0F)
+                .translationX(0F)
+                .setDuration(500)
+                .scaleX(0F)
+                .scaleY(0F)
+                .alpha(0F)
+                .setInterpolator(LinearInterpolator())
+                .start()
         }
     }
 
@@ -489,6 +592,11 @@ class NoteListFragment : Fragment() {
 
     companion object {
         const val NAME = "note_list_fragment"
+        const val SORT_TIME_STAMP_ASCENDING = "sort_time_stamp_ascending"
+        private const val SORT_TIME_STAMP_DESCENDING = "sort_time_stamp_descending"
+        private const val SORT_TITLE_ASCENDING = "sort_title_ascending"
+        private const val SORT_TITLE_DESCENDING = "sort_title_descending"
+        private const val SORT_PALETTE = "sort_palette"
 
         @JvmStatic
         fun newInstance() = NoteListFragment()

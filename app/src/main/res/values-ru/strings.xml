@@ -15,14 +15,14 @@
     <string name="lock_note">Заблокировать</string>
     <string name="unlock_note">Разблокировать</string>
 
-    <string name="entry_color_pink">Розовый</string>
-    <string name="entry_color_purple">Пурпурный</string>
-    <string name="entry_color_indigo">Индиго</string>
-    <string name="entry_color_green">Зеленый</string>
-    <string name="entry_color_orange">Оранжевый</string>
-    <string name="entry_color_brown">Коричневый</string>
-    <string name="entry_color_gray">Серый</string>
-    <string name="entry_color_blue_gray">" Серо-голубой"</string>
+    <string name="note_color_pink">Розовый</string>
+    <string name="note_color_purple">Пурпурный</string>
+    <string name="note_color_indigo">Индиго</string>
+    <string name="note_color_green">Зеленый</string>
+    <string name="note_color_orange">Оранжевый</string>
+    <string name="note_color_brown">Коричневый</string>
+    <string name="note_color_gray">Серый</string>
+    <string name="note_color_blue_gray">" Серо-голубой"</string>
     <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
     <string name="select_text_to_copy">Необходимо выделить текст для копирования</string>
     <string name="sel_text_copied_clipboard">Выделенный текст копируется в буфер обмена</string>
@@ -37,4 +37,13 @@
     <string name="set_note_color_brown">Установить коричневый цвет заметки</string>
     <string name="set_note_color_gray">Установить светло - серый цвет заметки</string>
     <string name="set_note_color_blue_gray">Установить серый цвет заметки</string>
+    <string name="sort_shown_by_time_stamp">Время создания</string>
+    <string name="sort_shown_by_title">Заголовок</string>
+    <string name="sort_shown_by_palette">Цвет</string>
+    <string name="description_sort_time_stamp_ascending">Отсортировать список по времени создания в порядке возрастания</string>
+    <string name="description_sort_time_stamp_descending">Отсортировать список по времени создания в порядке убывания</string>
+    <string name="description_sort_title_ascending">Отсортировать список по заголовкам в порядке возрастания</string>
+    <string name="description_sort_title_descending">Отсортировать список по названиям в порядке убывания</string>
+    <string name="sort_list_by_palette">"Сортировать список по цвету заметки "</string>
+    <string name="description_add_note">Добавить заметку</string>
 </resources>

@@ -15,14 +15,14 @@
     <string name="lock_note">Заключете</string>
     <string name="unlock_note">Отключете</string>
 
-    <string name="entry_color_pink">Розово</string>
-    <string name="entry_color_purple">Лилаво</string>
-    <string name="entry_color_indigo">Индиго</string>
-    <string name="entry_color_green">Зелено</string>
-    <string name="entry_color_orange">Портокал</string>
-    <string name="entry_color_brown">Кафяво</string>
-    <string name="entry_color_gray">Сив</string>
-    <string name="entry_color_blue_gray">Сиво-синьо</string>
+    <string name="note_color_pink">Розово</string>
+    <string name="note_color_purple">Лилаво</string>
+    <string name="note_color_indigo">Индиго</string>
+    <string name="note_color_green">Зелено</string>
+    <string name="note_color_orange">Портокал</string>
+    <string name="note_color_brown">Кафяво</string>
+    <string name="note_color_gray">Сив</string>
+    <string name="note_color_blue_gray">Сиво-синьо</string>
     <string name="copy_text_clipboard">Текстът на бележката е копиран в клипборда</string>
     <string name="select_text_to_copy">Изберете текст за копиране</string>
     <string name="sel_text_copied_clipboard">Избраният текст е копиран в клипборда</string>
@@ -37,4 +37,13 @@
     <string name="set_note_color_brown">Задайте кафяв цвят на бележката</string>
     <string name="set_note_color_gray">Задайте сив цвят на бележката</string>
     <string name="set_note_color_blue_gray">Задайте синьо сив цвят на бележката</string>
+    <string name="sort_shown_by_time_stamp">Време на създаване</string>
+    <string name="sort_shown_by_title">Заглавка</string>
+    <string name="sort_shown_by_palette">Цвят</string>
+    <string name="description_sort_time_stamp_ascending">Сортирайте списъка по време на създаване във възходящ ред</string>
+    <string name="description_sort_time_stamp_descending">Сортирайте списъка по време на създаване в низходящ ред</string>
+    <string name="description_sort_title_ascending">Сортирайте списъка по заглавия във възходящ ред</string>
+    <string name="description_sort_title_descending">Сортирайте списъка по заглавия в низходящ ред</string>
+    <string name="sort_list_by_palette">Сортирайте списъка по цвят на бележката</string>
+    <string name="description_add_note">Добави бележка</string>
 </resources>

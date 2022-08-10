@@ -5,6 +5,62 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Order buttons -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/OrderButtons"
+        android:id="@+id/fab_time_stamp_sort_ascending"
+        android:text="@string/sort_shown_by_time_stamp"
+        android:src="@drawable/ic_sort_ascending_black_36dp"
+        android:contentDescription="@string/description_sort_time_stamp_ascending"
+        app:tint="?attr/colorOnPrimary"
+        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_time_stamp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/OrderButtons"
+        android:id="@+id/fab_time_stamp_sort_descending"
+        android:text="@string/sort_shown_by_time_stamp"
+        android:src="@drawable/ic_sort_descending_black_36dp"
+        android:contentDescription="@string/description_sort_time_stamp_descending"
+        app:cornerRadius="30dp"
+        app:tint="?attr/colorOnPrimary"
+        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_time_stamp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        style="@style/OrderButtons"
+        android:id="@+id/fab_title_alphabet_sort_ascending"
+        android:text="@string/sort_shown_by_title"
+        android:src="@drawable/ic_sort_alphabetical_ascending_black_36dp"
+        android:contentDescription="@string/description_sort_title_ascending"
+        app:cornerRadius="30dp"
+        app:tint="?attr/colorOnPrimary"
+        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_title" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_title_alphabet_sort_descending"
+        style="@style/OrderButtons"
+        android:text="@string/sort_shown_by_title"
+        android:src="@drawable/ic_sort_alphabetical_descending_black_36dp"
+        android:contentDescription="@string/description_sort_title_descending"
+        app:cornerRadius="30dp"
+        app:tint="?attr/colorOnPrimary"
+        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_title" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_palette_sort"
+        style="@style/OrderButtons"
+        android:text="@string/sort_shown_by_palette"
+        android:src="@drawable/ic_palette_black_36dp"
+        android:contentDescription="@string/sort_list_by_palette"
+        app:cornerRadius="30dp"
+        app:tint="?attr/colorOnPrimary"
+        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_palette" />
+
+    <!-- AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/tool_bar_note_list"
         style="@style/MyToolbar"
@@ -15,7 +71,7 @@
         app:contentInsetStart="10dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -24,31 +80,31 @@
                 android:id="@+id/iv_outline_note_list"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:scaleType="centerCrop"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:src="@drawable/ic_exit_to_app_black_36dp"
                 android:tint="?attr/colorOnPrimary" />
 
             <TextView
                 android:id="@+id/tv_toolbar_note_list"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:gravity="center"
                 android:text="@string/title_note_list"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="30sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:textStyle="bold"
+                android:layout_weight="1"/>
 
-        <androidx.appcompat.widget.AppCompatImageButton
-            android:id="@+id/ib_note_list_filter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:backgroundTint="?attr/colorPrimary"
-            android:src="@drawable/ic_filter_variant_black_36dp" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_note_list_sort_shown"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_filter_variant_black_36dp"
+                android:tint="?attr/colorOnPrimary" />
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -126,6 +182,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_plus_thick_black_48dp"
         android:elevation="10dp"
+        android:contentDescription="@string/description_add_note"
         app:layout_anchor="@id/bab_note_list"
         app:layout_behavior=".presentation.utils.FabHideOnScroll"/>
 
