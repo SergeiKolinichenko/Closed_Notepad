@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

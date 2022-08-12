@@ -17,10 +17,8 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteView
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteViewFactory
-
-private const val TIME_STAMP = "time_stamp"
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview.ViewModelNoteView
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview.ViewModelNoteViewFactory
 
 class NoteViewFragment : Fragment() {
 
@@ -257,7 +255,7 @@ class NoteViewFragment : Fragment() {
 
     private fun retryNoteListFragment() {
         requireActivity().supportFragmentManager.popBackStack(
-            NoteListFragment.NAME,
+            null,
             0
         )
     }
@@ -286,6 +284,7 @@ class NoteViewFragment : Fragment() {
     companion object {
 
         const val NAME = "note_view_fragment"
+        private const val TIME_STAMP = "time_stamp"
 
         @JvmStatic
         fun newInstance(timeStamp: Long) =

@@ -7,8 +7,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +15,14 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEditFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEdit
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEditFactory
 import java.util.*
 
 /**
@@ -58,7 +55,7 @@ class NoteEditFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNoteEditBinding.inflate(inflater, container, false)
         return binding.root
     }

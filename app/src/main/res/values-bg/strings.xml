@@ -46,4 +46,7 @@
     <string name="description_sort_title_descending">Сортирайте списъка по заглавия в низходящ ред</string>
     <string name="sort_list_by_palette">Сортирайте списъка по цвят на бележката</string>
     <string name="description_add_note">Добави бележка</string>
+    <string name="hint_search_enter_search_words">Въведете думи за търсене</string>
+    <string name="description_leave_search">Оставете търсенето</string>
+    <string name="please_enter_search_text">Моля, въведете текст за търсене</string>
 </resources>

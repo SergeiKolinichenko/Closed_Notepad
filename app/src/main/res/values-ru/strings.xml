@@ -46,4 +46,7 @@
     <string name="description_sort_title_descending">Отсортировать список по названиям в порядке убывания</string>
     <string name="sort_list_by_palette">"Сортировать список по цвету заметки "</string>
     <string name="description_add_note">Добавить заметку</string>
+    <string name="hint_search_enter_search_words">Введите искомые слова</string>
+    <string name="description_leave_search">Покинуть поиск</string>
+    <string name="please_enter_search_text">Пожалуйста, введите искомый текст</string>
 </resources>

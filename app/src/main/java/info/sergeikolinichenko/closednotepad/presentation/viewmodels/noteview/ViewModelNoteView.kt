@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

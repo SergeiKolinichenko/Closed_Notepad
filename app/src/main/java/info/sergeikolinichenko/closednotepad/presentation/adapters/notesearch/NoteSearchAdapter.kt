@@ -1,9 +1,8 @@
-package info.sergeikolinichenko.closednotepad.presentation.adapters.notelist
+package info.sergeikolinichenko.closednotepad.presentation.adapters.notesearch
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.ListAdapter
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
@@ -11,26 +10,18 @@ import info.sergeikolinichenko.closednotepad.presentation.adapters.NoteListDiffC
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 
-class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallback()) {
+class NoteSearchAdapter: ListAdapter<Note, NoteSearchViewHolder>(NoteListDiffCallback()) {
 
     var onNoteClick: ((Note) -> Unit)? = null
-    var onNoteLongClick: ((Note) -> Unit)? = null
     var isNight: Boolean = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteListViewHolder {
-
-        val layoutType = when (viewType) {
-            SELECTED_ENTRY -> R.layout.selected_note_list_item
-            UNSELECTED_ENTRY -> R.layout.note_list_item
-            else -> throw RuntimeException("Unknown view type $viewType")
-        }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteSearchViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(
-            layoutType, parent, false
-        )
-        return NoteListViewHolder(view)
+            R.layout.note_list_item, parent, false)
+        return NoteSearchViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NoteSearchViewHolder, position: Int) {
         val note = getItem(position)
         val colorBack = if (isNight)
             NoteColors.entriesColor[NoteColors.DARK_COLOR][note.colorIndex]
@@ -41,6 +32,7 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
         else R.drawable.ic_lock_black_36dp
 
         with(holder) {
+
             tvNoteDate.text = TimeUtils.getDate(note.timeStamp)
             tvNoteTime.text = TimeUtils.getTime(note.timeStamp)
             tvNoteTitle.text = note.titleNote
@@ -53,24 +45,7 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
             itemView.setOnClickListener {
                 onNoteClick?.invoke(note)
             }
-
-            itemView.setOnLongClickListener {
-                onNoteLongClick?.invoke(note)
-                true
-            }
         }
-        holder.cvNote.animation = AnimationUtils.loadAnimation(
-            holder.itemView.context, R.anim.anim_note_entry
-        )
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (getItem(position).isSelected) SELECTED_ENTRY
-        else UNSELECTED_ENTRY
-    }
-
-    companion object {
-        private const val SELECTED_ENTRY = 1
-        private const val UNSELECTED_ENTRY = 0
-    }
 }

@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.adapters.notelist
+package info.sergeikolinichenko.closednotepad.presentation.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import info.sergeikolinichenko.closednotepad.models.Note

@@ -1,5 +1,6 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,10 +36,6 @@ class ViewModelNoteList(
     get() = _orderViewNoteList ?: throw RuntimeException("orderViewNoteList equal null")
 
     private val selectedNotes = mutableListOf<Note>()
-
-//    init {
-//        _noteList = getListNote.invoke()
-//    }
 
 //        _isSelected.value = false
 //        var tempCount = 0

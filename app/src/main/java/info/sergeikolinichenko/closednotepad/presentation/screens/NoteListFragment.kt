@@ -4,14 +4,12 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -23,8 +21,8 @@ import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteListFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
 
 class NoteListFragment : Fragment() {
 
@@ -123,10 +121,6 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    private fun goToTopRecycleView() {
-        //binding.recyclerView.layoutManager?.scrollToPosition(0)
-    }
-
     private fun orderViewNoteList(list: List<Note>): List<Note> {
         return when (viewModel.orderViewNoteList) {
             SORT_TIME_STAMP_ASCENDING -> list.sortedBy { it.timeStamp }
@@ -190,8 +184,7 @@ class NoteListFragment : Fragment() {
             removeNotes()
         }
         binding.ibNoteListMagnify.setOnClickListener {
-            binding.fabAddNoteList.hide()
-            binding.babNoteList.performHide()
+            launchNoteSearchFragment()
         }
     }
 
@@ -247,7 +240,7 @@ class NoteListFragment : Fragment() {
         adapterNoteList.onNoteClick = {
             if (!isNotesSelected) {
                 // Go to NoteViewFragment
-                launchNoteViewFragment(it)
+                launchNoteViewFragment(it.timeStamp)
             } else {
                 // Deselecting elements collections
                 viewModel.selectNotesAtNote(it)
@@ -460,8 +453,7 @@ class NoteListFragment : Fragment() {
         )
     }
 
-    private fun launchNoteViewFragment(noteEntry: Note) {
-        val timeStamp = noteEntry.timeStamp
+    private fun launchNoteViewFragment(timeStamp: Long) {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.enter_from_right, R.anim.exit_to_left,
@@ -480,6 +472,19 @@ class NoteListFragment : Fragment() {
             )
             .replace(R.id.main_container, NoteEditFragment.newInstanceAddMode())
             .addToBackStack(NoteEditFragment.NAME)
+            .commit()
+    }
+
+    private fun launchNoteSearchFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_top,
+                R.anim.exit_to_bottom,
+                R.anim.enter_from_bottom,
+                R.anim.exit_to_top
+            )
+            .replace(R.id.main_container, NoteSearchFragment.newInstance())
+            .addToBackStack(NoteSearchFragment.NAME)
             .commit()
     }
 

@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -131,7 +131,7 @@ class ViewModelNoteEdit(
     }
 
     private fun getSubstringIndex(string: String): Int {
-        var lString = string
+        val lString = string
         var index = string.indexOf(".")
         if (index < 0 || index > MAX_TITLE_LENGTH) {
             index = lString.lastIndexOf(" ")
