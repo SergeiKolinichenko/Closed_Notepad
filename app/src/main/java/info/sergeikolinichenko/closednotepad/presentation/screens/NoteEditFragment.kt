@@ -75,7 +75,6 @@ class NoteEditFragment : Fragment() {
         initFabSave()
         initFabNoSave()
         initColorButtons()
-        initSoftKeyListener()
         launchModes()
     }
 
@@ -254,36 +253,28 @@ class NoteEditFragment : Fragment() {
 
         with(binding) {
             fabNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
             )
             fabNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
             )
             fabNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
             )
             fabNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
             )
             fabNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
             )
             fabNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
             )
             fabNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
             )
             fabNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
+                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
             )
             fabNoteEditColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
@@ -497,19 +488,6 @@ class NoteEditFragment : Fragment() {
             startAnimation(animShowFabSave)
             isClickable = true
         }
-    }
-
-    private fun initSoftKeyListener() {
-//        binding.root.viewTreeObserver.addOnGlobalLayoutListener {
-//            val heightDiff = binding.root.rootView.height - binding.root.height
-//            if (heightDiff > 500) {
-//                Toast.makeText(requireContext(), "keyboard opened", Toast.LENGTH_SHORT).show()
-//                Log.e("MyLog", "keyboard opened")
-//            } else {
-//                Toast.makeText(requireContext(), "keyboard closed", Toast.LENGTH_SHORT).show()
-//                Log.d("MyLog", "keyboard closed")
-//            }
-//        }
     }
 
     private fun showToast(message: String) {

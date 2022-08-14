@@ -122,6 +122,7 @@ class NoteListFragment : Fragment() {
     }
 
     private fun orderViewNoteList(list: List<Note>): List<Note> {
+        setImageSortVariant()
         return when (viewModel.orderViewNoteList) {
             SORT_TIME_STAMP_ASCENDING -> list.sortedBy { it.timeStamp }
             SORT_TIME_STAMP_DESCENDING -> list.sortedByDescending { it.timeStamp }
@@ -138,18 +139,42 @@ class NoteListFragment : Fragment() {
         with(binding) {
             if (isNight) {
                 ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_white_36dp)
-                ivNoteListSortShown.setImageResource(R.drawable.ic_filter_variant_white_36dp)
             } else {
                 ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_black_36dp)
-                ivNoteListSortShown.setImageResource(R.drawable.ic_filter_variant_black_36dp)
             }
-
+            setImageSortVariant()
             ivOutlineNoteList.setOnClickListener {
                 finishApp.finishApp()
             }
             ivNoteListSortShown.setOnClickListener {
                 showOrderButtons()
             }
+        }
+    }
+
+    private fun setImageSortVariant() {
+        val sortVariant = when (viewModel.orderViewNoteList) {
+            SORT_TIME_STAMP_ASCENDING ->
+                if (isNight) R.drawable.ic_sort_ascending_white_36dp
+                else R.drawable.ic_sort_ascending_black_36dp
+
+            SORT_TIME_STAMP_DESCENDING ->
+                if (isNight) R.drawable.ic_sort_descending_white_36dp
+                else R.drawable.ic_sort_descending_black_36dp
+
+            SORT_TITLE_ASCENDING ->
+                if (isNight) R.drawable.ic_sort_alphabetical_ascending_white_36dp
+                else R.drawable.ic_sort_alphabetical_ascending_black_36dp
+
+            SORT_TITLE_DESCENDING ->
+                if (isNight) R.drawable.ic_sort_alphabetical_descending_white_36dp
+                else R.drawable.ic_sort_alphabetical_descending_black_36dp
+
+            else -> if (isNight) R.drawable.ic_filter_variant_white_36dp
+            else R.drawable.ic_filter_variant_black_36dp
+        }
+        sortVariant.let {
+            binding.ivNoteListSortShown.setImageResource(it)
         }
     }
 
@@ -172,8 +197,7 @@ class NoteListFragment : Fragment() {
             imgPallet = R.drawable.ic_palette_black_36dp
         }
         binding.ibNoteListCog.setOnClickListener {
-            binding.fabAddNoteList.show()
-            binding.babNoteList.performShow()
+            launchSettingsFragment()
         }
         binding.ibNoteListPalette.setOnClickListener {
             if (isNotesSelected) {
@@ -485,6 +509,19 @@ class NoteListFragment : Fragment() {
             )
             .replace(R.id.main_container, NoteSearchFragment.newInstance())
             .addToBackStack(NoteSearchFragment.NAME)
+            .commit()
+    }
+
+    private fun launchSettingsFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.enter_from_bottom,
+                R.anim.exit_to_top,
+                R.anim.enter_from_top,
+                R.anim.exit_to_bottom
+            )
+            .replace(R.id.main_container, SettingsFragment.newInstance())
+            .addToBackStack(SettingsFragment.NAME)
             .commit()
     }
 

@@ -48,5 +48,8 @@
     <string name="description_add_note">Добавить заметку</string>
     <string name="hint_search_enter_search_words">Введите искомые слова</string>
     <string name="description_leave_search">Покинуть поиск</string>
-    <string name="please_enter_search_text">Пожалуйста, введите искомый текст</string>
+    <string name="please_enter_search_text">Введите искомый текст</string>
+    <string name="title_application_settings">Настройки приложения</string>
+    <string name="settings_default_note_color">Цвет заметки по умолчанию</string>
+    <string name="settings_wastebasket">Мусорная корзина</string>
 </resources>

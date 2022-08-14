@@ -48,5 +48,8 @@
     <string name="description_add_note">Добави бележка</string>
     <string name="hint_search_enter_search_words">Въведете думи за търсене</string>
     <string name="description_leave_search">Оставете търсенето</string>
-    <string name="please_enter_search_text">Моля, въведете текст за търсене</string>
+    <string name="please_enter_search_text">Въведете текст за търсене</string>
+    <string name="title_application_settings">Настройки на приложението</string>
+    <string name="settings_default_note_color">Цвят на бележката по подразбиране</string>
+    <string name="settings_wastebasket">Кошче за боклук</string>
 </resources>

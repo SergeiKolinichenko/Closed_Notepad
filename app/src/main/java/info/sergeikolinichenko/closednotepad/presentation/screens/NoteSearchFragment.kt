@@ -1,10 +1,12 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -121,7 +123,16 @@ class NoteSearchFragment : Fragment() {
         adapterSearchNote.submitList(searchList)
     }
 
+    private fun Fragment.hideSoftKeyboard() {
+        val imm = requireActivity()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        view?.let {
+            imm.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
+
     private fun retryNoteListFragment() {
+        hideSoftKeyboard()
         requireActivity().supportFragmentManager.popBackStack(
             NoteListFragment.NAME,
             0
@@ -132,7 +143,7 @@ class NoteSearchFragment : Fragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.enter_from_bottom, R.anim.exit_to_top,
-                R.anim.enter_from_left, R.anim.exit_to_right
+                R.anim.enter_from_top, R.anim.exit_to_bottom
             )
             .replace(R.id.main_container, NoteViewFragment.newInstance(timeStamp))
             .addToBackStack(NoteViewFragment.NAME)

@@ -72,9 +72,30 @@
         <item name="android:clickable">false</item>
     </style>
 
-    <!-- <item name="android:visibility">invisible</item>
-             <item name="android:scaleY">0</item>
-        <item name="android:scaleX">0</item>
-     -->
+    <style name="SettingsButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/gray_100</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="SettingsColorButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/blue_gray_100</item>
+        <item name="android:textAlignment">center</item>
+    </style>
 
 </resources>

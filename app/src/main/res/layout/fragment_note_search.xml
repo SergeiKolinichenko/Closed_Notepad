@@ -30,7 +30,6 @@
             app:iconifiedByDefault="false"
             app:queryHint="@string/please_enter_search_text"
             app:searchHintIcon="@drawable/ic_magnify_black_48dp"
-
             android:background="@color/white"
             android:inputType="textCapSentences"/>
 
