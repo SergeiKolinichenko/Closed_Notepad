@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import info.sergeikolinichenko.closednotepad.database.AppDatabase
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.utils.NoteMapper
 
 class NoteRepositoryImpl(application: Application) : NotesRepository {
@@ -24,26 +25,29 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
 
     // Implementation of getting a notepad entry
     override suspend fun getNote(timeStamp: Long): Note {
-        return mapper.mapDbModelToEntity(notesDao.getNoteEntry(timeStamp))
+        return mapper.mapDbModelToEntity(notesDao.getNote(timeStamp))
     }
 
     // Implementation of adding a notepad entry
     override suspend fun addNote(note: Note) {
-        notesDao.addNoteEntry(mapper.mapEntityToDbModel(note))
+        notesDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
     // Implementation of editing a notepad entry
     override suspend fun editNote(note: Note) {
-        notesDao.addNoteEntry(mapper.mapEntityToDbModel(note))
+        notesDao.addNote(mapper.mapEntityToDbModel(note))
     }
 
     // Implementation of removing note from notepad to trash
-    override suspend fun removeNote(note: Note) {
-        notesDao.deleteNoteEntry(note.timeStamp)
-    }
-
-    // Implementation of searching for a required note in a notebook
-    override suspend fun searchNote(str: String): List<Note> {
-        TODO("Not yet implemented")
+    override suspend fun removeNote(note: Note): RemovedNote {
+        val removedNote = RemovedNote(
+            timeStamp = note.timeStamp,
+            titleEntry = note.titleNote,
+            itselfEntry = note.itselfNote,
+            colorIndex = note.colorIndex,
+            isLocked = note.isLocked
+        )
+        notesDao.removedNote(note.timeStamp)
+        return removedNote
     }
 }

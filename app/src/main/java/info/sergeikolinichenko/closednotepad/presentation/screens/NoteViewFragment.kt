@@ -72,7 +72,7 @@ class NoteViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeNoteEntry()
-        onScrollChangeListener()
+        onScrollViewChangeListener()
         observeViewToast()
         observeEndUsingFragment()
         initBackPressed()
@@ -176,7 +176,7 @@ class NoteViewFragment : Fragment() {
     }
 
     private fun initFab() {
-        binding.fabNoteEntryView.setOnClickListener {
+        binding.fabNoteViewExit.setOnClickListener {
             retryNoteListFragment()
         }
     }
@@ -220,16 +220,16 @@ class NoteViewFragment : Fragment() {
         viewModel.getNoteEntry(timeStamp)
     }
 
-    private fun onScrollChangeListener() {
+    private fun onScrollViewChangeListener() {
         binding.svNoteView.viewTreeObserver.addOnScrollChangedListener {
-            if (_binding != null) {
+            _binding?.let {
                 with(binding) {
                     if (svNoteView.scrollY > 0) {
                         babNoteView.performHide()
-                        fabNoteEntryView.hide()
+                        fabNoteViewExit.hide()
                     } else {
                         babNoteView.performShow()
-                        fabNoteEntryView.show()
+                        fabNoteViewExit.show()
                     }
                 }
             }

@@ -14,15 +14,21 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEdit
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEditFactory
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
@@ -45,6 +51,8 @@ class NoteEditFragment : Fragment() {
 
     private var isNight = false
     private var workingMode: String = MODE_UNKNOWN
+    private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
+    private var behaviorBottomAppBar = HideBottomViewOnScrollBehavior<BottomAppBar>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,11 +78,11 @@ class NoteEditFragment : Fragment() {
         observeIsShowColorButtons()
         initLockButton()
         initBackPressed()
+        initColorButtons()
         initBottomAppBar()
         initFabExit()
         initFabSave()
         initFabNoSave()
-        initColorButtons()
         launchModes()
     }
 
@@ -84,7 +92,9 @@ class NoteEditFragment : Fragment() {
 
     private fun observeRetryNoteListFrag() {
         viewModel.retryNoteListFrag.observe(viewLifecycleOwner) {
-            hideSoftKeyboard()
+            lifecycleScope.launch {
+                hideSoftKeyboard()
+            }
             retryNoteListFragment()
         }
     }
@@ -148,6 +158,7 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initBottomAppBar() {
+
         with(binding) {
             if (isNight) {
                 ibNoteEditCut.setImageResource(R.drawable.ic_content_cut_white_36dp)
@@ -188,6 +199,7 @@ class NoteEditFragment : Fragment() {
                 }
             }
         }
+        behaviorBottomAppBar = binding.babNoteEdit.behavior
     }
 
     private fun getExtractedStr(): String? {
@@ -248,56 +260,59 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initColorButtons() {
+        behaviorColorButtons = BottomSheetBehavior.from(binding.clNoteEditColorButtons)
+        behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
+
         val shadeColor = if (isNight) NoteColors.DARK_COLOR
         else NoteColors.LIGHT_COLOR
 
         with(binding) {
-            fabNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
             )
-            fabNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
             )
-            fabNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
             )
-            fabNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
             )
-            fabNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
             )
-            fabNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
             )
-            fabNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
             )
-            fabNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
+            mbNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
                 requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
             )
-            fabNoteEditColorPink.setOnClickListener {
+            mbNoteEditColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
             }
-            fabNoteEditColorPurple.setOnClickListener {
+            mbNoteEditColorPurple.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PURPLE)
             }
-            fabNoteEditColorIndigo.setOnClickListener {
+            mbNoteEditColorIndigo.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.INDIGO)
             }
-            fabNoteEditColorGreen.setOnClickListener {
+            mbNoteEditColorGreen.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GREEN)
             }
-            fabNoteEditColorOrange.setOnClickListener {
+            mbNoteEditColorOrange.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.ORANGE)
             }
-            fabNoteEditColorBrown.setOnClickListener {
+            mbNoteEditColorBrown.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BROWN)
             }
-            fabNoteEditColorGray.setOnClickListener {
+            mbNoteEditColorGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GRAY)
             }
-            fabNoteEditColorBlueGray.setOnClickListener {
+            mbNoteEditColorBlueGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BLUE_GRAY)
             }
         }
@@ -306,40 +321,25 @@ class NoteEditFragment : Fragment() {
     private fun observeIsShowColorButtons() {
         viewModel.isShowColorFabs.observe(viewLifecycleOwner) {
             if (it) {
-                with(binding) {
-                    showColorButton(fabNoteEditColorPink)
-                    showColorButton(fabNoteEditColorPurple)
-                    showColorButton(fabNoteEditColorIndigo)
-                    showColorButton(fabNoteEditColorGreen)
-                    showColorButton(fabNoteEditColorOrange)
-                    showColorButton(fabNoteEditColorBrown)
-                    showColorButton(fabNoteEditColorGray)
-                    showColorButton(fabNoteEditColorBlueGray)
-                }
+                showColorButtons()
             } else {
-                with(binding) {
-                    hideColorButton(fabNoteEditColorPink)
-                    hideColorButton(fabNoteEditColorPurple)
-                    hideColorButton(fabNoteEditColorIndigo)
-                    hideColorButton(fabNoteEditColorGreen)
-                    hideColorButton(fabNoteEditColorOrange)
-                    hideColorButton(fabNoteEditColorBrown)
-                    hideColorButton(fabNoteEditColorGray)
-                    hideColorButton(fabNoteEditColorBlueGray)
-                }
+                hideColorButtons()
             }
         }
     }
 
-    private fun showColorButton(view: View) {
-        view.animate().alpha(1F).scaleX(1.2F).scaleY(1.2F).setDuration(500).start()
-        view.visibility = View.VISIBLE
-        view.isClickable = true
+    private fun showColorButtons() {
+        behaviorBottomAppBar.slideDown(binding.babNoteEdit)
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
+            behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
-    private fun hideColorButton(view: View) {
-        view.animate().alpha(0F).scaleX(0F).scaleY(0F).setDuration(500).start()
-        view.isClickable = false
+    private fun hideColorButtons() {
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+        behaviorBottomAppBar.slideUp(binding.babNoteEdit)
     }
 
     private fun launchModes() {

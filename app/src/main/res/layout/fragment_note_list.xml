@@ -1,64 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <!-- Order buttons -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        style="@style/OrderButtons"
-        android:id="@+id/fab_time_stamp_sort_ascending"
-        android:text="@string/sort_shown_by_time_stamp"
-        android:src="@drawable/ic_sort_ascending_black_36dp"
-        android:contentDescription="@string/description_sort_time_stamp_ascending"
-        app:tint="?attr/colorOnPrimary"
-        app:maxImageSize="36dp"
-        tools:text="@string/sort_shown_by_time_stamp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_list_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="20dp"
+        android:clickable="false"
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_gravity="top|end"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="-200dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_time_stamp_sort_ascending"
+            style="@style/OrderButtons"
+            android:contentDescription="@string/description_sort_time_stamp_ascending"
+            android:text="@string/sort_shown_by_time_stamp"
+            app:icon="@drawable/ic_sort_ascending_black_36dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sort_shown_by_time_stamp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_time_stamp_sort_descending"
         style="@style/OrderButtons"
-        android:id="@+id/fab_time_stamp_sort_descending"
-        android:text="@string/sort_shown_by_time_stamp"
-        android:src="@drawable/ic_sort_descending_black_36dp"
         android:contentDescription="@string/description_sort_time_stamp_descending"
-        app:cornerRadius="30dp"
+        android:text="@string/sort_shown_by_time_stamp"
+        app:icon="@drawable/ic_sort_descending_black_36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mb_time_stamp_sort_ascending"
         app:tint="?attr/colorOnPrimary"
-        app:maxImageSize="36dp"
         tools:text="@string/sort_shown_by_time_stamp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_title_alphabet_sort_ascending"
         style="@style/OrderButtons"
-        android:id="@+id/fab_title_alphabet_sort_ascending"
-        android:text="@string/sort_shown_by_title"
-        android:src="@drawable/ic_sort_alphabetical_ascending_black_36dp"
         android:contentDescription="@string/description_sort_title_ascending"
-        app:cornerRadius="30dp"
-        app:tint="?attr/colorOnPrimary"
-        app:maxImageSize="36dp"
-        tools:text="@string/sort_shown_by_title" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_title_alphabet_sort_descending"
-        style="@style/OrderButtons"
         android:text="@string/sort_shown_by_title"
-        android:src="@drawable/ic_sort_alphabetical_descending_black_36dp"
-        android:contentDescription="@string/description_sort_title_descending"
-        app:cornerRadius="30dp"
+        app:icon="@drawable/ic_sort_alphabetical_ascending_black_36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mb_time_stamp_sort_descending"
         app:tint="?attr/colorOnPrimary"
-        app:maxImageSize="36dp"
         tools:text="@string/sort_shown_by_title" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_palette_sort"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_title_alphabet_sort_descending"
         style="@style/OrderButtons"
-        android:text="@string/sort_shown_by_palette"
-        android:src="@drawable/ic_palette_black_36dp"
-        android:contentDescription="@string/sort_list_by_palette"
-        app:cornerRadius="30dp"
+        android:contentDescription="@string/description_sort_title_descending"
+        android:text="@string/sort_shown_by_title"
+        app:icon="@drawable/ic_sort_alphabetical_descending_black_36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mb_title_alphabet_sort_ascending"
         app:tint="?attr/colorOnPrimary"
-        app:maxImageSize="36dp"
+        tools:text="@string/sort_shown_by_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mb_palette_sort"
+        style="@style/OrderButtons"
+        android:contentDescription="@string/sort_list_by_palette"
+        android:text="@string/sort_shown_by_palette"
+        app:icon="@drawable/ic_palette_black_36dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mb_title_alphabet_sort_descending"
+        app:tint="?attr/colorOnPrimary"
         tools:text="@string/sort_shown_by_palette" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
@@ -89,12 +109,12 @@
                 android:id="@+id/tv_toolbar_note_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/title_note_list"
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_weight="1"/>
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_note_list_sort_shown"
@@ -113,8 +133,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="?android:attr/actionBarSize"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/note_list_item" />
+        tools:listitem="@layout/note_list_item"
+        app:layout_dodgeInsetEdges="bottom"/>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bab_note_list"
@@ -124,8 +148,8 @@
         app:contentInsetEnd="5dp"
         app:contentInsetStart="5dp"
         app:fabAlignmentMode="center"
-        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
-        app:hideOnScroll="true">
+        app:fabCradleRoundedCornerRadius="2dp"
+        app:layout_dodgeInsetEdges="bottom">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -177,90 +201,109 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSecondary"
         android:backgroundTint="?attr/colorSecondary"
+        android:contentDescription="@string/description_add_note"
         android:elevation="10dp"
         android:src="@drawable/ic_plus_thick_black_48dp"
-        android:contentDescription="@string/description_add_note"
         app:layout_anchor="@id/bab_note_list"
-        app:layout_behavior=".presentation.utils.FabHideOnScroll" />
+        app:layout_dodgeInsetEdges="bottom"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_pink"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="65dp"
-        android:layout_marginEnd="240dp"
-        android:contentDescription="@string/set_note_color_to_pink"
-        android:backgroundTint="@color/pink_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_list_color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent"
+        android:elevation="10dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_insetEdge="bottom">
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_purple"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="125dp"
-        android:layout_marginEnd="225dp"
-        android:contentDescription="@string/set_note_color_to_purple"
-        android:backgroundTint="@color/purple_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_pink"
+                style="@style/SettingsColorButtons"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/pink_100"
+                app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_purple"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="?attr/colorPrimary" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_indigo"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="175dp"
-        android:layout_marginEnd="165dp"
-        android:contentDescription="@string/set_note_color_indigo"
-        android:backgroundTint="@color/indigo_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_purple"
+                style="@style/SettingsColorButtons"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/purple_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_pink"
+                app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="?attr/colorPrimary"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_green"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="200dp"
-        android:layout_marginEnd="60dp"
-        android:contentDescription="@string/set_note_color_green"
-        android:backgroundTint="@color/green_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_indigo"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/indigo_100"
+                app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_green"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_pink"
+                app:strokeColor="?attr/colorPrimary"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_orange"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="200dp"
-        android:layout_marginStart="60dp"
-        android:contentDescription="@string/set_note_color_orange"
-        android:backgroundTint="@color/orange_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_green"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/green_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_indigo"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_purple"
+                app:strokeColor="?attr/colorPrimary"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_brown"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="175dp"
-        android:layout_marginStart="165dp"
-        android:contentDescription="@string/set_note_color_brown"
-        android:backgroundTint="@color/brown_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp"/>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_orange"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/orange_100"
+                app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_brown"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_indigo"
+                app:strokeColor="?attr/colorPrimary"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_gray"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="125dp"
-        android:layout_marginStart="225dp"
-        android:contentDescription="@string/set_note_color_gray"
-        android:backgroundTint="@color/gray_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_brown"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/brown_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_orange"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_green"
+                app:strokeColor="?attr/colorPrimary"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_list_color_blue_gray"
-        style="@style/ColorButtonNoteList"
-        android:layout_marginBottom="65dp"
-        android:layout_marginStart="240dp"
-        android:contentDescription="@string/set_note_color_blue_gray"
-        android:backgroundTint="@color/blue_gray_100"
-        app:backgroundTint="?attr/colorPrimary"
-        app:borderWidth="3dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_gray"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/gray_100"
+                app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_blue_gray"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_orange"
+                app:strokeColor="?attr/colorPrimary"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mb_note_list_color_blue_gray"
+                style="@style/SettingsColorButtons"
+                android:backgroundTint="@color/blue_gray_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_gray"
+                app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_brown"
+                app:strokeColor="?attr/colorPrimary"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

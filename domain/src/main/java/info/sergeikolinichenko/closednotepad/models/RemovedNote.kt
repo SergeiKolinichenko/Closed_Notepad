@@ -4,5 +4,6 @@ data class RemovedNote(
     val timeStamp: Long,
     val titleEntry: String,
     val itselfEntry: String,
-    val colorIndex: Int
+    val colorIndex: Int,
+    val isLocked: Boolean
 )

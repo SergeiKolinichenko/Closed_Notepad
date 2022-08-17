@@ -1,6 +1,7 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.models.RemovedNote
 
 interface NotesRepository {
 
@@ -17,8 +18,5 @@ interface NotesRepository {
     suspend fun editNote(note: Note)
 
     // Move selected notes from notepad to trash
-    suspend fun removeNote(note: Note)
-
-    // Searching for a required note in a notebook
-    suspend fun searchNote(str: String): List<Note>
+    suspend fun removeNote(note: Note): RemovedNote
 }

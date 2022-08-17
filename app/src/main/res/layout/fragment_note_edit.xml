@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cl_note_entry_edit"
@@ -10,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="top"
+        app:layout_dodgeInsetEdges="bottom">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_note_edit_title"
@@ -122,7 +125,6 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="?android:attr/actionBarSize"
             android:elevation="5dp"
             android:paddingBottom="2dp"
             app:cardCornerRadius="5dp"
@@ -136,7 +138,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="5dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="?android:attr/actionBarSize"
                 android:background="@android:color/transparent"
                 android:fitsSystemWindows="true"
                 android:gravity="fill_horizontal|top"
@@ -160,17 +162,128 @@
 
     </LinearLayout>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_edit_color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_hideable="true"
+        app:layout_insetEdge="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_pink"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/pink_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_purple"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_purple"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/purple_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_pink"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_indigo"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/indigo_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_green"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_pink"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_green"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/green_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_indigo"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_purple"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_orange"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/orange_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_brown"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_indigo"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_brown"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/brown_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_orange"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_green"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_blue_gray"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_orange"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_blue_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/blue_gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_gray"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_brown"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bab_note_edit"
         style="@style/MyBottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        app:elevation="10dp"
         app:contentInsetEnd="5dp"
         app:contentInsetStart="5dp"
         app:fabAlignmentMode="end"
-        app:fabAnimationMode="scale"
-        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
-        app:hideOnScroll="true">
+        app:fabCradleRoundedCornerRadius="2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -221,7 +334,10 @@
         android:backgroundTint="?attr/colorSecondary"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         android:contentDescription="@string/exit_fragment"
-        app:layout_anchor="@id/bab_note_edit" />
+        app:elevation="15dp"
+        app:layout_anchor="@id/bab_note_edit"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_note_edit_save"
@@ -232,6 +348,7 @@
         android:layout_marginBottom="30dp"
         android:backgroundTint="?attr/colorSecondary"
         android:clickable="false"
+        app:elevation="10dp"
         android:src="@drawable/ic_content_save_black_48dp"
         android:contentDescription="@string/save_note"
         android:visibility="invisible" />
@@ -245,110 +362,9 @@
         android:layout_marginBottom="30dp"
         android:backgroundTint="?attr/colorSecondary"
         android:clickable="false"
+        app:elevation="10dp"
         android:src="@drawable/ic_content_save_off_black_48dp"
         android:contentDescription="@string/don_t_save_note"
         android:visibility="invisible" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_note_edit_color_buttons"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="100dp"
-        android:background="@android:color/transparent"
-        android:orientation="vertical"
-        app:layout_anchor="@id/bab_note_edit"
-        app:layout_anchorGravity="bottom|left">
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_pink"
-            style="@style/FabColorNoteEditOneLine"
-            android:backgroundTint="@color/pink_100"
-            android:contentDescription="@string/set_note_color_to_pink"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_purple"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_purple"
-            style="@style/FabColorNoteEditOneLine"
-            android:backgroundTint="@color/purple_100"
-            android:contentDescription="@string/set_note_color_to_purple"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_indigo"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_pink" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_indigo"
-            style="@style/FabColorNoteEditOneLine"
-            android:backgroundTint="@color/indigo_100"
-            android:contentDescription="@string/set_note_color_indigo"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_green"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_purple" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_green"
-            style="@style/FabColorNoteEditOneLine"
-            android:backgroundTint="@color/green_100"
-            android:contentDescription="@string/set_note_color_green"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_indigo" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_orange"
-            style="@style/ColorButtonNoteTwoLine"
-            android:backgroundTint="@color/orange_100"
-            android:contentDescription="@string/set_note_color_orange"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/fab_note_edit_color_pink"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_brown"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_brown"
-            style="@style/ColorButtonNoteTwoLine"
-            android:backgroundTint="@color/brown_100"
-            android:contentDescription="@string/set_note_color_brown"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_orange"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_gray"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_gray"
-            style="@style/ColorButtonNoteTwoLine"
-            android:backgroundTint="@color/gray_100"
-            android:contentDescription="@string/set_note_color_gray"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_brown"
-            app:layout_constraintEnd_toStartOf="@id/fab_note_edit_color_blue_gray"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_note_edit_color_blue_gray"
-            style="@style/ColorButtonNoteTwoLine"
-            android:backgroundTint="@color/blue_gray_100"
-            android:contentDescription="@string/set_note_color_blue_gray"
-            app:backgroundTint="?attr/colorPrimary"
-            app:borderWidth="3dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/fab_note_edit_color_gray"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
