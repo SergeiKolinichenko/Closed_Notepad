@@ -268,28 +268,28 @@ class NoteEditFragment : Fragment() {
 
         with(binding) {
             mbNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PINK])
             )
             mbNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PURPLE])
             )
             mbNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.INDIGO])
             )
             mbNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GREEN])
             )
             mbNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.ORANGE])
             )
             mbNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BROWN])
             )
             mbNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GRAY])
             )
             mbNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BLUE_GRAY])
             )
             mbNoteEditColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
@@ -410,8 +410,8 @@ class NoteEditFragment : Fragment() {
     private fun observeColorIndex() {
         viewModel.colorIndex.observe(viewLifecycleOwner) {
             val colorNote =
-                if (isNight) NoteColors.entriesColor[NoteColors.DARK_COLOR][it]
-                else NoteColors.entriesColor[NoteColors.LIGHT_COLOR][it]
+                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
+                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
             with(binding) {
                 cvNoteEditTitle.setBackgroundResource(colorNote)
                 cvNoteEditLock.setBackgroundResource(colorNote)

@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -100,23 +99,23 @@ class NoteListFragment : Fragment() {
 
     private fun initOrderButtons() {
         with(binding) {
-            mbTimeStampSortAscending?.setOnClickListener {
+            mbTimeStampSortAscending.setOnClickListener {
                 viewModel.setOrderViewNoteList(SORT_TIME_STAMP_ASCENDING)
                 hideOrderButtons()
             }
-            mbTimeStampSortDescending?.setOnClickListener {
+            mbTimeStampSortDescending.setOnClickListener {
                 viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
                 hideOrderButtons()
             }
-            mbTitleAlphabetSortAscending?.setOnClickListener {
+            mbTitleAlphabetSortAscending.setOnClickListener {
                 viewModel.setOrderViewNoteList(SORT_TITLE_ASCENDING)
                 hideOrderButtons()
             }
-            mbTitleAlphabetSortDescending?.setOnClickListener {
+            mbTitleAlphabetSortDescending.setOnClickListener {
                 viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
                 hideOrderButtons()
             }
-            mbPaletteSort?.setOnClickListener {
+            mbPaletteSort.setOnClickListener {
                 viewModel.setOrderViewNoteList(SORT_PALETTE)
                 hideOrderButtons()
             }
@@ -156,8 +155,7 @@ class NoteListFragment : Fragment() {
                 finishApp.finishApp()
             }
             ivNoteListSortShown.setOnClickListener {
-                val isClickable: Boolean = binding.clNoteListSort?.isClickable ?:
-                throw RuntimeException("isClickable equal null")
+                val isClickable: Boolean = binding.clNoteListSort.isClickable
                 if (!isClickable) {
                     showOrderButtons()
                 } else {
@@ -232,16 +230,16 @@ class NoteListFragment : Fragment() {
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
             behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
         }
-        binding.fabAddNoteList.hide()
-        behaviorBottomAppBar.slideDown(binding.babNoteList)
+//        binding.fabAddNoteList.hide()
+//        behaviorBottomAppBar.slideDown(binding.babNoteList)
     }
 
     private fun hideColorButtons() {
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
             behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
         }
-        behaviorBottomAppBar.slideUp(binding.babNoteList)
-        binding.fabAddNoteList.show()
+//        behaviorBottomAppBar.slideUp(binding.babNoteList)
+//        binding.fabAddNoteList.show()
     }
 
     // Delete selected items from collections
@@ -324,7 +322,7 @@ class NoteListFragment : Fragment() {
     private fun showOrderButtons() {
         val animShowOrderButtons = AnimationUtils.loadAnimation(context, R.anim.order_buttons_show)
         with(binding) {
-            val lLayoutParams = clNoteListSort?.layoutParams as CoordinatorLayout.LayoutParams
+            val lLayoutParams = clNoteListSort.layoutParams as CoordinatorLayout.LayoutParams
             lLayoutParams.marginEnd += (clNoteListSort.width * 1.15).toInt()
             clNoteListSort.layoutParams = lLayoutParams
             clNoteListSort.startAnimation(animShowOrderButtons)
@@ -335,7 +333,7 @@ class NoteListFragment : Fragment() {
     private fun hideOrderButtons() {
         val animHideOrderButtons = AnimationUtils.loadAnimation(context, R.anim.order_buttons_hide)
         with(binding) {
-            val lLayoutParams = clNoteListSort?.layoutParams as CoordinatorLayout.LayoutParams
+            val lLayoutParams = clNoteListSort.layoutParams as CoordinatorLayout.LayoutParams
             lLayoutParams.marginEnd -= (clNoteListSort.width * 1.15).toInt()
             clNoteListSort.layoutParams = lLayoutParams
             clNoteListSort.startAnimation(animHideOrderButtons)
@@ -364,35 +362,35 @@ class NoteListFragment : Fragment() {
         with(binding) {
             mbNoteListColorPink.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.PINK])
             )
             mbNoteListColorPurple.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.PURPLE])
             )
             mbNoteListColorIndigo.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.INDIGO])
             )
             mbNoteListColorGreen.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.GREEN])
             )
             mbNoteListColorOrange.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.ORANGE])
             )
             mbNoteListColorBrown.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.BROWN])
             )
             mbNoteListColorGray.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.GRAY])
             )
             mbNoteListColorBlueGray.backgroundTintList = ColorStateList.valueOf(
                 requireContext()
-                    .getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
+                    .getColor(NoteColors.noteColor[shadeColor][NoteColors.BLUE_GRAY])
             )
 
             mbNoteListColorPink.setOnClickListener {

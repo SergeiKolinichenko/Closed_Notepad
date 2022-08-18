@@ -1,6 +1,5 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +11,7 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCas
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import kotlinx.coroutines.launch
 
 class ViewModelNoteList(
@@ -20,6 +20,7 @@ class ViewModelNoteList(
     private val removeNote: RemoveNoteUseCase,
     private val editNote: EditNoteUseCase,
     private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
+    private val addRemovedNote: AddRemovedNoteUseCase,
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
@@ -37,6 +38,8 @@ class ViewModelNoteList(
 
     private val selectedNotes = mutableListOf<Note>()
 
+
+//    init {
 //        _isSelected.value = false
 //        var tempCount = 0
 //        for (i in 0..100) {
@@ -88,19 +91,10 @@ class ViewModelNoteList(
         clearSelectedNotes()
     }
 
-    fun removeNote(timeStamp: Long) {
-        val note = noteList.value?.find { it.timeStamp == timeStamp }
-        note?.let {
-            viewModelScope.launch {
-                removeNote.invoke(it)
-            }
-        }
-    }
-
     fun removeNotes() {
         for (item in selectedNotes) {
             viewModelScope.launch {
-                removeNote.invoke(item)
+                addRemovedNote.invoke(removeNote.invoke(item))
             }
         }
         clearSelectedNotes()

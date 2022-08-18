@@ -17,7 +17,7 @@ object NoteColors {
     const val BLUE_GRAY = 7
 
     
-    val entriesColor = arrayOf(
+    val noteColor = arrayOf(
         intArrayOf(
             R.color.pink_100,
             R.color.purple_100,

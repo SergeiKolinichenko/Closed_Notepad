@@ -33,9 +33,9 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
     override fun onBindViewHolder(holder: NoteListViewHolder, position: Int) {
         val note = getItem(position)
         val colorBack = if (isNight)
-            NoteColors.entriesColor[NoteColors.DARK_COLOR][note.colorIndex]
+            NoteColors.noteColor[NoteColors.DARK_COLOR][note.colorIndex]
         else
-            NoteColors.entriesColor[NoteColors.LIGHT_COLOR][note.colorIndex]
+            NoteColors.noteColor[NoteColors.LIGHT_COLOR][note.colorIndex]
 
         val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
         else R.drawable.ic_lock_black_36dp
@@ -60,7 +60,7 @@ class NoteListAdapter : ListAdapter<Note, NoteListViewHolder>(NoteListDiffCallba
             }
         }
         holder.cvNote.animation = AnimationUtils.loadAnimation(
-            holder.itemView.context, R.anim.anim_note_entry
+            holder.itemView.context, R.anim.anim_note_list
         )
     }
 

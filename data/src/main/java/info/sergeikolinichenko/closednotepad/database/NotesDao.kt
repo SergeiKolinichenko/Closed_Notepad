@@ -21,7 +21,10 @@ interface NotesDao {
     suspend fun addNote(noteDbModel: NoteDbModel)
 
     @Query("DELETE FROM notes WHERE timeStamp = :timeStamp")
-    suspend fun removedNote(timeStamp: Long)
+    suspend fun deleteNote(timeStamp: Long)
+
+    @Query("SELECT * FROM removed_notes")
+    fun getRemovedNoteList():LiveData<List<RemovedNoteDbModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addRemovedNote(removedNoteDbModel: RemovedNoteDbModel)

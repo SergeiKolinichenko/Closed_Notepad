@@ -197,8 +197,8 @@ class NoteViewFragment : Fragment() {
         viewModel.note.observe(viewLifecycleOwner) {
 
             val colorNote =
-                if (isNight) NoteColors.entriesColor[NoteColors.DARK_COLOR][it.colorIndex]
-                else NoteColors.entriesColor[NoteColors.LIGHT_COLOR][it.colorIndex]
+                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it.colorIndex]
+                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it.colorIndex]
 
             val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
             else R.drawable.ic_lock_black_36dp

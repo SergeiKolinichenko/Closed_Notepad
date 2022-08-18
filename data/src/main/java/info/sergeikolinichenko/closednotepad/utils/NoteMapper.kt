@@ -2,6 +2,7 @@ package info.sergeikolinichenko.closednotepad.utils
 
 import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.models.RemovedNote
 
 class NoteMapper {
 
@@ -19,6 +20,15 @@ class NoteMapper {
         itselfNote = noteDbModel.itselfNote,
         colorIndex = noteDbModel.colorIndex,
         isLocked = noteDbModel.isLocked,
+        isSelected = false
+    )
+
+    fun mapNoteToRemovedNote(note: Note) = RemovedNote(
+        timeStamp = note.timeStamp,
+        titleNote = note.titleNote,
+        itselfNote = note.itselfNote,
+        colorIndex = note.colorIndex,
+        isLocked = note.isLocked,
         isSelected = false
     )
 

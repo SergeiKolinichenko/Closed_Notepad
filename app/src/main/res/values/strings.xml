@@ -54,6 +54,7 @@
     <string name="description_add_note">Add note</string>
     <string name="hint_search_enter_search_words">Enter search words</string>
     <string name="description_leave_search">Leave search</string>
+    <string name="description_leave_note_view">Leave page</string>
     <string name="please_enter_search_text">Enter search text</string>
 
     <string name="title_application_settings">Application Settings</string>

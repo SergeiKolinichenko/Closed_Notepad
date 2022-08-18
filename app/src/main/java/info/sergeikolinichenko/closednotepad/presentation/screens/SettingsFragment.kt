@@ -3,7 +3,6 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,11 +57,11 @@ class SettingsFragment : Fragment() {
     private fun observeDefaultColorIndex() {
         viewModel.defaultColorIndex.observe(viewLifecycleOwner) {
             val colorNote: Int = if (it != PreferencesRepositoryImpl.ERROR_GET_INT) {
-                if (isNight) NoteColors.entriesColor[NoteColors.DARK_COLOR][it]
-                else NoteColors.entriesColor[NoteColors.LIGHT_COLOR][it]
+                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
+                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
             } else {
-                if (isNight) NoteColors.entriesColor[NoteColors.DARK_COLOR][NoteColors.GRAY]
-                else NoteColors.entriesColor[NoteColors.LIGHT_COLOR][NoteColors.GRAY]
+                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][NoteColors.GRAY]
+                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][NoteColors.GRAY]
             }
             binding.mbSettingsDefaultColor.iconTint =
                 resources.getColorStateList(colorNote, null)
@@ -80,6 +79,9 @@ class SettingsFragment : Fragment() {
             }
             mbSettingsDefaultColor.setOnClickListener {
                 showColorButtons()
+            }
+            mbSettingsWastebasket.setOnClickListener {
+                launchTrashCanListFragment()
             }
         }
     }
@@ -105,28 +107,28 @@ class SettingsFragment : Fragment() {
 
         with(binding) {
             mbSettingsPink.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PINK])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PINK])
             )
             mbSettingsPurple.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.PURPLE])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PURPLE])
             )
             mbSettingsIndigo.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.INDIGO])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.INDIGO])
             )
             mbSettingsGreen.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GREEN])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GREEN])
             )
             mbSettingsOrange.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.ORANGE])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.ORANGE])
             )
             mbSettingsBrown.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BROWN])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BROWN])
             )
             mbSettingsGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.GRAY])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GRAY])
             )
             mbSettingsBlueGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.entriesColor[shadeColor][NoteColors.BLUE_GRAY])
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BLUE_GRAY])
             )
 
             mbSettingsPink.setOnClickListener {
@@ -162,6 +164,19 @@ class SettingsFragment : Fragment() {
                 hideColorButtons()
             }
         }
+    }
+
+    private fun launchTrashCanListFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+//            .setCustomAnimations(
+//                R.anim.enter_from_top,
+//                R.anim.exit_to_bottom,
+//                R.anim.enter_from_bottom,
+//                R.anim.exit_to_top
+//            )
+            .replace(R.id.main_container, TrashCanListFragment.newInstance())
+            .addToBackStack(TrashCanListFragment.NAME)
+            .commit()
     }
 
     private fun isNightMode() {

@@ -17,7 +17,8 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListNotes(): T {
-        val noteList: LiveData<List<Note>> = Transformations.map(notesDao.getNoteList()) {
+        val noteList: LiveData<List<Note>> =
+            Transformations.map(notesDao.getNoteList()) {
             mapper.mapListDbModelToListEntity(it)
         }
         return noteList as T
@@ -40,14 +41,7 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
 
     // Implementation of removing note from notepad to trash
     override suspend fun removeNote(note: Note): RemovedNote {
-        val removedNote = RemovedNote(
-            timeStamp = note.timeStamp,
-            titleEntry = note.titleNote,
-            itselfEntry = note.itselfNote,
-            colorIndex = note.colorIndex,
-            isLocked = note.isLocked
-        )
-        notesDao.removedNote(note.timeStamp)
-        return removedNote
+        notesDao.deleteNote(note.timeStamp)
+        return mapper.mapNoteToRemovedNote(note)
     }
 }
