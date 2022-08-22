@@ -4,18 +4,19 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -24,6 +25,7 @@ import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
 
@@ -41,9 +43,10 @@ class NoteListFragment : Fragment() {
     }
 
     private val adapterNoteList by lazy { NoteListAdapter() }
-    private var isNight = false
 
     private lateinit var finishApp: FinishApp
+
+    private var isNight = false
     private var isNotesSelected = false
 
     private var imgDelete = 0   // id ib_note_list_delete AppCompatImageView
@@ -51,8 +54,6 @@ class NoteListFragment : Fragment() {
     private var wasBabHiden = false // was BottomAppBar visible
 
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
-    private var behaviorBottomAppBar = HideBottomViewOnScrollBehavior<BottomAppBar>()
-    private var behaviorOrderButtons = HideBottomViewOnScrollBehavior<ConstraintLayout>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -80,8 +81,10 @@ class NoteListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeNoteList()
         observeIsSelected()
+        observeShowColorButtons()
+        observeShowOrderButtons()
         isNightMode()
-        initToolbar()
+        initActionAppbar()
         initFabAddNote()
         initBottomAppBar()
         initRecyclerView()
@@ -89,7 +92,7 @@ class NoteListFragment : Fragment() {
         initColorButtons()
         initBackPressed()
         initOrderButtons()
-        onRecyclerViewChangeListener()
+        onRecyclerViewScrollListener()
     }
 
     override fun onDestroyView() {
@@ -97,35 +100,29 @@ class NoteListFragment : Fragment() {
         _binding = null
     }
 
-    private fun initOrderButtons() {
-        with(binding) {
-            mbTimeStampSortAscending.setOnClickListener {
-                viewModel.setOrderViewNoteList(SORT_TIME_STAMP_ASCENDING)
-                hideOrderButtons()
-            }
-            mbTimeStampSortDescending.setOnClickListener {
-                viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
-                hideOrderButtons()
-            }
-            mbTitleAlphabetSortAscending.setOnClickListener {
-                viewModel.setOrderViewNoteList(SORT_TITLE_ASCENDING)
-                hideOrderButtons()
-            }
-            mbTitleAlphabetSortDescending.setOnClickListener {
-                viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
-                hideOrderButtons()
-            }
-            mbPaletteSort.setOnClickListener {
-                viewModel.setOrderViewNoteList(SORT_PALETTE)
-                hideOrderButtons()
+    private fun observeNoteList() {
+        viewModel.noteList.observe(viewLifecycleOwner) {
+            adapterNoteList.submitList(orderViewNoteList(it))
+        }
+    }
+
+    private fun observeShowColorButtons() {
+        viewModel.showColorButtons.observe(viewLifecycleOwner) {
+            if (it) {
+                showColorButtons()
+            } else {
+                hideColorButtons()
             }
         }
     }
 
-    private fun observeNoteList() {
-        viewModel.noteList.observe(viewLifecycleOwner) {
-            adapterNoteList.submitList(orderViewNoteList(it))
-
+    private fun observeShowOrderButtons() {
+        viewModel.showOrderButtons.observe(viewLifecycleOwner) {
+            if (it) {
+                showOrderButtons()
+            } else {
+                hideOrderButtons()
+            }
         }
     }
 
@@ -143,7 +140,7 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    private fun initToolbar() {
+    private fun initActionAppbar() {
         with(binding) {
             if (isNight) {
                 ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_white_36dp)
@@ -155,12 +152,7 @@ class NoteListFragment : Fragment() {
                 finishApp.finishApp()
             }
             ivNoteListSortShown.setOnClickListener {
-                val isClickable: Boolean = binding.clNoteListSort.isClickable
-                if (!isClickable) {
-                    showOrderButtons()
-                } else {
-                    hideOrderButtons()
-                }
+                viewModel.setStateShowOrderButtons()
             }
         }
     }
@@ -198,24 +190,23 @@ class NoteListFragment : Fragment() {
     }
 
     private fun initBottomAppBar() {
-        behaviorBottomAppBar = binding.babNoteList.behavior
         if (isNight) {
-            binding.ibNoteListCog.setImageResource(R.drawable.ic_cog_white_36dp)
+            binding.ibNoteListMenu.setImageResource(R.drawable.ic_menu_white_36dp)
             binding.ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_white_36dp)
             imgDelete = R.drawable.ic_delete_white_36dp
             imgPallet = R.drawable.ic_palette_white_36dp
         } else {
-            binding.ibNoteListCog.setImageResource(R.drawable.ic_cog_black_36dp)
+            binding.ibNoteListMenu.setImageResource(R.drawable.ic_menu_black_36dp)
             binding.ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_black_36dp)
             imgDelete = R.drawable.ic_delete_black_36dp
             imgPallet = R.drawable.ic_palette_black_36dp
         }
-        binding.ibNoteListCog.setOnClickListener {
-            launchSettingsFragment()
+        binding.ibNoteListMenu.setOnClickListener {
+            launchMenuFragment()
         }
         binding.ibNoteListPalette.setOnClickListener {
             if (isNotesSelected) {
-                showColorButtons()
+                viewModel.setStateShowColorButtons()
             }
         }
         binding.ibNoteListDelete.setOnClickListener {
@@ -226,45 +217,6 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    private fun showColorButtons() {
-        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
-            behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-//        binding.fabAddNoteList.hide()
-//        behaviorBottomAppBar.slideDown(binding.babNoteList)
-    }
-
-    private fun hideColorButtons() {
-        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
-            behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
-        }
-//        behaviorBottomAppBar.slideUp(binding.babNoteList)
-//        binding.fabAddNoteList.show()
-    }
-
-    // Delete selected items from collections
-    private fun removeNotes() {
-        if (isNotesSelected) {
-            val snackBar = Snackbar.make(
-                requireActivity().findViewById(R.id.main_container),
-                resources.getString(R.string.confirm_deletion_notes),
-                Snackbar.LENGTH_LONG
-            )
-                .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                        super.onDismissed(transientBottomBar, event)
-                        viewModel.resetSelectedNotes()
-                    }
-                })
-                .setAction(R.string.delete_note) {
-                    viewModel.removeNotes()
-                }
-            snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-            snackBar.anchorView = binding.fabAddNoteList
-            snackBar.show()
-        }
-    }
-
     private fun initRecyclerView() {
         val noteListRecyclerView: RecyclerView = binding.recyclerView
         noteListRecyclerView.adapter = adapterNoteList
@@ -272,20 +224,21 @@ class NoteListFragment : Fragment() {
 
     private fun initNoteClickListeners() {
         adapterNoteList.onNoteClick = {
+//            Log.d("MyLog", "time ${TimeUtils.getDiffDays(it.timeStamp)}")
             if (!isNotesSelected) {
                 // Go to NoteViewFragment
                 launchNoteViewFragment(it.timeStamp)
-                if (behaviorBottomAppBar.isScrolledDown) {
+                if (binding.babNoteList.isScrolledDown) {
                     showFabAndBab()
                 }
             } else {
                 // Deselecting elements collections
-                viewModel.selectNotesAtNote(it)
+                viewModel.selectNotes(it)
             }
         }
         adapterNoteList.onNoteLongClick = {
             // Selecting elements collections
-            viewModel.selectNotesAtNote(it)
+            viewModel.selectNotes(it)
         }
     }
 
@@ -300,7 +253,7 @@ class NoteListFragment : Fragment() {
                     ibNoteListDelete.isClickable = true
                     ibNoteListPalette.isClickable = true
                 }
-                if (behaviorBottomAppBar.isScrolledDown) {
+                if (binding.babNoteList.isScrolledDown) {
                     wasBabHiden = true
                     showFabAndBab()
                 }
@@ -311,11 +264,23 @@ class NoteListFragment : Fragment() {
                     ibNoteListDelete.isClickable = false
                     ibNoteListPalette.isClickable = false
                 }
-                if (behaviorBottomAppBar.isScrolledUp && wasBabHiden) {
+                if (binding.babNoteList.isScrolledUp && wasBabHiden) {
                     hideFabAndBab()
                     wasBabHiden = false
                 }
             }
+        }
+    }
+
+    private fun showColorButtons() {
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
+            behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
+    private fun hideColorButtons() {
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -349,6 +314,26 @@ class NoteListFragment : Fragment() {
     private fun hideFabAndBab() {
         binding.babNoteList.performHide(true)
         binding.fabAddNoteList.hide()
+    }
+
+    private fun initOrderButtons() {
+        with(binding) {
+            mbTimeStampSortAscending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TIME_STAMP_ASCENDING)
+            }
+            mbTimeStampSortDescending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TIME_STAMP_DESCENDING)
+            }
+            mbTitleAlphabetSortAscending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TITLE_ASCENDING)
+            }
+            mbTitleAlphabetSortDescending.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_TITLE_DESCENDING)
+            }
+            mbPaletteSort.setOnClickListener {
+                viewModel.setOrderViewNoteList(SORT_PALETTE)
+            }
+        }
     }
 
     private fun initColorButtons() {
@@ -395,54 +380,45 @@ class NoteListFragment : Fragment() {
 
             mbNoteListColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
-                hideColorButtons()
             }
             mbNoteListColorPink.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PINK)
-                hideColorButtons()
             }
             mbNoteListColorPurple.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.PURPLE)
-                hideColorButtons()
             }
             mbNoteListColorIndigo.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.INDIGO)
-                hideColorButtons()
             }
             mbNoteListColorGreen.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GREEN)
-                hideColorButtons()
             }
             mbNoteListColorOrange.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.ORANGE)
-                hideColorButtons()
             }
             mbNoteListColorBrown.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BROWN)
-                hideColorButtons()
             }
             mbNoteListColorGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.GRAY)
-                hideColorButtons()
             }
             mbNoteListColorBlueGray.setOnClickListener {
                 viewModel.setColorIndex(NoteColors.BLUE_GRAY)
-                hideColorButtons()
             }
         }
     }
 
-    private fun onRecyclerViewChangeListener() {
+    private fun onRecyclerViewScrollListener() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!isNotesSelected) {
                     if (dy > 0) {
-                        if (behaviorBottomAppBar.isScrolledUp) {
+                        if (binding.babNoteList.isScrolledUp) {
                             hideFabAndBab()
                         }
                     } else {
-                        if (behaviorBottomAppBar.isScrolledDown) {
+                        if (binding.babNoteList.isScrolledDown) {
                             showFabAndBab()
                         }
                     }
@@ -461,6 +437,39 @@ class NoteListFragment : Fragment() {
 
             }
         )
+    }
+
+    // Delete selected items from collections
+    private fun removeNotes() {
+        if (isNotesSelected) {
+            val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
+            else R.drawable.ic_map_marker_question_outline_white_48dp
+
+            val snackBar = Snackbar.make(
+                requireActivity().findViewById(R.id.main_container),
+                resources.getString(R.string.confirm_remove_notes),
+                Snackbar.LENGTH_LONG
+            )
+                .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                        super.onDismissed(transientBottomBar, event)
+                        viewModel.resetSelectedNotes()
+                    }
+                })
+                .setAction(R.string.move_note) {
+                    viewModel.removeNotes()
+                }
+            val snackBarView = snackBar.view
+            val snackBarText = snackBarView.findViewById<TextView>(
+                com.google.android.material.R.id.snackbar_text)
+            snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+                icon, 0, 0, 0)
+            snackBarText.compoundDrawablePadding = 15
+            snackBarText.gravity = Gravity.CENTER
+            snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+            snackBar.anchorView = binding.fabAddNoteList
+            snackBar.show()
+        }
     }
 
     private fun launchNoteViewFragment(timeStamp: Long) {
@@ -498,7 +507,7 @@ class NoteListFragment : Fragment() {
             .commit()
     }
 
-    private fun launchSettingsFragment() {
+    private fun launchMenuFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
             .setCustomAnimations(
                 R.anim.enter_from_bottom,
@@ -506,8 +515,8 @@ class NoteListFragment : Fragment() {
                 R.anim.enter_from_top,
                 R.anim.exit_to_bottom
             )
-            .replace(R.id.main_container, SettingsFragment.newInstance())
-            .addToBackStack(SettingsFragment.NAME)
+            .replace(R.id.main_container, NotesMenuFragment.newInstance())
+            .addToBackStack(NotesMenuFragment.NAME)
             .commit()
     }
 
@@ -529,7 +538,8 @@ class NoteListFragment : Fragment() {
 
     companion object {
         const val NAME = "note_list_fragment"
-        const val SORT_TIME_STAMP_ASCENDING = "sort_time_stamp_ascending"
+
+        private const val SORT_TIME_STAMP_ASCENDING = "sort_time_stamp_ascending"
         private const val SORT_TIME_STAMP_DESCENDING = "sort_time_stamp_descending"
         private const val SORT_TITLE_ASCENDING = "sort_title_ascending"
         private const val SORT_TITLE_DESCENDING = "sort_title_descending"

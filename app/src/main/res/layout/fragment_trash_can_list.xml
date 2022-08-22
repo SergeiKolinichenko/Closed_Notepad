@@ -7,14 +7,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.screens.TrashCanListFragment">
 
-    <!-- Order buttons -->
+    <!-- Order buttons
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_trash_can_list_sort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="20dp"
         android:clickable="false"
-
         android:layout_gravity="top|end"
         android:layout_marginTop="65dp"
         android:layout_marginEnd="-200dp">
@@ -80,6 +79,8 @@
             tools:text="@string/sort_shown_by_palette" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    -->
 
     <!-- AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
@@ -166,6 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
+                android:clickable="false"
                 android:src="@drawable/ic_delete_off_grey600_36dp"
                 android:layout_marginEnd="100dp"/>
         </LinearLayout>

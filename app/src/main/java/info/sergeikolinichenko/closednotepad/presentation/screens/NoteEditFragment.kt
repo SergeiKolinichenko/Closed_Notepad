@@ -7,11 +7,10 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -22,6 +21,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
@@ -129,8 +130,6 @@ class NoteEditFragment : Fragment() {
                 MODE_ADD -> viewModel.addNoteToBase()
                 MODE_EDIT -> viewModel.editNoteToBase()
             }
-//            hideSaveFab()
-//            hideNoSaveFab()
         }
     }
 
@@ -161,11 +160,13 @@ class NoteEditFragment : Fragment() {
 
         with(binding) {
             if (isNight) {
+                ibNoteEditSelectAll.setImageResource(R.drawable.ic_select_all_white_36dp)
                 ibNoteEditCut.setImageResource(R.drawable.ic_content_cut_white_36dp)
                 ibNoteEditCopy.setImageResource(R.drawable.ic_content_copy_white_36dp)
                 ibNoteEditPaste.setImageResource(R.drawable.ic_content_paste_white_36dp)
                 ibNoteEditPallet.setImageResource(R.drawable.ic_palette_white_36dp)
             } else {
+                ibNoteEditSelectAll.setImageResource(R.drawable.ic_select_all_black_36dp)
                 ibNoteEditCut.setImageResource(R.drawable.ic_content_cut_black_36dp)
                 ibNoteEditCopy.setImageResource(R.drawable.ic_content_copy_black_36dp)
                 ibNoteEditPaste.setImageResource(R.drawable.ic_content_paste_black_36dp)
@@ -174,6 +175,9 @@ class NoteEditFragment : Fragment() {
         }
 
         with(binding) {
+            ibNoteEditSelectAll.setOnClickListener {
+                selectAll()
+            }
             ibNoteEditCut.setOnClickListener {
                 val extractedString = getExtractedStr()
                 extractedString?.let {
@@ -202,6 +206,14 @@ class NoteEditFragment : Fragment() {
         behaviorBottomAppBar = binding.babNoteEdit.behavior
     }
 
+    private fun selectAll() {
+        val text = binding.etNoteEditItself.text
+        text?.let {
+            val finish = text.length
+            binding.etNoteEditItself.setSelection(0, finish)
+        }
+    }
+
     private fun getExtractedStr(): String? {
         val startIndex = binding.etNoteEditItself.selectionStart
         val endIndex = binding.etNoteEditItself.selectionEnd
@@ -209,7 +221,7 @@ class NoteEditFragment : Fragment() {
             val string = binding.etNoteEditItself.text
             string?.substring(startIndex, endIndex)
         } else {
-            showToast(getString(R.string.select_text_to_copy))
+            showSnakebar(getString(R.string.select_text_to_copy))
             null
         }
     }
@@ -234,7 +246,7 @@ class NoteEditFragment : Fragment() {
             .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(null, extractedString)
         clipboardManager.setPrimaryClip(clip)
-        showToast(getString(R.string.sel_text_copied_clipboard))
+        showSnakebar(getString(R.string.sel_text_copied_clipboard))
     }
 
     private fun setCopyFromClip() {
@@ -490,7 +502,28 @@ class NoteEditFragment : Fragment() {
         }
     }
 
-    private fun showToast(message: String) {
+    private fun showSnakebar(message: String) {
+        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
+        else R.drawable.ic_information_variant_white_48dp
+
+        val snackBar = Snackbar.make(
+            requireActivity().findViewById(R.id.main_container),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+
+        val snackBarView = snackBar.view
+        val snackBarText = snackBarView.findViewById<TextView>(
+            com.google.android.material.R.id.snackbar_text)
+        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+            icon, 0, 0, 0)
+        snackBarText.compoundDrawablePadding = 15
+        snackBarText.gravity = Gravity.CENTER
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+        snackBar.anchorView = binding.fabNoteEditExit
+        snackBar.show()
+
+
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 

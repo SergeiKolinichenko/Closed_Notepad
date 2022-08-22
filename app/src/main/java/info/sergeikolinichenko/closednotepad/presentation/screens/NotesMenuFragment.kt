@@ -11,16 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import info.sergeikolinichenko.closednotepad.R
-import info.sergeikolinichenko.closednotepad.databinding.FragmentSettingsBinding
+import info.sergeikolinichenko.closednotepad.databinding.FragmentNotesMenuBinding
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.settins.ViewModelSettings
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.settins.ViewModelSettingsFactory
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
 
-class SettingsFragment : Fragment() {
+class NotesMenuFragment : Fragment() {
 
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding: FragmentSettingsBinding
+    private var _binding: FragmentNotesMenuBinding? = null
+    private val binding: FragmentNotesMenuBinding
         get() = _binding ?: throw RuntimeException("FragmentSettingsBinding equals null")
 
     private val viewModelFactory by lazy {
@@ -37,7 +37,7 @@ class SettingsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        _binding = FragmentNotesMenuBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,7 +63,7 @@ class SettingsFragment : Fragment() {
                 if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][NoteColors.GRAY]
                 else NoteColors.noteColor[NoteColors.LIGHT_COLOR][NoteColors.GRAY]
             }
-            binding.mbSettingsDefaultColor.iconTint =
+            binding.mbSettingsDefaultColor.backgroundTintList =
                 resources.getColorStateList(colorNote, null)
         }
     }
@@ -168,12 +168,6 @@ class SettingsFragment : Fragment() {
 
     private fun launchTrashCanListFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
-//            .setCustomAnimations(
-//                R.anim.enter_from_top,
-//                R.anim.exit_to_bottom,
-//                R.anim.enter_from_bottom,
-//                R.anim.exit_to_top
-//            )
             .replace(R.id.main_container, TrashCanListFragment.newInstance())
             .addToBackStack(TrashCanListFragment.NAME)
             .commit()
@@ -189,6 +183,6 @@ class SettingsFragment : Fragment() {
         const val NAME = "settings_fragment"
 
         @JvmStatic
-        fun newInstance() = SettingsFragment()
+        fun newInstance() = NotesMenuFragment()
     }
 }

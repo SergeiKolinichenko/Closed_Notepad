@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,9 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNo
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.random.Random
+import kotlin.random.Random.Default.nextBoolean
 
 class ViewModelNoteList(
     getListNote: GetListNotesUseCase,
@@ -28,13 +32,21 @@ class ViewModelNoteList(
     val noteList: LiveData<List<Note>>
     get() = _noteList
 
-    private val _isSelected = MutableLiveData(false)
+    private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
+    val orderViewNoteList: String
+        get() = _orderViewNoteList ?: throw RuntimeException("orderViewNoteList equal null")
+
+    private val _isSelected = MutableLiveData<Boolean>()
     val isSelected: LiveData<Boolean>
         get() = _isSelected
 
-    private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
-    val orderViewNoteList: String
-    get() = _orderViewNoteList ?: throw RuntimeException("orderViewNoteList equal null")
+    private var _showColorButtons = MutableLiveData<Boolean>()
+    val showColorButtons: LiveData<Boolean>
+    get() = _showColorButtons
+
+    private var _showOrderButtons = MutableLiveData<Boolean>()
+    val showOrderButtons: LiveData<Boolean>
+        get() = _showOrderButtons
 
     private val selectedNotes = mutableListOf<Note>()
 
@@ -59,20 +71,18 @@ class ViewModelNoteList(
 //        }
 //    }
 
-    fun selectNotesAtNote(noteEntry: Note) {
-        val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
-        throw RuntimeException("noteList equals null")
+    fun selectNotes(note: Note) {
+         if (isSelected.value == false || isSelected.value == null) _isSelected.value = true
 
-        if (isSelected.value == false) {
-            _isSelected.value = true
-        }
-
-        if (selectedNotes.contains(noteEntry)) {
+        if (selectedNotes.contains(note)) {
             resetSelectedNotes()
         } else {
-            val newItem = noteEntry.copy(isSelected = !noteEntry.isSelected)
+            val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
+            throw RuntimeException("noteList equals null")
+
+            val newItem = note.copy(isSelected = !note.isSelected)
             selectedNotes.add(newItem)
-            notes.remove(noteEntry)
+            notes.remove(note)
             notes.add(newItem)
             _noteList.value = notes
         }
@@ -108,6 +118,7 @@ class ViewModelNoteList(
             }
         }
         clearSelectedNotes()
+        _showColorButtons.value = false
     }
 
     private fun clearSelectedNotes() {
@@ -119,6 +130,17 @@ class ViewModelNoteList(
         _orderViewNoteList = order
         setPrefOrderListNote.invoke(order)
         _noteList.value = noteList.value
+        _showOrderButtons.value = false
+    }
+
+    fun setStateShowColorButtons() {
+        _showColorButtons.value =
+            showColorButtons.value == null || showColorButtons.value == false
+    }
+
+    fun setStateShowOrderButtons() {
+        _showOrderButtons.value =
+            showOrderButtons.value == null || showOrderButtons.value == false
     }
 
 }

@@ -7,8 +7,9 @@
     <string name="settings_notes">Settings</string>
     <string name="title_note_list">Notepad</string>
     <string name="confirm_deletion_notes">Confirm deletion of selected notes</string>
-    <string name="confirm_deletion_note">Confirm deletion of selected note</string>
+    <string name="confirm_deletion_note">Confirm the deletion of the selected note</string>
     <string name="delete_note">Delete</string>
+    <string name="move_note">Move</string>
     <string name="edit_note">Edit</string>
     <string name="copy_itsels_note">Copy</string>
     <string name="send_itself_note">Send</string>
@@ -57,7 +58,13 @@
     <string name="description_leave_note_view">Leave page</string>
     <string name="please_enter_search_text">Enter search text</string>
 
-    <string name="title_application_settings">Application Settings</string>
+    <string name="title_application_menu">Configuration</string>
     <string name="settings_default_note_color">Default note color</string>
     <string name="settings_wastebasket">Wastebasket</string>
+    <string name="confirm_recovery_notes">Confirm recovery of selected notes</string>
+    <string name="confirm_recovery_note">Confirm the restoration of the selected note</string>
+    <string name="recovery_note">Recovery</string>
+    <string name="confirm_remove_notes">Move selected notes to trash</string>
+    <string name="confirm_remove_note">Move note to trash</string>
+
 </resources>

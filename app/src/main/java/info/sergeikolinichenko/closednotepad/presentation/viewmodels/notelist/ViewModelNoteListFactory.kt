@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
-import info.sergeikolinichenko.closednotepad.repositories.RemovedNoteRepository
 import info.sergeikolinichenko.closednotepad.repositories.RemovedNoteRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
@@ -17,16 +16,16 @@ import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUse
 
 class ViewModelNoteListFactory(application: Application): ViewModelProvider.Factory {
 
-    private val repoNotes = NoteRepositoryImpl(application)
-    private val repoRemovedNotes = RemovedNoteRepositoryImpl(application)
+    private val repositoryNotes = NoteRepositoryImpl(application)
+    private val repositoryRemovedNotes = RemovedNoteRepositoryImpl(application)
     private val preferencesRepository = PreferencesRepositoryImpl(application)
 
-    private val getListNote = GetListNotesUseCase(repoNotes)
-    private val removeNote = RemoveNoteUseCase(repoNotes)
-    private val editNote = EditNoteUseCase(repoNotes)
-    private val addRemovedNote = AddRemovedNoteUseCase(repoRemovedNotes)
+    private val getListNote = GetListNotesUseCase(repositoryNotes)
+    private val removeNote = RemoveNoteUseCase(repositoryNotes)
+    private val editNote = EditNoteUseCase(repositoryNotes)
+    private val addRemovedNote = AddRemovedNoteUseCase(repositoryRemovedNotes)
 
-    private val addNote = AddNoteUseCase(repoNotes)
+    private val addNote = AddNoteUseCase(repositoryNotes)
 
     private val setPrefOrderNoteList = SetPrefOrderNoteListUseCase(preferencesRepository)
     private val getPrefOrderNoteList = GetPrefOrderNoteListUseCase(preferencesRepository)

@@ -6,9 +6,9 @@
     <string name="settings_notes">Настройки</string>
     <string name="title_note_list">Блокнот</string>
     <string name="test_text_view">Тест TextView</string>
-    <string name="confirm_deletion_notes">Подтвердите удаление выбранных записей</string>
+    <string name="confirm_deletion_notes">Подтвердите удаление выбранных заметок</string>
     <string name="delete_note">Удалить</string>
-    <string name="confirm_deletion_note">"Подтвердите удаление выбранных запись "</string>
+    <string name="confirm_deletion_note">Подтвердите удаление выбранной заметки</string>
     <string name="edit_note">Редактировать</string>
     <string name="copy_itsels_note">Копировать</string>
     <string name="send_itself_note">Отправить</string>
@@ -25,7 +25,7 @@
     <string name="note_color_blue_gray">" Серо-голубой"</string>
     <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
     <string name="select_text_to_copy">Необходимо выделить текст для копирования</string>
-    <string name="sel_text_copied_clipboard">Выделенный текст копируется в буфер обмена</string>
+    <string name="sel_text_copied_clipboard">Выделенный текст скопирован в буфер обмена</string>
     <string name="exit_fragment">Выйти из фрагмента</string>
     <string name="save_note">Сохранить заметку</string>
     <string name="don_t_save_note">Не сохранять заметку</string>
@@ -49,8 +49,14 @@
     <string name="hint_search_enter_search_words">Введите искомые слова</string>
     <string name="description_leave_search">Покинуть поиск</string>
     <string name="please_enter_search_text">Введите искомый текст</string>
-    <string name="title_application_settings">Настройки приложения</string>
+    <string name="title_application_menu">Конфигурация</string>
     <string name="settings_default_note_color">Цвет заметки по умолчанию</string>
-    <string name="settings_wastebasket">Мусорная корзина</string>
+    <string name="settings_wastebasket">Корзина</string>
     <string name="description_leave_note_view">Покинуть страницу</string>
+    <string name="confirm_recovery_notes">Подтвердите восстановление выбранных заметок</string>
+    <string name="confirm_recovery_note">Подтвердите восстановление выбранной заметки</string>
+    <string name="confirm_remove_notes">Переместить выбранные заметки в корзину</string>
+    <string name="confirm_remove_note">Переместить заметку в корзину</string>
+    <string name="recovery_note">Восстановить</string>
+    <string name="move_note">Переместить</string>
 </resources>

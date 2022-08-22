@@ -158,12 +158,12 @@
             android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_list_cog"
+                android:id="@+id/ib_note_list_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_cog_black_36dp" />
+                android:src="@drawable/ic_menu_black_36dp" />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_palette"

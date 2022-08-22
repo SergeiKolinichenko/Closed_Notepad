@@ -22,6 +22,10 @@ class RemovedNoteRepositoryImpl(application: Application) : RemovedNoteRepositor
         return removedNoteList as T
     }
 
+    override suspend fun getRemovedNote(timeStamp: Long): RemovedNote {
+        return mapper.mapDbModelToEntity(notesDao.getRemovedNote(timeStamp))
+    }
+
     override suspend fun addRemovedNote(removedNote: RemovedNote) {
         notesDao.addRemovedNote(mapper.mapEntityToDbModel(removedNote))
     }

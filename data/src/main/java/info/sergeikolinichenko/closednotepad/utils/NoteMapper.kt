@@ -3,6 +3,7 @@ package info.sergeikolinichenko.closednotepad.utils
 import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import java.util.*
 
 class NoteMapper {
 
@@ -25,6 +26,7 @@ class NoteMapper {
 
     fun mapNoteToRemovedNote(note: Note) = RemovedNote(
         timeStamp = note.timeStamp,
+        timeRemove = Date().time,
         titleNote = note.titleNote,
         itselfNote = note.itselfNote,
         colorIndex = note.colorIndex,

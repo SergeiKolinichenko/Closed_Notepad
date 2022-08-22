@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class RemovedNoteDbModel (
     @PrimaryKey(autoGenerate = false)
     val timeStamp: Long,
+    val timeRemove: Long,
     val titleEntry: String,
     val itselfEntry: String,
     val colorIndex: Int,

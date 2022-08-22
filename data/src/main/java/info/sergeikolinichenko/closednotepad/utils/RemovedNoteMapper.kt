@@ -8,14 +8,16 @@ class RemovedNoteMapper {
 
     fun mapEntityToDbModel(removedNote: RemovedNote) = RemovedNoteDbModel(
         timeStamp = removedNote.timeStamp,
+        timeRemove = removedNote.timeRemove,
         titleEntry = removedNote.titleNote,
         itselfEntry = removedNote.itselfNote,
         colorIndex = removedNote.colorIndex,
         isLocked = removedNote.isLocked
     )
 
-    private fun mapDbModelToEntity(removedNoteDbModel: RemovedNoteDbModel) = RemovedNote(
+    fun mapDbModelToEntity(removedNoteDbModel: RemovedNoteDbModel) = RemovedNote(
         timeStamp = removedNoteDbModel.timeStamp,
+        timeRemove = removedNoteDbModel.timeRemove,
         titleNote = removedNoteDbModel.titleEntry,
         itselfNote = removedNoteDbModel.itselfEntry,
         colorIndex = removedNoteDbModel.colorIndex,

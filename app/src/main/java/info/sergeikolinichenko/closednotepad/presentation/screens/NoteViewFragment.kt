@@ -5,13 +5,14 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.doOnDetach
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
@@ -72,7 +73,7 @@ class NoteViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeNoteEntry()
-        onScrollViewChangeListener()
+        initOnScrollChangedListener()
         observeViewToast()
         observeEndUsingFragment()
         initBackPressed()
@@ -82,7 +83,6 @@ class NoteViewFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.svNoteView.viewTreeObserver.removeOnGlobalLayoutListener(null)
         _binding = null
     }
 
@@ -164,15 +164,27 @@ class NoteViewFragment : Fragment() {
     }
 
     private fun removeNote() {
-        Snackbar.make(
+        val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
+        else R.drawable.ic_map_marker_question_outline_white_48dp
+
+        val snackBar = Snackbar.make(
             requireActivity().findViewById(R.id.main_container),
-            resources.getString(R.string.confirm_deletion_note),
+            resources.getString(R.string.confirm_remove_note),
             Snackbar.LENGTH_LONG
         )
-            .setAction(R.string.delete_note) {
+            .setAction(R.string.move_note) {
                 viewModel.removeNote()
             }
-            .show()
+        val snackBarView = snackBar.view
+        val snackBarText = snackBarView.findViewById<TextView>(
+            com.google.android.material.R.id.snackbar_text)
+        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+            icon, 0, 0, 0)
+        snackBarText.compoundDrawablePadding = 15
+        snackBarText.gravity = Gravity.CENTER
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+        snackBar.anchorView = binding.fabNoteViewExit
+        snackBar.show()
     }
 
     private fun initFab() {
@@ -207,31 +219,38 @@ class NoteViewFragment : Fragment() {
                 cvNoteViewItselfNote.setBackgroundResource(colorNote)
                 cvNoteViewTitle.setBackgroundResource(colorNote)
                 ivNoteViewLock.setImageResource(imgLock)
+
                 tvNoteViewFulldate.text = TimeUtils.getFullDate(it.timeStamp)
                 tvNoteViewTitleNote.text = it.titleNote
                 tvNoteViewItselfNote.text = it.itselfNote
-                if (it.isLocked) {
-                    binding.ivNoteViewLock.visibility = View.VISIBLE
-                } else {
-                    binding.ivNoteViewLock.visibility = View.INVISIBLE
+
+                binding.ivNoteViewLock.visibility = if (it.isLocked) View.VISIBLE
+                else View.INVISIBLE
+            }
+        }
+        viewModel.getNote(timeStamp)
+    }
+
+    private fun initOnScrollChangedListener() {
+        binding.svNoteView.doOnDetach {
+            ViewTreeObserver.OnGlobalLayoutListener{
+                binding.svNoteView.viewTreeObserver.removeOnScrollChangedListener {
+                    binding.svNoteView.viewTreeObserver.addOnScrollChangedListener {
+                        onScrollChangedListener()
+                    }
                 }
             }
         }
-        viewModel.getNoteEntry(timeStamp)
     }
 
-    private fun onScrollViewChangeListener() {
-        binding.svNoteView.viewTreeObserver.addOnScrollChangedListener {
-            _binding?.let {
-                with(binding) {
-                    if (svNoteView.scrollY > 0) {
-                        babNoteView.performHide()
-                        fabNoteViewExit.hide()
-                    } else {
-                        babNoteView.performShow()
-                        fabNoteViewExit.show()
-                    }
-                }
+    private fun onScrollChangedListener(){
+        with(binding) {
+            if (svNoteView.scrollY > 0) {
+                babNoteView.performHide()
+                fabNoteViewExit.hide()
+            } else {
+                babNoteView.performShow()
+                fabNoteViewExit.show()
             }
         }
     }
