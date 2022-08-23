@@ -189,7 +189,7 @@ class NoteViewFragment : Fragment() {
 
     private fun initFab() {
         binding.fabNoteViewExit.setOnClickListener {
-            retryNoteListFragment()
+            retryPreviousFragment()
         }
     }
 
@@ -198,7 +198,7 @@ class NoteViewFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    retryNoteListFragment()
+                    retryPreviousFragment()
                 }
 
             }
@@ -268,11 +268,11 @@ class NoteViewFragment : Fragment() {
 
     private fun observeEndUsingFragment() {
         viewModel.endUsingFragment.observe(viewLifecycleOwner) {
-            retryNoteListFragment()
+            retryPreviousFragment()
         }
     }
 
-    private fun retryNoteListFragment() {
+    private fun retryPreviousFragment() {
         requireActivity().supportFragmentManager.popBackStack(
             null,
             0

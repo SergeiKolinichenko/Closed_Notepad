@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,46 +10,55 @@
         android:id="@+id/ll_title_settings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_gravity="top"
+        android:orientation="vertical"
         app:layout_dodgeInsetEdges="bottom">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_title_settings_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"
-        android:text="@string/title_application_menu"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginTop="5dp"/>
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_settings_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="5dp"
+            android:text="@string/title_application_menu"
+            android:textSize="28sp"
+            android:textStyle="bold" />
 
-    <View
-        android:id="@+id/view_settings_1"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="?attr/colorPrimary"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="2dp"/>
+        <View
+            android:id="@+id/view_settings_1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/colorPrimary" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_settings_default_color"
-        style="@style/SettingsButtons"
-        android:text="@string/settings_default_note_color"
-        app:icon="@drawable/ic_palette_black_48dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp"
-        app:cornerRadius="5dp"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_default_color"
+            style="@style/SettingsButtons"
+            android:text="@string/settings_default_note_color"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_palette_black_48dp"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mb_settings_wastebasket"
-        style="@style/SettingsButtons"
-        android:text="@string/settings_wastebasket"
-        app:icon="@drawable/ic_delete_black_48dp"
-        app:strokeColor="?attr/colorPrimary"
-        app:strokeWidth="1dp"
-        app:cornerRadius="5dp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_days_before_delete"
+            style="@style/SettingsButtons"
+            android:text="@string/days_before_deletion"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_delete_clock_outline_black_48dp"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_wastebasket"
+            style="@style/SettingsButtons"
+            android:text="@string/settings_wastebasket"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_delete_black_48dp"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
 
     </LinearLayout>
 
@@ -59,8 +67,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         app:layout_insetEdge="bottom">
 
         <com.google.android.material.button.MaterialButton
@@ -74,7 +82,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="?attr/colorPrimary"
-            app:strokeWidth="1dp"/>
+            app:strokeWidth="1dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mb_settings_purple"
@@ -164,5 +172,97 @@
             app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_day_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+
+        app:layout_anchor="@id/mb_menu_days_before_delete"
+        app:layout_anchorGravity="center">
+
+<!--        android:visibility="invisible"-->
+<!--        android:scaleY="0"-->
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_no"
+            android:text="@string/no_days_before_deletion"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_10"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_10"
+            android:text="@string/days_before_deletion_10"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_30"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_30"
+            android:text="@string/days_before_deletion_30"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_10"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_90"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_90"
+            android:text="@string/days_before_deletion_90"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_30"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_180"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_180"
+            android:text="@string/days_before_deletion_180"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_90"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_360"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_360"
+            android:text="@string/days_before_deletion_360"
+            style="@style/SettingsDaysSetButtons"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_180"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_notes_menu_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondary"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        android:contentDescription="@string/description_leave_note_view"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

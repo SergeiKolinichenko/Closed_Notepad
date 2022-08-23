@@ -59,4 +59,11 @@
     <string name="confirm_remove_note">Переместить заметку в корзину</string>
     <string name="recovery_note">Восстановить</string>
     <string name="move_note">Переместить</string>
+    <string name="days_before_deletion">Дней до удаления</string>
+    <string name="no_days_before_deletion">Нет</string>
+    <string name="days_before_deletion_10">10 дней</string>
+    <string name="days_before_deletion_30">30 дней</string>
+    <string name="days_before_deletion_90">90 дней</string>
+    <string name="days_before_deletion_180">180 дней</string>
+    <string name="days_before_deletion_360">360 дней</string>
 </resources>

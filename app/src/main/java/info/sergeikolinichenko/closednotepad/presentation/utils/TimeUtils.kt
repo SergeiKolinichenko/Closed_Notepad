@@ -24,7 +24,7 @@ class TimeUtils {
 
         fun getDiffDays(timeStamp: Long): Int {
             val oneDay = 1000 * 60 * 60 * 24
-            val result = (Date().time - timeStamp) / oneDay
+            val result = ((Date().time - timeStamp) / oneDay)+1
             return result.toInt()
         }
     }

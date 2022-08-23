@@ -10,9 +10,12 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDelReNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
 
 class ViewModelNoteListFactory(application: Application): ViewModelProvider.Factory {
 
@@ -23,19 +26,24 @@ class ViewModelNoteListFactory(application: Application): ViewModelProvider.Fact
     private val getListNote = GetListNotesUseCase(repositoryNotes)
     private val removeNote = RemoveNoteUseCase(repositoryNotes)
     private val editNote = EditNoteUseCase(repositoryNotes)
+
+    private val getRemovedNoteList = GetListRemovedNoteUseCase(repositoryRemovedNotes)
     private val addRemovedNote = AddRemovedNoteUseCase(repositoryRemovedNotes)
+    private val deleteRemovedNote = DeleteRemovedNoteUseCase(repositoryRemovedNotes)
 
     private val addNote = AddNoteUseCase(repositoryNotes)
 
     private val setPrefOrderNoteList = SetPrefOrderNoteListUseCase(preferencesRepository)
     private val getPrefOrderNoteList = GetPrefOrderNoteListUseCase(preferencesRepository)
+    private val getPrefDayBeforeDelete = GetPrefAutoDelReNoteUseCase(preferencesRepository)
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelNoteList::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            ViewModelNoteList( getListNote, getPrefOrderNoteList,
-                removeNote, editNote, setPrefOrderNoteList,
-                addRemovedNote,
+            ViewModelNoteList(
+                getListNote, removeNote, editNote,
+                getRemovedNoteList, addRemovedNote, deleteRemovedNote,
+                getPrefOrderNoteList, setPrefOrderNoteList, getPrefDayBeforeDelete,
                 addNote
             ) as T
         } else {

@@ -59,4 +59,11 @@
     <string name="confirm_remove_note">Преместете бележката в кошчето</string>
     <string name="recovery_note">Възстановете</string>
     <string name="move_note">Ход</string>
+    <string name="days_before_deletion">Дни преди изтриването</string>
+    <string name="no_days_before_deletion">Не</string>
+    <string name="days_before_deletion_10">10 дни</string>
+    <string name="days_before_deletion_30">30 дни</string>
+    <string name="days_before_deletion_90">90 дни</string>
+    <string name="days_before_deletion_180">180 дни</string>
+    <string name="days_before_deletion_360">360 дни</string>
 </resources>

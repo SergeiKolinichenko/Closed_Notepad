@@ -9,4 +9,8 @@ interface PreferencesRepository {
     fun setPrefColorIndex(index: Int)
 
     fun getPrefColorIndex(): Int
+
+    fun getPrefAutoDelReNote(): Int
+
+    fun setPrefAutoDelReNote(days: Int)
 }

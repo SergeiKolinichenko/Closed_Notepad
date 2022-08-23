@@ -6,13 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDelReNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.random.Random
@@ -20,17 +25,20 @@ import kotlin.random.Random.Default.nextBoolean
 
 class ViewModelNoteList(
     getListNote: GetListNotesUseCase,
-    getPrefOrderListNote: GetPrefOrderNoteListUseCase,
     private val removeNote: RemoveNoteUseCase,
     private val editNote: EditNoteUseCase,
-    private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
+    private val getRemovedNoteList: GetListRemovedNoteUseCase,
     private val addRemovedNote: AddRemovedNoteUseCase,
+    private val deleteRemovedNote: DeleteRemovedNoteUseCase,
+    getPrefOrderListNote: GetPrefOrderNoteListUseCase,
+    private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
+    private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
     private var _noteList: MutableLiveData<List<Note>> = getListNote.invoke()
     val noteList: LiveData<List<Note>>
-    get() = _noteList
+        get() = _noteList
 
     private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
     val orderViewNoteList: String
@@ -42,13 +50,17 @@ class ViewModelNoteList(
 
     private var _showColorButtons = MutableLiveData<Boolean>()
     val showColorButtons: LiveData<Boolean>
-    get() = _showColorButtons
+        get() = _showColorButtons
 
     private var _showOrderButtons = MutableLiveData<Boolean>()
     val showOrderButtons: LiveData<Boolean>
         get() = _showOrderButtons
 
     private val selectedNotes = mutableListOf<Note>()
+
+    init {
+        autoDeleteRemovedNote()
+    }
 
 
 //    init {
@@ -72,13 +84,13 @@ class ViewModelNoteList(
 //    }
 
     fun selectNotes(note: Note) {
-         if (isSelected.value == false || isSelected.value == null) _isSelected.value = true
+        if (isSelected.value == false || isSelected.value == null) _isSelected.value = true
 
         if (selectedNotes.contains(note)) {
             resetSelectedNotes()
         } else {
-            val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
-            throw RuntimeException("noteList equals null")
+            val notes: MutableList<Note> =
+                noteList.value?.toMutableList() ?: throw RuntimeException("noteList equals null")
 
             val newItem = note.copy(isSelected = !note.isSelected)
             selectedNotes.add(newItem)
@@ -89,8 +101,8 @@ class ViewModelNoteList(
     }
 
     fun resetSelectedNotes() {
-        val notes: MutableList<Note> = noteList.value?.toMutableList() ?:
-        throw RuntimeException("noteList equals null")
+        val notes: MutableList<Note> =
+            noteList.value?.toMutableList() ?: throw RuntimeException("noteList equals null")
 
         for (item in selectedNotes) {
             val newItem = item.copy(isSelected = !item.isSelected)
@@ -141,6 +153,22 @@ class ViewModelNoteList(
     fun setStateShowOrderButtons() {
         _showOrderButtons.value =
             showOrderButtons.value == null || showOrderButtons.value == false
+    }
+
+    private fun autoDeleteRemovedNote() {
+        val days = getPrefDayBeforeDelete.invoke()
+        if (days > 0) {
+            val list = getRemovedNoteList.invoke<LiveData<List<RemovedNote>>>().value
+            list?.let {
+                for (item in list) {
+                    if (TimeUtils.getDiffDays(item.timeStamp) > days) {
+                        viewModelScope.launch {
+                            deleteRemovedNote.invoke(item.timeStamp)
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

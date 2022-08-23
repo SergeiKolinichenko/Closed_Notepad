@@ -224,7 +224,6 @@ class NoteListFragment : Fragment() {
 
     private fun initNoteClickListeners() {
         adapterNoteList.onNoteClick = {
-//            Log.d("MyLog", "time ${TimeUtils.getDiffDays(it.timeStamp)}")
             if (!isNotesSelected) {
                 // Go to NoteViewFragment
                 launchNoteViewFragment(it.timeStamp)
@@ -461,9 +460,11 @@ class NoteListFragment : Fragment() {
                 }
             val snackBarView = snackBar.view
             val snackBarText = snackBarView.findViewById<TextView>(
-                com.google.android.material.R.id.snackbar_text)
+                com.google.android.material.R.id.snackbar_text
+            )
             snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-                icon, 0, 0, 0)
+                icon, 0, 0, 0
+            )
             snackBarText.compoundDrawablePadding = 15
             snackBarText.gravity = Gravity.CENTER
             snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE

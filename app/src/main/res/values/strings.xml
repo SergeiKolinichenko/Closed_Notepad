@@ -66,5 +66,12 @@
     <string name="recovery_note">Recovery</string>
     <string name="confirm_remove_notes">Move selected notes to trash</string>
     <string name="confirm_remove_note">Move note to trash</string>
+    <string name="days_before_deletion">Days before deletion</string>
+    <string name="no_days_before_deletion">No</string>
+    <string name="days_before_deletion_10">10 days</string>
+    <string name="days_before_deletion_30">30 days</string>
+    <string name="days_before_deletion_90">90 days</string>
+    <string name="days_before_deletion_180">180 days</string>
+    <string name="days_before_deletion_360">360 days</string>
 
 </resources>
