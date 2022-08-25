@@ -12,8 +12,13 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -25,9 +30,9 @@ import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
-import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
+import java.util.concurrent.Executor
 
 class NoteListFragment : Fragment() {
 
@@ -47,8 +52,6 @@ class NoteListFragment : Fragment() {
     private lateinit var finishApp: FinishApp
 
     private var isNight = false
-    private var isNotesSelected = false
-
     private var imgDelete = 0   // id ib_note_list_delete AppCompatImageView
     private var imgPallet = 0   // id ib_note_list_palette AppCompatImageView
     private var wasBabHiden = false // was BottomAppBar visible
@@ -190,30 +193,30 @@ class NoteListFragment : Fragment() {
     }
 
     private fun initBottomAppBar() {
-        if (isNight) {
-            binding.ibNoteListMenu.setImageResource(R.drawable.ic_menu_white_36dp)
-            binding.ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_white_36dp)
-            imgDelete = R.drawable.ic_delete_white_36dp
-            imgPallet = R.drawable.ic_palette_white_36dp
-        } else {
-            binding.ibNoteListMenu.setImageResource(R.drawable.ic_menu_black_36dp)
-            binding.ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_black_36dp)
-            imgDelete = R.drawable.ic_delete_black_36dp
-            imgPallet = R.drawable.ic_palette_black_36dp
-        }
-        binding.ibNoteListMenu.setOnClickListener {
-            launchMenuFragment()
-        }
-        binding.ibNoteListPalette.setOnClickListener {
-            if (isNotesSelected) {
+        with(binding) {
+            if (isNight) {
+                ibNoteListMenu.setImageResource(R.drawable.ic_menu_white_36dp)
+                ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_white_36dp)
+                imgDelete = R.drawable.ic_delete_white_36dp
+                imgPallet = R.drawable.ic_palette_white_36dp
+            } else {
+                ibNoteListMenu.setImageResource(R.drawable.ic_menu_black_36dp)
+                ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_black_36dp)
+                imgDelete = R.drawable.ic_delete_black_36dp
+                imgPallet = R.drawable.ic_palette_black_36dp
+            }
+            ibNoteListMenu.setOnClickListener {
+                launchMenuFragment()
+            }
+            ibNoteListPalette.setOnClickListener {
                 viewModel.setStateShowColorButtons()
             }
-        }
-        binding.ibNoteListDelete.setOnClickListener {
-            removeNotes()
-        }
-        binding.ibNoteListMagnify.setOnClickListener {
-            launchNoteSearchFragment()
+            ibNoteListDelete.setOnClickListener {
+                removeNotes()
+            }
+            ibNoteListMagnify.setOnClickListener {
+                launchNoteSearchFragment()
+            }
         }
     }
 
@@ -224,9 +227,11 @@ class NoteListFragment : Fragment() {
 
     private fun initNoteClickListeners() {
         adapterNoteList.onNoteClick = {
-            if (!isNotesSelected) {
+            if (viewModel.isSelected.value == null || viewModel.isSelected.value == false) {
                 // Go to NoteViewFragment
-                launchNoteViewFragment(it.timeStamp)
+                if (it.isLocked) getBiometricSuccess(it.timeStamp)
+                else launchNoteViewFragment(it.timeStamp)
+
                 if (binding.babNoteList.isScrolledDown) {
                     showFabAndBab()
                 }
@@ -244,7 +249,6 @@ class NoteListFragment : Fragment() {
     private fun observeIsSelected() {
         // Get an indicator whether there are selected elements collections
         viewModel.isSelected.observe(viewLifecycleOwner) {
-            isNotesSelected = it
             if (it) {
                 with(binding) {
                     ibNoteListDelete.setImageResource(imgDelete)
@@ -337,7 +341,7 @@ class NoteListFragment : Fragment() {
 
     private fun initColorButtons() {
         behaviorColorButtons = BottomSheetBehavior.from(
-            requireActivity().findViewById(R.id.cl_note_list_color_buttons)
+            binding.clNoteListColorButtons
         )
         behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
 
@@ -411,7 +415,7 @@ class NoteListFragment : Fragment() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (!isNotesSelected) {
+                if (viewModel.isSelected.value == null || viewModel.isSelected.value == false) {
                     if (dy > 0) {
                         if (binding.babNoteList.isScrolledUp) {
                             hideFabAndBab()
@@ -440,7 +444,7 @@ class NoteListFragment : Fragment() {
 
     // Delete selected items from collections
     private fun removeNotes() {
-        if (isNotesSelected) {
+        if (viewModel.isSelected.value == true) {
             val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
             else R.drawable.ic_map_marker_question_outline_white_48dp
 
@@ -471,6 +475,82 @@ class NoteListFragment : Fragment() {
             snackBar.anchorView = binding.fabAddNoteList
             snackBar.show()
         }
+    }
+
+    private fun showSnakebar(message: String) {
+        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
+        else R.drawable.ic_information_variant_white_48dp
+
+        val snackBar = Snackbar.make(
+            requireActivity().findViewById(R.id.main_container),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+
+        val snackBarView = snackBar.view
+        val snackBarText = snackBarView.findViewById<TextView>(
+            com.google.android.material.R.id.snackbar_text
+        )
+        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+            icon, 0, 0, 0
+        )
+        snackBarText.compoundDrawablePadding = 15
+        snackBarText.gravity = Gravity.CENTER
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+        snackBar.anchorView = binding.fabAddNoteList
+        snackBar.show()
+    }
+
+    private fun getBiometricSuccess(timeStamp: Long) {
+        val biometricManager = BiometricManager.from(requireContext())
+        val executor = ContextCompat.getMainExecutor(requireContext())
+        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> authUser(timeStamp, executor)
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
+                getString(R.string.hardware_not_available)
+            )
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
+                getString(R.string.hardware_unavailable_later)
+            )
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
+                showSnakebar(getString(R.string.no_blocking_method))
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
+                showSnakebar(getString(R.string.biometrical_error_security))
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                showSnakebar(getString(R.string.boimetric_error_unsuported))
+            }
+            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
+                showSnakebar(getString(R.string.biometric_status_unknoun))
+            }
+        }
+    }
+
+    private fun authUser(timeStamp: Long, executor: Executor) {
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.authentication_required))
+            .setSubtitle(getString(R.string.important_authentication))
+            .setDescription(getString(R.string.please_authenticate))
+            .setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
+//            .setDeviceCredentialAllowed(true)
+            .build()
+        val biomedicalPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    launchNoteViewFragment(timeStamp)
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    showSnakebar("Authentication error: $errString")
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    showSnakebar("Authentication failed")
+                }
+            })
+        biomedicalPrompt.authenticate(promptInfo)
     }
 
     private fun launchNoteViewFragment(timeStamp: Long) {

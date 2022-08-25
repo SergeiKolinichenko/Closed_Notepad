@@ -8,6 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +41,6 @@ class TrashCanListFragment : Fragment() {
     private val adapterTrashCanList by lazy { TrashCanAdapter() }
 
     private var isNight = false
-    private var isRemovedNoteSelected = false
     private var wasHidden = false
 
     private var imgDelete = 0   // id ib_note_list_delete AppCompatImageView
@@ -78,7 +82,6 @@ class TrashCanListFragment : Fragment() {
 
     private fun observeIsSelected() {
         viewModel.isSelected.observe(viewLifecycleOwner) {
-            isRemovedNoteSelected = it
             with(binding) {
                 if (it) {
                     if (babTrashCanList.isScrolledDown) {
@@ -126,14 +129,15 @@ class TrashCanListFragment : Fragment() {
     }
 
     private fun initTrashCanClickListeners() {
-        adapterTrashCanList.onNoteClick = {
-            if (!isRemovedNoteSelected) {
-                launchTrashCanViewFragment(it.timeStamp)
+        adapterTrashCanList.onReNoteClick = {
+            if (viewModel.isSelected.value == false || viewModel.isSelected.value == null) {
+                if (it.isLocked) getBiometricSuccess(it.timeStamp)
+                else launchTrashCanViewFragment(it.timeStamp)
             } else {
                 viewModel.selectRemovedNotes(it)
             }
         }
-        adapterTrashCanList.onNoteLongClick = {
+        adapterTrashCanList.onReNoteLongClick = {
             viewModel.selectRemovedNotes(it)
         }
     }
@@ -188,7 +192,7 @@ class TrashCanListFragment : Fragment() {
         binding.recyclerViewTrashCan.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (!isRemovedNoteSelected) {
+                if (viewModel.isSelected.value == false || viewModel.isSelected.value == null) {
                     if (dy > 0) {
                         if (binding.babTrashCanList.isScrolledUp) {
                             hideFabAndBab()
@@ -222,6 +226,81 @@ class TrashCanListFragment : Fragment() {
             .replace(R.id.main_container, TrashCanViewFragment.newInstance(timeStamp))
             .addToBackStack(NoteEditFragment.NAME)
             .commit()
+    }
+
+    private fun getBiometricSuccess(timeStamp: Long) {
+        val biometricManager = BiometricManager.from(requireContext())
+        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> authUser(timeStamp)
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
+                getString(R.string.hardware_not_available)
+            )
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
+                getString(R.string.hardware_unavailable_later)
+            )
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> //authUser(executor, timeStamp)
+                showSnakebar(getString(R.string.no_blocking_method))
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
+                showSnakebar(getString(R.string.biometrical_error_security))
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                showSnakebar(getString(R.string.boimetric_error_unsuported))
+            }
+            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
+                showSnakebar(getString(R.string.biometric_status_unknoun))
+            }
+        }
+    }
+
+    private fun authUser(timeStamp: Long) {
+        val executor = ContextCompat.getMainExecutor(requireContext())
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle(getString(R.string.authentication_required))
+            .setSubtitle(getString(R.string.important_authentication))
+            .setDescription(getString(R.string.please_authenticate))
+            .setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
+            .build()
+        val biomedicalPrompt = BiometricPrompt(this, executor,
+            object : BiometricPrompt.AuthenticationCallback() {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                    super.onAuthenticationSucceeded(result)
+                    launchTrashCanViewFragment(timeStamp)
+                }
+
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                    super.onAuthenticationError(errorCode, errString)
+                    showSnakebar("Authentication error: $errString")
+                }
+
+                override fun onAuthenticationFailed() {
+                    super.onAuthenticationFailed()
+                    showSnakebar("Authentication failed")
+                }
+            })
+        biomedicalPrompt.authenticate(promptInfo)
+    }
+
+    private fun showSnakebar(message: String) {
+        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
+        else R.drawable.ic_information_variant_white_48dp
+
+        val snackBar = Snackbar.make(
+            requireActivity().findViewById(R.id.main_container),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+
+        val snackBarView = snackBar.view
+        val snackBarText = snackBarView.findViewById<TextView>(
+            com.google.android.material.R.id.snackbar_text
+        )
+        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+            icon, 0, 0, 0
+        )
+        snackBarText.compoundDrawablePadding = 15
+        snackBarText.gravity = Gravity.CENTER
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+        snackBar.anchorView = binding.fabTrashCanListExit
+        snackBar.show()
     }
 
     private fun showSnackbar(

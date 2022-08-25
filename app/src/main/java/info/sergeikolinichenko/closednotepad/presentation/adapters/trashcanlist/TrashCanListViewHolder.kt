@@ -8,9 +8,9 @@ import com.google.android.material.card.MaterialCardView
 import info.sergeikolinichenko.closednotepad.R
 
 class TrashCanListViewHolder(view: View): RecyclerView.ViewHolder(view) {
-    val tvNoteDate: TextView = view.findViewById(R.id.tv_note_date)
-    val tvNoteTime: TextView = view.findViewById(R.id.tv_note_time)
-    val tvNoteTitle: TextView = view.findViewById(R.id.tv_note_title)
-    val isLocked: AppCompatImageView = view.findViewById(R.id.iv_note_lock)
-    val cvNote: MaterialCardView = view.findViewById(R.id.cv_note)
+    val tvReNoteDateCreate: TextView = view.findViewById(R.id.tv_removed_note_date_create)
+    val tvReNoteDateRemoved: TextView = view.findViewById(R.id.tv_removed_note_date_removed)
+    val tvReNoteTitle: TextView = view.findViewById(R.id.tv_removed_note_title)
+    val isReLocked: AppCompatImageView = view.findViewById(R.id.iv_removed_note_lock)
+    val cvReNote: MaterialCardView = view.findViewById(R.id.cv_removed_note)
 }

@@ -13,6 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
@@ -80,6 +83,7 @@ class NoteEditFragment : Fragment() {
         initLockButton()
         initBackPressed()
         initColorButtons()
+        initActionBar()
         initBottomAppBar()
         initFabExit()
         initFabSave()
@@ -109,7 +113,11 @@ class NoteEditFragment : Fragment() {
 
     private fun initLockButton() {
         binding.cvNoteEditLock.setOnClickListener {
-            viewModel.changeIsLock()
+            if (viewModel.isLock.value == true) {
+                viewModel.changeIsLock()
+            } else {
+                testBiometricSuccess()
+            }
         }
     }
 
@@ -154,6 +162,14 @@ class NoteEditFragment : Fragment() {
 
             }
         )
+    }
+
+    private fun initActionBar() {
+        if (isNight) {
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
+        } else {
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
+        }
     }
 
     private fun initBottomAppBar() {
@@ -522,9 +538,29 @@ class NoteEditFragment : Fragment() {
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
         snackBar.anchorView = binding.fabNoteEditExit
         snackBar.show()
+    }
 
-
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    private fun testBiometricSuccess() {
+        val biometricManager = BiometricManager.from(requireContext())
+        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> viewModel.setIsLock(true)
+            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
+                getString(R.string.hardware_not_available)
+            )
+            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
+                getString(R.string.hardware_unavailable_later)
+            )
+            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> //authUser(executor, timeStamp)
+                showSnakebar(getString(R.string.no_blocking_method))
+            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
+                showSnakebar(getString(R.string.biometrical_error_security))
+            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
+                showSnakebar(getString(R.string.boimetric_error_unsuported))
+            }
+            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
+                showSnakebar(getString(R.string.biometric_status_unknoun))
+            }
+        }
     }
 
     override fun onDestroyView() {

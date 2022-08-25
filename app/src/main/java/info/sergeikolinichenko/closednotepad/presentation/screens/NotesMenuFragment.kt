@@ -87,11 +87,15 @@ class NotesMenuFragment : Fragment() {
     private fun observeDaysBeforeDelete() {
         viewModel.daysBeforeDelete.observe(viewLifecycleOwner) {
             val daysPref = it
-            val daysBefore = if (daysPref != null && daysPref > 0) daysPref.toString()
-            else resources.getString(R.string.no_days_before_deletion)
-            val string = resources.getString(R.string.days_before_deletion)
 
-            val text = "$daysBefore $string"
+            val text: String = if (daysPref != null && daysPref > 0){
+                val daysBefore = daysPref.toString()
+                val string = resources.getString(R.string.days_before_deletion)
+                "$daysBefore $string"
+            } else {
+                resources.getString(R.string.manual_delete_trash)
+            }
+
             binding.mbMenuDaysBeforeDelete.text = text
         }
     }

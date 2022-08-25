@@ -14,15 +14,15 @@ import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 class TrashCanAdapter: ListAdapter<RemovedNote,
         TrashCanListViewHolder>(TrashCanListDiffCallback()) {
 
-    var onNoteClick: ((RemovedNote) -> Unit)? = null
-    var onNoteLongClick: ((RemovedNote) -> Unit)? = null
+    var onReNoteClick: ((RemovedNote) -> Unit)? = null
+    var onReNoteLongClick: ((RemovedNote) -> Unit)? = null
     var isNight: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             TrashCanListViewHolder {
         val layoutType = when (viewType) {
-            SELECTED_ENTRY -> R.layout.selected_note_list_item
-            UNSELECTED_ENTRY -> R.layout.note_list_item
+            SELECTED_ENTRY -> R.layout.selected_removed_note_list_item
+            UNSELECTED_ENTRY -> R.layout.removed_note_list_item
             else -> throw RuntimeException("Unknown view type $viewType")
         }
         val view = LayoutInflater.from(parent.context).inflate(
@@ -42,25 +42,25 @@ class TrashCanAdapter: ListAdapter<RemovedNote,
         else R.drawable.ic_lock_black_36dp
 
         with(holder) {
-            tvNoteDate.text = TimeUtils.getDate(removedNote.timeStamp)
-            tvNoteTime.text = TimeUtils.getTime(removedNote.timeStamp)
-            tvNoteTitle.text = removedNote.titleNote
-            cvNote.setBackgroundResource(colorBack)
-            isLocked.setImageResource(imgLock)
+            tvReNoteDateCreate.text = TimeUtils.getDate(removedNote.timeStamp)
+            tvReNoteDateRemoved.text = TimeUtils.getDate(removedNote.timeRemove)
+            tvReNoteTitle.text = removedNote.titleNote
+            cvReNote.setBackgroundResource(colorBack)
+            isReLocked.setImageResource(imgLock)
 
-            if (removedNote.isLocked) isLocked.visibility = View.VISIBLE
-            else isLocked.visibility = View.INVISIBLE
+            if (removedNote.isLocked) isReLocked.visibility = View.VISIBLE
+            else isReLocked.visibility = View.INVISIBLE
 
             itemView.setOnClickListener {
-                onNoteClick?.invoke(removedNote)
+                onReNoteClick?.invoke(removedNote)
             }
 
             itemView.setOnLongClickListener {
-                onNoteLongClick?.invoke(removedNote)
+                onReNoteLongClick?.invoke(removedNote)
                 true
             }
         }
-        holder.cvNote.animation = AnimationUtils.loadAnimation(
+        holder.cvReNote.animation = AnimationUtils.loadAnimation(
             holder.itemView.context, R.anim.anim_trash_can_list
         )
     }

@@ -44,7 +44,7 @@ class ViewModelNoteList(
     val orderViewNoteList: String
         get() = _orderViewNoteList ?: throw RuntimeException("orderViewNoteList equal null")
 
-    private val _isSelected = MutableLiveData<Boolean>()
+    private val _isSelected = MutableLiveData(false)
     val isSelected: LiveData<Boolean>
         get() = _isSelected
 
@@ -66,7 +66,7 @@ class ViewModelNoteList(
 //    init {
 //        _isSelected.value = false
 //        var tempCount = 0
-//        for (i in 0..100) {
+//        for (i in 0..200) {
 //            if (tempCount == 7) tempCount = 0
 //            val note = Note(
 //                timeStamp = Date().time,

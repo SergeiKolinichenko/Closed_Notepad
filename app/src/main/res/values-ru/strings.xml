@@ -59,11 +59,21 @@
     <string name="confirm_remove_note">Переместить заметку в корзину</string>
     <string name="recovery_note">Восстановить</string>
     <string name="move_note">Переместить</string>
-    <string name="days_before_deletion">Дней до удаления</string>
+    <string name="days_before_deletion">дней до автоудаления из корзины</string>
     <string name="no_days_before_deletion">Нет</string>
-    <string name="days_before_deletion_10">10 дней</string>
-    <string name="days_before_deletion_30">30 дней</string>
-    <string name="days_before_deletion_90">90 дней</string>
-    <string name="days_before_deletion_180">180 дней</string>
-    <string name="days_before_deletion_360">360 дней</string>
+    <string name="days_before_deletion_10">10</string>
+    <string name="days_before_deletion_30">30</string>
+    <string name="days_before_deletion_90">90</string>
+    <string name="days_before_deletion_180">180</string>
+    <string name="days_before_deletion_360">360</string>
+    <string name="hardware_not_available">Биометрическое оборудование отуствует на этом устройстве.</string>
+    <string name="hardware_unavailable_later">Аппаратное обеспечение недоступно. Попробуйте позже.</string>
+    <string name="no_blocking_method">В настройках \"Безопасность - Защита устройства\" отсутствует способ блокировки.</string>
+    <string name="biometrical_error_security">Обнаружена уязвимость в системе безопасности, и датчик недоступен, пока эта проблема не будет устранена в обновлении для системы безопасности.</string>
+    <string name="biometric_status_unknoun">Неизвестный статус биметрического оборудования, обратитесь к поставщику устройства.</string>
+    <string name="boimetric_error_unsuported">Невозможно пройти аутентификацию, поскольку указанные параметры несовместимы с текущей версией Android.</string>
+    <string name="authentication_required">Требуется авторизация!</string>
+    <string name="please_authenticate">Пожалуйста, авторизируйтесь, чтобы иметь возможность просматривать заблокированные заметки.</string>
+    <string name="important_authentication">Обязательная аутентификация.</string>
+    <string name="manual_delete_trash">Ручное удаление из корзины</string>
 </resources>

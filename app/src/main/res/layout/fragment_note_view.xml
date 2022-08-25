@@ -56,6 +56,13 @@
                         android:background="@android:color/transparent"
                         android:orientation="horizontal">
 
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/iv_note_view_create"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="4dp"
+                            android:src="@drawable/ic_pencil_black_36dp" />
+
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tv_note_view_fulldate"
                             android:layout_width="0dp"

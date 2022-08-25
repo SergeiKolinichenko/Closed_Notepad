@@ -73,9 +73,10 @@ class NoteViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeNoteEntry()
-        initOnScrollChangedListener()
         observeViewToast()
         observeEndUsingFragment()
+        initOnScrollChangedListener()
+        initActionBar()
         initBackPressed()
         initBottomAppBar()
         initFab()
@@ -92,6 +93,14 @@ class NoteViewFragment : Fragment() {
             throw RuntimeException("Arguments don't contains time_stamp")
         }
         _timeStamp = requireArguments().getLong(TIME_STAMP)
+    }
+
+    private fun initActionBar() {
+        if (isNight) {
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
+        } else {
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
+        }
     }
 
     private fun initBottomAppBar() {
