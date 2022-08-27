@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanlist
 
+import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +18,8 @@ class ViewModelTrashCanList(
     getPrefOrderNoteList: GetPrefOrderNoteListUseCase,
     private val deleteRemovedNote: DeleteRemovedNoteUseCase,
     private val recoveryRemovedNote: RecoveryRemovedNoteUseCase,
-    private val addNote: AddNoteUseCase
+    private val addNote: AddNoteUseCase,
+    private val backupManager: BackupManager
 ) : ViewModel() {
 
     private var _removedNoteList: MutableLiveData<List<RemovedNote>> = getRemovedNoteList.invoke()
@@ -76,6 +78,7 @@ class ViewModelTrashCanList(
                 addNote.invoke(recoveryRemovedNote.invoke(item))
             }
         }
+        backupManager.dataChanged()
         clearSelectedRemovedNotes()
     }
 
@@ -85,6 +88,7 @@ class ViewModelTrashCanList(
                 deleteRemovedNote.invoke(item.timeStamp)
             }
         }
+        backupManager.dataChanged()
         clearSelectedRemovedNotes()
     }
 

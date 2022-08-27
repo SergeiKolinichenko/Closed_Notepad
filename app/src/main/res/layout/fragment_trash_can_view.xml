@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:textSize="26sp"
+                    android:textSize="22sp"
                     android:textStyle="bold"
                     tools:text="Title Note" />
 
@@ -57,22 +57,46 @@
                     android:background="@android:color/transparent"
                     android:orientation="horizontal">
 
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_trash_can_view_pencil"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_palette_black_24dp"
+                        android:visibility="visible" />
+
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_trash_can_view_fulldate"
+                        android:id="@+id/tv_trash_can_view_date_create"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:textStyle="bold|italic"
+                        tools:text="13.10.1961" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_trash_can_view_remove"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_delete_black_24dp"
+                        android:visibility="visible"
+                        android:layout_marginStart="15dp"/>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_trash_can_view_date_remove"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold|italic"
                         android:layout_weight="1"
-                        tools:text="13.10.1961 23:23" />
+                        tools:text="13.10.1961" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_trash_can_view_lock"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:textSize="18sp"
+                        android:textSize="14sp"
                         android:textStyle="bold|italic"
                         android:layout_marginEnd="5dp"
                         tools:text="Locked" />
@@ -81,7 +105,7 @@
                         android:id="@+id/iv_trash_can_view_lock"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:src="@drawable/ic_lock_black_36dp"
+                        android:src="@drawable/ic_lock_black_24dp"
                         android:visibility="visible" />
                 </LinearLayout>
             </LinearLayout>

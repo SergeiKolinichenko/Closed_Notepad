@@ -34,8 +34,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:textSize="26sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
+                        android:layout_gravity="center"
                         tools:text="Title Note" />
 
                     <View
@@ -61,14 +62,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="4dp"
-                            android:src="@drawable/ic_pencil_black_36dp" />
+                            android:src="@drawable/ic_pencil_black_24dp" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tv_note_view_fulldate"
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:textStyle="bold|italic"
                             android:layout_weight="1"
                             tools:text="13.10.1961 23:23" />
@@ -78,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:textStyle="bold|italic"
                             android:layout_marginEnd="5dp"
                             tools:text="Locked" />
@@ -87,7 +88,7 @@
                             android:id="@+id/iv_note_view_lock"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_lock_black_36dp"
+                            android:src="@drawable/ic_lock_black_24dp"
                             android:visibility="visible" />
                     </LinearLayout>
                 </LinearLayout>

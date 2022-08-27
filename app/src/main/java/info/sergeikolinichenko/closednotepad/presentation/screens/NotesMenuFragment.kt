@@ -1,13 +1,11 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
-import android.animation.Animator
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -35,6 +33,7 @@ class NotesMenuFragment : Fragment() {
 
     private var isNight = false
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
+    private var behaviorDaySetButtons = BottomSheetBehavior<ConstraintLayout>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -150,6 +149,9 @@ class NotesMenuFragment : Fragment() {
     }
 
     private fun showColorButtons() {
+        if (behaviorDaySetButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behaviorDaySetButtons.state = BottomSheetBehavior.STATE_HIDDEN
+        }
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
             behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -158,6 +160,21 @@ class NotesMenuFragment : Fragment() {
     private fun hideColorButtons() {
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
             behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
+
+    private fun showDaySetButtons() {
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+        if (behaviorDaySetButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
+            behaviorDaySetButtons.state = BottomSheetBehavior.STATE_EXPANDED
+        }
+    }
+
+    private fun hideDaySetButtons() {
+        if (behaviorDaySetButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
+            behaviorDaySetButtons.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
 
@@ -222,6 +239,9 @@ class NotesMenuFragment : Fragment() {
     }
 
     private fun initDaySetButtons() {
+        behaviorDaySetButtons = BottomSheetBehavior.from(binding.clMenuDaySet)
+        behaviorDaySetButtons.state = BottomSheetBehavior.STATE_HIDDEN
+
         with(binding) {
             mbMenuDaySetNo.setOnClickListener {
                 viewModel.setDaysBeforeDelete(DAYS_BEFORE_DELETE_0)
@@ -242,99 +262,6 @@ class NotesMenuFragment : Fragment() {
                 viewModel.setDaysBeforeDelete(DAYS_BEFORE_DELETE_360)
             }
         }
-    }
-
-    private fun showDaySetButtons() {
-        binding.mbMenuDaysBeforeDelete.animate()
-            .scaleY(0f)
-            .setDuration(250)
-            .setInterpolator(AccelerateDecelerateInterpolator())
-            .setListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-                    binding.mbMenuDaysBeforeDelete.visibility = View.INVISIBLE
-                    binding.mbMenuDaysBeforeDelete.isClickable = false
-                    binding.clMenuDaySet.animate()
-                        .scaleY(1F)
-                        .setDuration(250)
-                        .setInterpolator(AccelerateDecelerateInterpolator())
-                        .setListener(object : Animator.AnimatorListener {
-                            override fun onAnimationStart(p0: Animator?) {
-                                binding.clMenuDaySet.visibility = View.VISIBLE
-                            }
-
-                            override fun onAnimationEnd(p0: Animator?) {
-                                with(binding) {
-                                    mbMenuDaySet10.isClickable = true
-                                    mbMenuDaySet30.isClickable = true
-                                    mbMenuDaySet90.isClickable = true
-                                    mbMenuDaySet180.isClickable = true
-                                    mbMenuDaySet360.isClickable = true
-                                }
-                            }
-
-                            override fun onAnimationCancel(p0: Animator?) {
-                            }
-
-                            override fun onAnimationRepeat(p0: Animator?) {
-                            }
-                        })
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                }
-            })
-    }
-
-    private fun hideDaySetButtons() {
-        binding.clMenuDaySet.animate()
-            .scaleY(0f)
-            .setDuration(250)
-            .setInterpolator(AccelerateDecelerateInterpolator())
-            .setListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(p0: Animator?) {
-                    with(binding) {
-                        mbMenuDaySet10.isClickable = false
-                        mbMenuDaySet30.isClickable = false
-                        mbMenuDaySet90.isClickable = false
-                        mbMenuDaySet180.isClickable = false
-                        mbMenuDaySet360.isClickable = false
-                    }
-                }
-
-                override fun onAnimationEnd(p0: Animator?) {
-                    binding.mbMenuDaysBeforeDelete.visibility = View.VISIBLE
-                    binding.mbMenuDaysBeforeDelete.animate()
-                        .scaleY(1F)
-                        .setDuration(250)
-                        .setInterpolator(AccelerateDecelerateInterpolator())
-                        .setListener(object : Animator.AnimatorListener {
-                            override fun onAnimationStart(p0: Animator?) {
-                                binding.clMenuDaySet.visibility = View.VISIBLE
-                            }
-                            override fun onAnimationEnd(p0: Animator?) {
-                                binding.mbMenuDaysBeforeDelete.isClickable = true
-                            }
-
-                            override fun onAnimationCancel(p0: Animator?) {
-                            }
-
-                            override fun onAnimationRepeat(p0: Animator?) {
-                            }
-                        })
-                }
-
-                override fun onAnimationCancel(p0: Animator?) {
-                }
-
-                override fun onAnimationRepeat(p0: Animator?) {
-                }
-            })
     }
 
     private fun initBackPressed() {

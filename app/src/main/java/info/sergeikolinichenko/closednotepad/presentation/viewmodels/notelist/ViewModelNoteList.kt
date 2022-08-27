@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
+import android.app.backup.BackupManager
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +19,7 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNo
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.utils.NotesBackupAgent
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.random.Random
@@ -33,6 +35,7 @@ class ViewModelNoteList(
     getPrefOrderListNote: GetPrefOrderNoteListUseCase,
     private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
     private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
+    private val backupManager: BackupManager,
     private val addEntryToNoteUseCase: AddNoteUseCase
 ) : ViewModel() {
 
@@ -119,6 +122,7 @@ class ViewModelNoteList(
                 addRemovedNote.invoke(removeNote.invoke(item))
             }
         }
+        backupManager.dataChanged()
         clearSelectedNotes()
     }
 
@@ -130,6 +134,7 @@ class ViewModelNoteList(
             }
         }
         clearSelectedNotes()
+        backupManager.dataChanged()
         _showColorButtons.value = false
     }
 
@@ -143,6 +148,7 @@ class ViewModelNoteList(
         setPrefOrderListNote.invoke(order)
         _noteList.value = noteList.value
         _showOrderButtons.value = false
+        backupManager.dataChanged()
     }
 
     fun setStateShowColorButtons() {
@@ -167,6 +173,7 @@ class ViewModelNoteList(
                         }
                     }
                 }
+                backupManager.dataChanged()
             }
         }
     }

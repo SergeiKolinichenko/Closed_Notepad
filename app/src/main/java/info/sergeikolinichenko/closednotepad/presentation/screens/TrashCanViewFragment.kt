@@ -60,6 +60,7 @@ class TrashCanViewFragment : Fragment() {
         observeEndUsingFragment()
         onScrollViewChangeListener()
         initBackPressed()
+        initActionBar()
         initBottomAppBar()
         initFabExit()
     }
@@ -70,15 +71,16 @@ class TrashCanViewFragment : Fragment() {
                 if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it.colorIndex]
                 else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it.colorIndex]
 
-            val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
-            else R.drawable.ic_lock_black_36dp
+            val imgLock = if (isNight) R.drawable.ic_lock_white_24dp
+            else R.drawable.ic_lock_black_24dp
 
             with(binding) {
                 cvTrashCanViewTitle.setBackgroundResource(colorNote)
                 cvTrashCanViewItself.setBackgroundResource(colorNote)
                 ivTrashCanViewLock.setImageResource(imgLock)
 
-                tvTrashCanViewFulldate.text = TimeUtils.getFullDate(it.timeStamp)
+                tvTrashCanViewDateCreate.text = TimeUtils.getDate(it.timeStamp)
+                tvTrashCanViewDateRemove.text = TimeUtils.getDate(it.timeRemove)
                 tvTrashCanViewTitle.text = it.titleNote
                 tvTrashCanViewItself.text = it.itselfNote
 
@@ -101,6 +103,19 @@ class TrashCanViewFragment : Fragment() {
             throw RuntimeException("Arguments don't contains time_stamp")
         }
         _timeStamp = requireArguments().getLong(TIME_STAMP)
+    }
+
+    private fun initActionBar() {
+        val imgPencil = if (isNight) R.drawable.ic_pencil_white_24dp
+        else R.drawable.ic_pencil_black_24dp
+
+        val imgRemove = if (isNight) R.drawable.ic_delete_white_24dp
+        else R.drawable.ic_delete_black_24dp
+
+        with(binding){
+            ivTrashCanViewPencil.setImageResource(imgPencil)
+            ivTrashCanViewRemove.setImageResource(imgRemove)
+        }
     }
 
     private fun initBottomAppBar() {

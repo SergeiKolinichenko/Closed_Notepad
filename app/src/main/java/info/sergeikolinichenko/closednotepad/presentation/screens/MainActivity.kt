@@ -1,8 +1,8 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import info.sergeikolinichenko.closednotepad.R
 
 class MainActivity : AppCompatActivity(), NoteListFragment.FinishApp, NoteViewFragment.SendNoteTo {

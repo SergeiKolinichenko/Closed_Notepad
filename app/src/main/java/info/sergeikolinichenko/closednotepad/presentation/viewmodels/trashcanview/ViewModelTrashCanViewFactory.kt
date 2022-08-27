@@ -1,6 +1,7 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanview
 
 import android.app.Application
+import android.app.backup.BackupManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl
@@ -15,6 +16,8 @@ class ViewModelTrashCanViewFactory(application: Application): ViewModelProvider.
     private val repositoryRemovedNote = RemovedNoteRepositoryImpl(application)
     private val repositoryNote = NoteRepositoryImpl(application)
 
+    private val backupManager = BackupManager(application)
+
     private val getRemovedNote = GetRemovedNoteUseCase(repositoryRemovedNote)
     private val deleteRemovedNote = DeleteRemovedNoteUseCase(repositoryRemovedNote)
     private val recoveryRemovedNote = RecoveryRemovedNoteUseCase(repositoryRemovedNote)
@@ -26,7 +29,8 @@ class ViewModelTrashCanViewFactory(application: Application): ViewModelProvider.
                 ViewModelTrashCanView( getRemovedNote,
                     recoveryRemovedNote,
                     deleteRemovedNote,
-                    addNote
+                    addNote,
+                    backupManager
                 ) as T
             } else {
                 throw RuntimeException("Unknown view Model class $modelClass")

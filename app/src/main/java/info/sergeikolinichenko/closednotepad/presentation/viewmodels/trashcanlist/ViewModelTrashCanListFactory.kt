@@ -1,6 +1,7 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanlist
 
 import android.app.Application
+import android.app.backup.BackupManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl
@@ -19,11 +20,14 @@ class ViewModelTrashCanListFactory(application: Application): ViewModelProvider.
     private val preferencesRepository = PreferencesRepositoryImpl(application)
     private val repositoryNote = NoteRepositoryImpl(application)
 
+    private val backupManager = BackupManager(application)
+
     private val getRemovedNoteList = GetListRemovedNoteUseCase(repositoryRemovedNote)
     private val deleteRemovedNote = DeleteRemovedNoteUseCase(repositoryRemovedNote)
     private val recoveryRemovedNote = RecoveryRemovedNoteUseCase(repositoryRemovedNote)
-    private val addNote = AddNoteUseCase(repositoryNote)
     private val getPrefOrderNoteList = GetPrefOrderNoteListUseCase(preferencesRepository)
+
+    private val addNote = AddNoteUseCase(repositoryNote)
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelTrashCanList::class.java)) {
@@ -33,7 +37,8 @@ class ViewModelTrashCanListFactory(application: Application): ViewModelProvider.
                 getPrefOrderNoteList,
                 deleteRemovedNote,
                 recoveryRemovedNote,
-                addNote
+                addNote,
+                backupManager
             ) as T
         } else {
             throw RuntimeException("Unknown view Model class $modelClass")

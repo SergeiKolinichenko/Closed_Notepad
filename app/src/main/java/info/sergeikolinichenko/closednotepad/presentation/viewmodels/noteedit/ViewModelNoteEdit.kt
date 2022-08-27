@@ -1,19 +1,26 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit
 
+import android.app.backup.BackupManager
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
+import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIndexUseCase
 import kotlinx.coroutines.launch
 
 class ViewModelNoteEdit(
     private val getNoteEntryUseCase: GetNoteUseCase,
     private val addNoteEntryUseCase: AddNoteUseCase,
-    private val editNoteEntryUseCase: EditNoteUseCase
+    private val editNoteEntryUseCase: EditNoteUseCase,
+    getPrefColorIndex: GetPrefColorIndexUseCase,
+    private val backupManager: BackupManager
 ) : ViewModel() {
 
     private var _note = MutableLiveData<Note>()
@@ -42,7 +49,16 @@ class ViewModelNoteEdit(
 
     private var _isShowColorFabs = MutableLiveData<Boolean>()
     val isShowColorFabs: LiveData<Boolean>
-    get() = _isShowColorFabs
+        get() = _isShowColorFabs
+
+    init {
+        val colorIndex = getPrefColorIndex.invoke()
+        _colorIndex.value =
+            if (colorIndex != PreferencesRepositoryImpl.ERROR_GET_INT)
+                getPrefColorIndex.invoke()
+            else NoteColors.GRAY
+
+    }
 
     fun getNoteEntry() {
         viewModelScope.launch {
@@ -55,7 +71,7 @@ class ViewModelNoteEdit(
         val itself = parseString(inItself)
 
         if (title.isEmpty() && itself.isEmpty()) {
-            retryNoteListFrag()
+            retryNoteListFragment()
         } else {
             _note.value = parseNote(title, itself)
             _getSaveOption.value = Unit
@@ -73,7 +89,7 @@ class ViewModelNoteEdit(
             && colorIndex.value == note.value?.colorIndex
             || (title.isEmpty() && itself.isEmpty())
         ) {
-            retryNoteListFrag()
+            retryNoteListFragment()
         } else {
             _note.value = parseNote(title, itself)
             _getSaveOption.value = Unit
@@ -86,7 +102,8 @@ class ViewModelNoteEdit(
                 addNoteEntryUseCase.invoke(it)
             }
         }
-        retryNoteListFrag()
+        backupManager.dataChanged()
+        retryNoteListFragment()
     }
 
     fun editNoteToBase() {
@@ -95,7 +112,8 @@ class ViewModelNoteEdit(
                 editNoteEntryUseCase.invoke(it)
             }
         }
-        retryNoteListFrag()
+        backupManager.dataChanged()
+        retryNoteListFragment()
     }
 
     private fun parseNote(inTitle: String, inItself: String): Note {
@@ -111,6 +129,9 @@ class ViewModelNoteEdit(
         } else if (itself.isEmpty()) {
             itself = title
         }
+        if (title.length > MAX_TITLE_LENGTH) {
+            title = makeTitle(title)
+        }
         return Note(
             timeStamp = timeStamp,
             titleNote = title,
@@ -122,29 +143,48 @@ class ViewModelNoteEdit(
     }
 
     private fun makeTitle(itself: String): String {
-        var lItself = itself
-        if (itself.length > MAX_TITLE_LENGTH) {
+
+        var title = if (itself.length > MAX_TITLE_LENGTH) {
             val index = getSubstringIndex(itself)
-            lItself = itself.substring(0, index)
+            itself.substring(0, index)
+        } else itself
+
+        val firstChar = title.substring(0, 1)
+        if (firstChar != firstChar.uppercase()) {
+            title = setFirstCharUppercase(title)
         }
-        return lItself
+
+        return title
     }
 
     private fun getSubstringIndex(string: String): Int {
-        val lString = string
+        // get the number of characters up to the first dot
         var index = string.indexOf(".")
+        // if there are more characters or no dot
         if (index < 0 || index > MAX_TITLE_LENGTH) {
-            index = lString.lastIndexOf(" ")
-            if (index > MAX_TITLE_LENGTH) {
+            // get the number of MAX_TITLE_LENGTH characters up to the last space
+            index = string.lastIndexOf(" ")
+            // if there are more MAX_TITLE_LENGTH characters and there are spaces
+            if (index > 0 && index > MAX_TITLE_LENGTH) {
+                // get the number of characters up to the last space, but less MAX_TITLE_LENGTH
+                var lString = string
                 do {
                     index = lString.lastIndexOf(" ")
-                    lString.substring(0, index)
+                    lString = lString.substring(0, index)
                 } while (index >= MAX_TITLE_LENGTH)
-            } else {
+                // if there are no spaces and characters greater than 0
+            } else if (index < 0 && string.isNotEmpty()) {
                 index = MAX_TITLE_LENGTH
             }
         }
         return index
+    }
+
+    private fun setFirstCharUppercase(string: String): String {
+        val firstChar = string.substring(0, 1)
+        val firstCharUpperCase = firstChar.uppercase()
+        val otherString = string.substring(1)
+        return firstCharUpperCase + otherString
     }
 
     private fun parseString(txt: String?) = txt?.trim() ?: ""
@@ -172,12 +212,12 @@ class ViewModelNoteEdit(
         _isShowColorFabs.value = state
     }
 
-    fun retryNoteListFrag() {
+    fun retryNoteListFragment() {
         _retryNoteListFrag.value = Unit
     }
 
     companion object {
-        private const val MAX_TITLE_LENGTH = 50
+        private const val MAX_TITLE_LENGTH = 22
     }
 
 }

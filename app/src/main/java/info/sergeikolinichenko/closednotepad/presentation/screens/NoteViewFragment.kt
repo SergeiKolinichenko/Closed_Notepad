@@ -97,9 +97,9 @@ class NoteViewFragment : Fragment() {
 
     private fun initActionBar() {
         if (isNight) {
-            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_white_24dp)
         } else {
-            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_black_24dp)
         }
     }
 
@@ -161,7 +161,7 @@ class NoteViewFragment : Fragment() {
 
         clipboardManager.setPrimaryClip(clip)
 
-        showToast(getString(R.string.copy_text_clipboard))
+        showSnakebar(getString(R.string.copy_text_clipboard))
     }
 
     private fun sendNoteTo() {
@@ -271,8 +271,27 @@ class NoteViewFragment : Fragment() {
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
+    private fun showSnakebar(message: String) {
+        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
+        else R.drawable.ic_information_variant_white_48dp
+
+        val snackBar = Snackbar.make(
+            requireActivity().findViewById(R.id.main_container),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+
+        val snackBarView = snackBar.view
+        val snackBarText = snackBarView.findViewById<TextView>(
+            com.google.android.material.R.id.snackbar_text)
+        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
+            icon, 0, 0, 0)
+        snackBarText.compoundDrawablePadding = 15
+        snackBarText.gravity = Gravity.CENTER
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
+        snackBar.anchorView = binding.fabNoteViewExit
+        snackBar.show()
     }
 
     private fun observeEndUsingFragment() {

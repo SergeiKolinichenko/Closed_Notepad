@@ -1,6 +1,7 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
 import android.app.Application
+import android.app.backup.BackupManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl
@@ -31,11 +32,13 @@ class ViewModelNoteListFactory(application: Application): ViewModelProvider.Fact
     private val addRemovedNote = AddRemovedNoteUseCase(repositoryRemovedNotes)
     private val deleteRemovedNote = DeleteRemovedNoteUseCase(repositoryRemovedNotes)
 
-    private val addNote = AddNoteUseCase(repositoryNotes)
-
     private val setPrefOrderNoteList = SetPrefOrderNoteListUseCase(preferencesRepository)
     private val getPrefOrderNoteList = GetPrefOrderNoteListUseCase(preferencesRepository)
     private val getPrefDayBeforeDelete = GetPrefAutoDelReNoteUseCase(preferencesRepository)
+
+    private val backupManager = BackupManager(application)
+
+    private val addNote = AddNoteUseCase(repositoryNotes) // TODO delete later
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelNoteList::class.java)) {
@@ -44,6 +47,7 @@ class ViewModelNoteListFactory(application: Application): ViewModelProvider.Fact
                 getListNote, removeNote, editNote,
                 getRemovedNoteList, addRemovedNote, deleteRemovedNote,
                 getPrefOrderNoteList, setPrefOrderNoteList, getPrefDayBeforeDelete,
+                backupManager,
                 addNote
             ) as T
         } else {

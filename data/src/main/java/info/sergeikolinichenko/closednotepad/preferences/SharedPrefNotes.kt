@@ -7,7 +7,7 @@ import android.content.SharedPreferences
 abstract class SharedPrefNotes() {
 
     companion object {
-        private const val SHARED_PREFS_NAME = "shared_prefs_notes"
+        const val SHARED_PREFS_NAME = "shared_prefs_notes"
         private var INSTANCE: SharedPreferences? = null
         private val LOCK = Any()
 

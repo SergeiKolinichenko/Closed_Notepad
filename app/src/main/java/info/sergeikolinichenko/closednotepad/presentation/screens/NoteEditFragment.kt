@@ -7,11 +7,12 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
@@ -143,7 +144,7 @@ class NoteEditFragment : Fragment() {
 
     private fun initFabNoSave() {
         binding.fabNoteEditNotSave.setOnClickListener {
-            viewModel.retryNoteListFrag()
+            viewModel.retryNoteListFragment()
         }
     }
 
@@ -166,9 +167,9 @@ class NoteEditFragment : Fragment() {
 
     private fun initActionBar() {
         if (isNight) {
-            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_white_24dp)
         } else {
-            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_black_24dp)
         }
     }
 
@@ -231,10 +232,12 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun getExtractedStr(): String? {
-        val startIndex = binding.etNoteEditItself.selectionStart
-        val endIndex = binding.etNoteEditItself.selectionEnd
+        val view = requireActivity().currentFocus as EditText
+
+        val startIndex = view.selectionStart
+        val endIndex = view.selectionEnd
         return if (startIndex != endIndex) {
-            val string = binding.etNoteEditItself.text
+            val string = view.text
             string?.substring(startIndex, endIndex)
         } else {
             showSnakebar(getString(R.string.select_text_to_copy))
@@ -243,18 +246,20 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun getCutString() {
-        val startIndex = binding.etNoteEditItself.selectionStart
-        val endIndex = binding.etNoteEditItself.selectionEnd
+        val view = requireActivity().currentFocus as EditText
 
-        val string = binding.etNoteEditItself.text
+        val startIndex = view.selectionStart
+        val endIndex = view.selectionEnd
+
+        val string = view.text
         val startString = string?.substring(0, startIndex)
         val endString = string?.substring(endIndex)
         val fullString = startString + endString
         val editableString = Editable.Factory.getInstance().newEditable(fullString)
 
-        binding.etNoteEditItself.text?.clear()
-        binding.etNoteEditItself.text = editableString
-        binding.etNoteEditItself.setSelection(startIndex)
+        view.text?.clear()
+        view.text = editableString
+        view.setSelection(startIndex)
     }
 
     private fun copySelToClip(extractedString: String) {
@@ -272,19 +277,21 @@ class NoteEditFragment : Fragment() {
         val item = data?.getItemAt(0)
         val copyString = item?.text.toString()
 
-        val startIndex = binding.etNoteEditItself.selectionStart
-        val endIndex = binding.etNoteEditItself.selectionEnd
+        val view = requireActivity().currentFocus as EditText
 
-        val string = binding.etNoteEditItself.text
+        val startIndex = view.selectionStart
+        val endIndex = view.selectionEnd
+
+        val string = view.text
         val startString = string?.substring(0, startIndex)
         val endString = string?.substring(endIndex)
         val fullString = startString + copyString + endString
 
         val newCursorPosition = startIndex + copyString.length
 
-        binding.etNoteEditItself.text?.clear()
-        binding.etNoteEditItself.text = Editable.Factory.getInstance().newEditable(fullString)
-        binding.etNoteEditItself.setSelection(newCursorPosition)
+        view.text?.clear()
+        view.text = Editable.Factory.getInstance().newEditable(fullString)
+        view.setSelection(newCursorPosition)
     }
 
     private fun initColorButtons() {
@@ -381,8 +388,6 @@ class NoteEditFragment : Fragment() {
         viewModel.setTimeStamp(Date().time)
         viewModel.setIsLock(false)
 
-        viewModel.setColorIndex(NoteColors.BLUE_GRAY) // TODO create load colorIndex from preferences
-
         with(binding) {
 
             tvNoteEditFullDate.text = TimeUtils.getFullDate(viewModel.timeStamp)
@@ -437,6 +442,7 @@ class NoteEditFragment : Fragment() {
 
     private fun observeColorIndex() {
         viewModel.colorIndex.observe(viewLifecycleOwner) {
+            Log.d("MyLog", "$it")
             val colorNote =
                 if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
                 else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
