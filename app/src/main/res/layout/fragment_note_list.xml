@@ -103,7 +103,8 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:src="@drawable/ic_exit_to_app_black_36dp"
-                android:tint="?attr/colorOnPrimary" />
+                android:tint="?attr/colorOnPrimary"
+                android:contentDescription="@string/exit_application"/>
 
             <TextView
                 android:id="@+id/tv_toolbar_note_list"
@@ -113,7 +114,8 @@
                 android:gravity="center"
                 android:text="@string/title_note_list"
                 android:textColor="?attr/colorOnPrimary"
-                android:textSize="30sp"
+                android:textSize="28sp"
+                android:minHeight="48dp"
                 android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -123,7 +125,8 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:src="@drawable/ic_filter_variant_black_36dp"
-                android:tint="?attr/colorOnPrimary" />
+                android:tint="?attr/colorOnPrimary"
+                android:contentDescription="@string/sorting_note_titles_on_screen"/>
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -163,7 +166,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_menu_black_36dp" />
+                android:src="@drawable/ic_menu_black_36dp"
+                android:contentDescription="@string/settings_and_trash_can"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_palette"
@@ -173,7 +177,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
                 android:clickable="false"
-                android:src="@drawable/ic_palette_grey600_36dp" />
+                android:src="@drawable/ic_palette_grey600_36dp"
+                android:contentDescription="@string/change_the_color_of_selected_notes"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_delete"
@@ -182,7 +187,8 @@
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
                 android:clickable="false"
-                android:src="@drawable/ic_delete_grey600_36dp" />
+                android:src="@drawable/ic_delete_grey600_36dp"
+                android:contentDescription="@string/move_selected_notes_to_trash"/>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_note_list_magnify"
@@ -190,7 +196,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_magnify_black_36dp" />
+                android:src="@drawable/ic_magnify_black_36dp"
+                android:contentDescription="@string/search_for_a_note"/>
         </LinearLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
@@ -199,11 +206,10 @@
         android:id="@+id/fab_add_note_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSecondary"
-        android:backgroundTint="?attr/colorSecondary"
         android:contentDescription="@string/description_add_note"
         android:elevation="10dp"
         android:src="@drawable/ic_plus_thick_black_48dp"
+        app:backgroundTint="?attr/colorSecondaryVariant"
         app:layout_anchor="@id/bab_note_list"
         app:layout_dodgeInsetEdges="bottom"/>
 
@@ -228,7 +234,8 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="?attr/colorPrimary" />
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_to_pink"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_purple"
@@ -239,7 +246,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_pink"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_to_purple"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_indigo"
@@ -250,7 +258,8 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_pink"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_indigo"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_green"
@@ -260,7 +269,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_indigo"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_purple"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_green"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_orange"
@@ -271,7 +281,8 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_indigo"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_orange"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_brown"
@@ -281,7 +292,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_orange"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_green"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_brown"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_gray"
@@ -292,7 +304,8 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_orange"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_gray"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mb_note_list_color_blue_gray"
@@ -302,7 +315,8 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_gray"
                 app:layout_constraintTop_toBottomOf="@id/mb_note_list_color_brown"
-                app:strokeColor="?attr/colorPrimary"/>
+                app:strokeColor="?attr/colorPrimary"
+                android:contentDescription="@string/set_note_color_blue_gray"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

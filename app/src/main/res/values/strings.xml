@@ -83,5 +83,20 @@
     <string name="please_authenticate">Please authenticate to be able to view locked notes.</string>
     <string name="important_authentication">Required authentication</string>
     <string name="manual_delete_trash">Self-deleting notes from the trash</string>
+    <string name="enter_note_text">Enter note text</string>
+    <string name="enter_note_title">Enter title</string>
+    <string name="copy_the_selected_text">Copy the selected text</string>
+    <string name="cut_the_selected_text">Cut the selected text</string>
+    <string name="change_note_color">Change note color</string>
+    <string name="paste_text_from_clipboard">Paste text from clipboard</string>
+    <string name="choose_all">Choose all</string>
+    <string name="move_selected_notes_to_trash">Move selected notes to trash</string>
+    <string name="search_for_a_note">Search for a note</string>
+    <string name="settings_and_trash_can">Settings and trash can</string>
+    <string name="change_the_color_of_selected_notes">Change the color of selected notes</string>
+    <string name="delete_selected_notes_permanently">Delete selected notes permanently</string>
+    <string name="restore_selected_notes">Restore selected notes</string>
+    <string name="sorting_note_titles_on_screen">Sorting note titles on the screen</string>
+    <string name="exit_application">Exit application</string>
 
 </resources>

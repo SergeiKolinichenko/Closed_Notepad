@@ -7,81 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.screens.TrashCanListFragment">
 
-    <!-- Order buttons
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_trash_can_list_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="20dp"
-        android:clickable="false"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="65dp"
-        android:layout_marginEnd="-200dp">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_tcl_time_stamp_sort_ascending"
-            style="@style/OrderButtons"
-            android:contentDescription="@string/description_sort_time_stamp_ascending"
-            android:text="@string/sort_shown_by_time_stamp"
-            app:icon="@drawable/ic_sort_ascending_black_36dp"
-            android:layout_marginTop="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/sort_shown_by_time_stamp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_tcl_time_stamp_sort_descending"
-            style="@style/OrderButtons"
-            android:contentDescription="@string/description_sort_time_stamp_descending"
-            android:text="@string/sort_shown_by_time_stamp"
-            app:icon="@drawable/ic_sort_descending_black_36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mb_tcl_time_stamp_sort_ascending"
-            app:tint="?attr/colorOnPrimary"
-            tools:text="@string/sort_shown_by_time_stamp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_tcl_title_alphabet_sort_ascending"
-            style="@style/OrderButtons"
-            android:contentDescription="@string/description_sort_title_ascending"
-            android:text="@string/sort_shown_by_title"
-            app:icon="@drawable/ic_sort_alphabetical_ascending_black_36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mb_tcl_time_stamp_sort_descending"
-            app:tint="?attr/colorOnPrimary"
-            tools:text="@string/sort_shown_by_title" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_tcl_title_alphabet_sort_descending"
-            style="@style/OrderButtons"
-            android:contentDescription="@string/description_sort_title_descending"
-            android:text="@string/sort_shown_by_title"
-            app:icon="@drawable/ic_sort_alphabetical_descending_black_36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mb_tcl_title_alphabet_sort_ascending"
-            app:tint="?attr/colorOnPrimary"
-            tools:text="@string/sort_shown_by_title" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/mb_tcl_palette_sort"
-            style="@style/OrderButtons"
-            android:contentDescription="@string/sort_list_by_palette"
-            android:text="@string/sort_shown_by_palette"
-            app:icon="@drawable/ic_palette_black_36dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mb_tcl_title_alphabet_sort_descending"
-            app:tint="?attr/colorOnPrimary"
-            tools:text="@string/sort_shown_by_palette" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    -->
-
     <!-- AppBarLayout -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/tool_bar_trash_can_list"
@@ -108,15 +33,6 @@
                 android:textColor="?attr/colorOnPrimary"
                 android:textSize="30sp"
                 android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/iv_trash_can_list_sort_shown"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:src="@drawable/ic_filter_variant_black_36dp"
-                android:tint="?attr/colorOnPrimary" />
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -159,7 +75,9 @@
                 android:layout_weight="1"
                 android:backgroundTint="?attr/colorPrimary"
                 android:clickable="false"
-                android:src="@drawable/ic_delete_grey600_36dp" />
+                android:src="@drawable/ic_delete_grey600_36dp"
+                android:contentDescription="@string/delete_selected_notes_permanently"
+                />
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_trash_can_list_delete_off"
@@ -169,7 +87,9 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:clickable="false"
                 android:src="@drawable/ic_delete_off_grey600_36dp"
-                android:layout_marginEnd="100dp"/>
+                android:layout_marginEnd="100dp"
+                android:contentDescription="@string/restore_selected_notes"
+                />
         </LinearLayout>
     </com.google.android.material.bottomappbar.BottomAppBar>
 
@@ -178,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="?attr/colorSecondary"
-        android:backgroundTint="?attr/colorSecondary"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:elevation="10dp"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         android:contentDescription="@string/description_leave_note_view"

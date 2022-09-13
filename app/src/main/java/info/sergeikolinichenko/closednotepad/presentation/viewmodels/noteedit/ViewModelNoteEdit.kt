@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
@@ -43,8 +44,8 @@ class ViewModelNoteEdit(
     val retryNoteListFrag: LiveData<Unit>
         get() = _retryNoteListFrag
 
-    private var _getSaveOption = MutableLiveData<Unit>()
-    val getSaveOption: LiveData<Unit>
+    private var _getSaveOption = MutableLiveData<Boolean>()
+    val getSaveOption: LiveData<Boolean>
         get() = _getSaveOption
 
     private var _isShowColorFabs = MutableLiveData<Boolean>()
@@ -74,7 +75,9 @@ class ViewModelNoteEdit(
             retryNoteListFragment()
         } else {
             _note.value = parseNote(title, itself)
-            _getSaveOption.value = Unit
+//            if (getSaveOption.value != true) {
+//                _getSaveOption.value = true
+//            }
         }
     }
 
@@ -92,7 +95,9 @@ class ViewModelNoteEdit(
             retryNoteListFragment()
         } else {
             _note.value = parseNote(title, itself)
-            _getSaveOption.value = Unit
+//            if (getSaveOption.value != true) {
+//                _getSaveOption.value = true
+//            }
         }
     }
 
@@ -102,7 +107,7 @@ class ViewModelNoteEdit(
                 addNoteEntryUseCase.invoke(it)
             }
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         retryNoteListFragment()
     }
 
@@ -112,7 +117,7 @@ class ViewModelNoteEdit(
                 editNoteEntryUseCase.invoke(it)
             }
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         retryNoteListFragment()
     }
 
@@ -212,12 +217,16 @@ class ViewModelNoteEdit(
         _isShowColorFabs.value = state
     }
 
+    fun setSaveOption() {
+        _getSaveOption.value = getSaveOption.value == null || getSaveOption.value == false
+    }
+
     fun retryNoteListFragment() {
         _retryNoteListFrag.value = Unit
     }
 
     companion object {
-        private const val MAX_TITLE_LENGTH = 22
+        private const val MAX_TITLE_LENGTH = 16
     }
 
 }

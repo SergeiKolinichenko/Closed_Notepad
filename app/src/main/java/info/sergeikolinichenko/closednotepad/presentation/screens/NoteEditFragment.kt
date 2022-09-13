@@ -7,11 +7,12 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.biometric.BiometricManager
@@ -107,8 +108,15 @@ class NoteEditFragment : Fragment() {
 
     private fun observeGetSaveOption() {
         viewModel.getSaveOption.observe(viewLifecycleOwner) {
-            showSaveFab()
-            showNoSaveFab()
+            it?.let {
+                if (it) {
+                    showSaveFab()
+                    showNoSaveFab()
+                } else {
+                    hideSaveFab()
+                    hideNoSaveFab()
+                }
+            }
         }
     }
 
@@ -130,6 +138,7 @@ class NoteEditFragment : Fragment() {
                 MODE_ADD -> viewModel.addNote(title, itself)
                 MODE_EDIT -> viewModel.editNote(title, itself)
             }
+            viewModel.setSaveOption()
         }
     }
 
@@ -167,9 +176,9 @@ class NoteEditFragment : Fragment() {
 
     private fun initActionBar() {
         if (isNight) {
-            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_white_24dp)
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
         } else {
-            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_black_24dp)
+            binding.ivNoteEditCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
         }
     }
 
@@ -213,8 +222,10 @@ class NoteEditFragment : Fragment() {
             }
             ibNoteEditPallet.setOnClickListener {
                 val isShow = viewModel.isShowColorFabs.value
+                val buttonSaveOption = viewModel.getSaveOption.value
                 if (isShow == null || !isShow) {
                     viewModel.setShowColorFabs(true)
+                    if (buttonSaveOption == true) viewModel.setSaveOption()
                 } else {
                     viewModel.setShowColorFabs(false)
                 }
@@ -232,7 +243,9 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun getExtractedStr(): String? {
-        val view = requireActivity().currentFocus as EditText
+        val someView = requireActivity().currentFocus
+        val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
+        else binding.etNoteEditItself
 
         val startIndex = view.selectionStart
         val endIndex = view.selectionEnd
@@ -246,7 +259,9 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun getCutString() {
-        val view = requireActivity().currentFocus as EditText
+        val someView = requireActivity().currentFocus
+        val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
+        else binding.etNoteEditItself
 
         val startIndex = view.selectionStart
         val endIndex = view.selectionEnd
@@ -277,7 +292,9 @@ class NoteEditFragment : Fragment() {
         val item = data?.getItemAt(0)
         val copyString = item?.text.toString()
 
-        val view = requireActivity().currentFocus as EditText
+        val someView = requireActivity().currentFocus
+        val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
+        else binding.etNoteEditItself
 
         val startIndex = view.selectionStart
         val endIndex = view.selectionEnd
@@ -442,13 +459,13 @@ class NoteEditFragment : Fragment() {
 
     private fun observeColorIndex() {
         viewModel.colorIndex.observe(viewLifecycleOwner) {
-            Log.d("MyLog", "$it")
             val colorNote =
                 if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
                 else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
             with(binding) {
                 cvNoteEditTitle.setBackgroundResource(colorNote)
                 cvNoteEditLock.setBackgroundResource(colorNote)
+                cvNoteEditCreate.setBackgroundResource(colorNote)
                 cvNoteEditItself.setBackgroundResource(colorNote)
             }
         }
@@ -511,6 +528,23 @@ class NoteEditFragment : Fragment() {
         }
     }
 
+    private fun hideSaveFab() {
+        val anim = if (viewModel.isShowColorFabs.value == false) R.anim.fab_save_hide
+        else R.anim.fab_save_other_hide
+
+        val animHideFabSave =
+            AnimationUtils.loadAnimation(context, anim)
+
+        with(binding.fabNoteEditSave) {
+            val lLayoutParams = layoutParams as CoordinatorLayout.LayoutParams
+            lLayoutParams.marginEnd += (width * 0.25).toInt()
+            lLayoutParams.bottomMargin -= (height * 1.7).toInt()
+            layoutParams = lLayoutParams
+            startAnimation(animHideFabSave)
+            isClickable = false
+        }
+    }
+
     private fun showNoSaveFab() {
         val animShowFabSave =
             AnimationUtils.loadAnimation(context, R.anim.fab_no_save_show)
@@ -521,6 +555,23 @@ class NoteEditFragment : Fragment() {
             layoutParams = lLayoutParams
             startAnimation(animShowFabSave)
             isClickable = true
+        }
+    }
+
+    private fun hideNoSaveFab() {
+        val anim = if (viewModel.isShowColorFabs.value == false) R.anim.fab_no_save_hide
+        else R.anim.fab_no_save_other_hide
+
+        val animHideFabSave =
+            AnimationUtils.loadAnimation(context, anim)
+
+        with(binding.fabNoteEditNotSave) {
+            val lLayoutParams = layoutParams as CoordinatorLayout.LayoutParams
+            lLayoutParams.marginEnd -= (width * 1.5).toInt()
+            lLayoutParams.bottomMargin -= (height * 1)
+            layoutParams = lLayoutParams
+            startAnimation(animHideFabSave)
+            isClickable = false
         }
     }
 

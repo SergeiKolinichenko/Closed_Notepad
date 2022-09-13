@@ -1,6 +1,7 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesmenu
 
 import android.app.Application
+import android.app.backup.BackupManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
@@ -18,6 +19,8 @@ class ViewModelNotesMenuFactory(application: Application): ViewModelProvider.Fac
     private val setPrefAutoDelReNote = SetPrefAutoDelReNoteUseCase(repository)
     private val getPrefAutoDelReNote = GetPrefAutoDelReNoteUseCase(repository)
 
+    private val backupManager = BackupManager(application)
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelNotesMenu::class.java)) {
             @Suppress("UNCHECKED_CAST")
@@ -25,7 +28,8 @@ class ViewModelNotesMenuFactory(application: Application): ViewModelProvider.Fac
                 setPrefColorIndex,
                 getPrefColorIndex,
                 setPrefAutoDelReNote,
-                getPrefAutoDelReNote
+                getPrefAutoDelReNote,
+                backupManager
             ) as T
         } else {
             throw RuntimeException("Unknown view Model class $modelClass")

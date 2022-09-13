@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
@@ -78,7 +79,7 @@ class ViewModelTrashCanList(
                 addNote.invoke(recoveryRemovedNote.invoke(item))
             }
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         clearSelectedRemovedNotes()
     }
 
@@ -88,7 +89,7 @@ class ViewModelTrashCanList(
                 deleteRemovedNote.invoke(item.timeStamp)
             }
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         clearSelectedRemovedNotes()
     }
 

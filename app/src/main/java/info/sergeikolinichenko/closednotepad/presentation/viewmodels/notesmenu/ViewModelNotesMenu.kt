@@ -1,8 +1,10 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesmenu
 
+import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDelReNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIndexUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefAutoDelReNoteUseCase
@@ -12,7 +14,8 @@ class ViewModelNotesMenu(
     private val setPrefColorIndex: SetPrefColorIndexUseCase,
     private val getPrefColorIndex: GetPrefColorIndexUseCase,
     private val setPrefAutoDelReNote: SetPrefAutoDelReNoteUseCase,
-    getPrefAutoDelReNote: GetPrefAutoDelReNoteUseCase
+    getPrefAutoDelReNote: GetPrefAutoDelReNoteUseCase,
+    private val backupManager: BackupManager
 ): ViewModel() {
 
     private val _defaultColorIndex = MutableLiveData<Int>()
@@ -40,12 +43,14 @@ class ViewModelNotesMenu(
         setPrefColorIndex.invoke(color)
         _defaultColorIndex.value = getPrefColorIndex.invoke()
         _showColorButtons.value = false
+        NotesBackupAgent.requestBackup(backupManager)
     }
 
     fun setDaysBeforeDelete(days: Int) {
         setPrefAutoDelReNote.invoke(days)
         _daysBeforeDelete.value = days
         _showDaySetButtons.value = false
+        NotesBackupAgent.requestBackup(backupManager)
     }
 
     fun showSetDaysButton() {

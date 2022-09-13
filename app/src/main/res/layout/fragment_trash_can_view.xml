@@ -188,7 +188,7 @@
         android:id="@+id/fab_trash_can_view_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondary"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         android:contentDescription="@string/description_leave_note_view"
         app:layout_anchor="@id/bab_trash_can_view"/>

@@ -34,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:textSize="22sp"
+                        android:textSize="26sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         tools:text="Title Note" />
@@ -62,7 +62,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_marginEnd="4dp"
-                            android:src="@drawable/ic_pencil_black_24dp" />
+                            android:src="@drawable/ic_pencil_black_36dp" />
 
                         <com.google.android.material.textview.MaterialTextView
                             android:id="@+id/tv_note_view_fulldate"
@@ -88,7 +88,7 @@
                             android:id="@+id/iv_note_view_lock"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_lock_black_24dp"
+                            android:src="@drawable/ic_lock_black_36dp"
                             android:visibility="visible" />
                     </LinearLayout>
                 </LinearLayout>
@@ -121,7 +121,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:background="@android:color/transparent"
-                        android:textSize="24sp"
+                        android:textSize="26sp"
                         />
                 </ScrollView>
             </com.google.android.material.card.MaterialCardView>
@@ -186,7 +186,7 @@
         android:id="@+id/fab_note_view_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondary"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         android:contentDescription="@string/description_leave_note_view"
         app:layout_anchor="@id/bab_note_view"/>

@@ -97,9 +97,9 @@ class NoteViewFragment : Fragment() {
 
     private fun initActionBar() {
         if (isNight) {
-            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_white_24dp)
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_white_36dp)
         } else {
-            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_black_24dp)
+            binding.ivNoteViewCreate.setImageResource(R.drawable.ic_pencil_black_36dp)
         }
     }
 

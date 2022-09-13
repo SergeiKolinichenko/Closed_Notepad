@@ -76,4 +76,19 @@
     <string name="important_authentication">Изисква се автентификация.</string>
     <string name="no_blocking_method">В настройките \"Сигурност - Защита на устройството\" няма метод за блокиране.</string>
     <string name="manual_delete_trash">Самоизтриване на бележки от кошчето</string>
+    <string name="enter_note_text">Въведете текст на бележката</string>
+    <string name="enter_note_title">Въведете заглавие</string>
+    <string name="copy_the_selected_text">Копирайте избрания текст</string>
+    <string name="cut_the_selected_text">Изрязване на избрания текст</string>
+    <string name="change_note_color">Промяна на цвета на бележката</string>
+    <string name="paste_text_from_clipboard">Поставяне на текст от клипборда</string>
+    <string name="choose_all">Изберете всички</string>
+    <string name="move_selected_notes_to_trash">Преместете избраните бележки в кошчето</string>
+    <string name="search_for_a_note">Потърсете бележка</string>
+    <string name="settings_and_trash_can">Настройки и кошче</string>
+    <string name="change_the_color_of_selected_notes">Променете цвета на избраните бележки</string>
+    <string name="delete_selected_notes_permanently">Изтрийте избраните бележки за постоянно</string>
+    <string name="restore_selected_notes">Възстановяване на избрани бележки</string>
+    <string name="sorting_note_titles_on_screen">Сортиране на заглавия на бележки на екрана</string>
+    <string name="exit_application">Излезте от приложението</string>
 </resources>

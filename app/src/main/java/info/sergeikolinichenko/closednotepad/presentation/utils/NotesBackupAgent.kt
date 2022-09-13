@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.utils
+package info.sergeikolinichenko.closednotepad.presentation.utils
 
 import android.app.backup.*
 import android.os.ParcelFileDescriptor
@@ -40,7 +40,7 @@ class NotesBackupAgent: BackupAgentHelper() {
         }
     }
 
-    override fun getFilesDir(): File {
+    override fun getDatabasePath(name: String?): File {
         return getDatabasePath(AppDatabase.DB_NAME)
     }
 

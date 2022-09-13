@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +32,8 @@ import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
 import java.util.concurrent.Executor
+
+private var firstStart = true
 
 class NoteListFragment : Fragment() {
 
@@ -82,6 +83,10 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (firstStart) {
+            observeRemovedNoteList()
+            firstStart = false
+        }
         observeNoteList()
         observeIsSelected()
         observeShowColorButtons()
@@ -106,6 +111,13 @@ class NoteListFragment : Fragment() {
     private fun observeNoteList() {
         viewModel.noteList.observe(viewLifecycleOwner) {
             adapterNoteList.submitList(orderViewNoteList(it))
+        }
+    }
+
+    private fun observeRemovedNoteList() {
+        viewModel.removedNoteList.observe(viewLifecycleOwner) {
+            viewModel.autoDeleteRemovedNote()
+            viewModel.removedNoteList.removeObservers(viewLifecycleOwner)
         }
     }
 

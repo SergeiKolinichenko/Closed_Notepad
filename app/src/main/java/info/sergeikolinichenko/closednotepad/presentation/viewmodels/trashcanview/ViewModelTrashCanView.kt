@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetRemovedNoteUseCase
@@ -41,7 +42,7 @@ class ViewModelTrashCanView(
         viewModelScope.launch {
             addNote.invoke(recoveryRemovedNote.invoke(removedNote))
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         _endUsingFragment.value = Unit
     }
 
@@ -52,12 +53,12 @@ class ViewModelTrashCanView(
         viewModelScope.launch {
             deleteRemovedNote.invoke(timeStamp)
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         _endUsingFragment.value = Unit
     }
 
-    fun endUsingFragment(){
-        _endUsingFragment.value= Unit
+    fun endUsingFragment() {
+        _endUsingFragment.value = Unit
     }
 
 }

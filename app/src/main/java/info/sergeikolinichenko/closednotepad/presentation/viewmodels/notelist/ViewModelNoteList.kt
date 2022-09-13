@@ -1,13 +1,13 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist
 
 import android.app.backup.BackupManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
@@ -19,11 +19,9 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNo
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
-import info.sergeikolinichenko.closednotepad.utils.NotesBackupAgent
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.random.Random
-import kotlin.random.Random.Default.nextBoolean
 
 class ViewModelNoteList(
     getListNote: GetListNotesUseCase,
@@ -35,13 +33,16 @@ class ViewModelNoteList(
     getPrefOrderListNote: GetPrefOrderNoteListUseCase,
     private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
     private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
-    private val backupManager: BackupManager,
-    private val addEntryToNoteUseCase: AddNoteUseCase
+    private val backupManager: BackupManager
 ) : ViewModel() {
 
     private var _noteList: MutableLiveData<List<Note>> = getListNote.invoke()
     val noteList: LiveData<List<Note>>
         get() = _noteList
+
+    private var _removedNoteList = MutableLiveData<List<RemovedNote>>()
+    val removedNoteList: LiveData<List<RemovedNote>>
+        get() = _removedNoteList
 
     private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
     val orderViewNoteList: String
@@ -62,29 +63,8 @@ class ViewModelNoteList(
     private val selectedNotes = mutableListOf<Note>()
 
     init {
-        autoDeleteRemovedNote()
+        initAutoDeleteRemovedNote()
     }
-
-
-//    init {
-//        _isSelected.value = false
-//        var tempCount = 0
-//        for (i in 0..200) {
-//            if (tempCount == 7) tempCount = 0
-//            val note = Note(
-//                timeStamp = Date().time,
-//                titleNote = "This is Title $i",
-//                itselfNote = "This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.This is text entry $i for test. Цикл for в Kotlin имеет другой синтаксис. Применим в тех случаях, когда есть итератор - массив, Map и т.д. Стандартный вариант, когда нужно пробежаться по заданному числу элементов, описывается следующим образом. Если для цикла используется одна команда, можно обойтись без фигурных скобок, но проще всегда использовать блок.",
-//                colorIndex = tempCount,
-//                isLocked = Random.nextBoolean(),
-//                isSelected = false
-//            )
-//            tempCount++
-//            viewModelScope.launch {
-//                addEntryToNoteUseCase.invoke(note)
-//            }
-//        }
-//    }
 
     fun selectNotes(note: Note) {
         if (isSelected.value == false || isSelected.value == null) _isSelected.value = true
@@ -122,7 +102,7 @@ class ViewModelNoteList(
                 addRemovedNote.invoke(removeNote.invoke(item))
             }
         }
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         clearSelectedNotes()
     }
 
@@ -134,7 +114,7 @@ class ViewModelNoteList(
             }
         }
         clearSelectedNotes()
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
         _showColorButtons.value = false
     }
 
@@ -148,7 +128,7 @@ class ViewModelNoteList(
         setPrefOrderListNote.invoke(order)
         _noteList.value = noteList.value
         _showOrderButtons.value = false
-        backupManager.dataChanged()
+        NotesBackupAgent.requestBackup(backupManager)
     }
 
     fun setStateShowColorButtons() {
@@ -161,21 +141,27 @@ class ViewModelNoteList(
             showOrderButtons.value == null || showOrderButtons.value == false
     }
 
-    private fun autoDeleteRemovedNote() {
+    private fun initAutoDeleteRemovedNote() {
         val days = getPrefDayBeforeDelete.invoke()
         if (days > 0) {
-            val list = getRemovedNoteList.invoke<LiveData<List<RemovedNote>>>().value
-            list?.let {
-                for (item in list) {
-                    if (TimeUtils.getDiffDays(item.timeStamp) > days) {
-                        viewModelScope.launch {
-                            deleteRemovedNote.invoke(item.timeStamp)
-                        }
+            _removedNoteList = getRemovedNoteList.invoke()
+        }
+    }
+
+    fun autoDeleteRemovedNote() {
+        val days = getPrefDayBeforeDelete.invoke()
+        val list = removedNoteList.value
+        list?.let {
+            for (item in list) {
+                if (TimeUtils.getDiffDays(item.timeStamp) > days) {
+                    viewModelScope.launch {
+                        deleteRemovedNote.invoke(item.timeStamp)
                     }
                 }
-                backupManager.dataChanged()
             }
+            NotesBackupAgent.requestBackup(backupManager)
         }
+        _removedNoteList.value = null
     }
 
 }

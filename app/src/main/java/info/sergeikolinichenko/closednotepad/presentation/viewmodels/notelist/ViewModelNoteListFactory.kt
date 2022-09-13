@@ -38,8 +38,6 @@ class ViewModelNoteListFactory(application: Application): ViewModelProvider.Fact
 
     private val backupManager = BackupManager(application)
 
-    private val addNote = AddNoteUseCase(repositoryNotes) // TODO delete later
-
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if(modelClass.isAssignableFrom(ViewModelNoteList::class.java)) {
             @Suppress("UNCHECKED_CAST")
@@ -47,8 +45,7 @@ class ViewModelNoteListFactory(application: Application): ViewModelProvider.Fact
                 getListNote, removeNote, editNote,
                 getRemovedNoteList, addRemovedNote, deleteRemovedNote,
                 getPrefOrderNoteList, setPrefOrderNoteList, getPrefDayBeforeDelete,
-                backupManager,
-                addNote
+                backupManager
             ) as T
         } else {
             throw RuntimeException("Unknown view Model class $modelClass")

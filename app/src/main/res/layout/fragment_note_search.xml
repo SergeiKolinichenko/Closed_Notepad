@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="?attr/colorSecondary"
+        android:backgroundTint="?attr/colorSecondaryVariant"
         android:src="@drawable/ic_arrow_left_bold_black_48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

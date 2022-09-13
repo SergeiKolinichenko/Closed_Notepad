@@ -76,4 +76,19 @@
     <string name="please_authenticate">Пожалуйста, авторизируйтесь, чтобы иметь возможность просматривать заблокированные заметки.</string>
     <string name="important_authentication">Требуется аутентификация.</string>
     <string name="manual_delete_trash">Самостоятельное удаление заметок из корзины</string>
+    <string name="enter_note_text">Введите текст заметки</string>
+    <string name="enter_note_title">Введите заголовок</string>
+    <string name="copy_the_selected_text">Скопируйте выделенный текст</string>
+    <string name="cut_the_selected_text">Вырезать выделенный текст</string>
+    <string name="change_note_color">Измените цвет заметки</string>
+    <string name="paste_text_from_clipboard">Вставить текст из буфера обмена</string>
+    <string name="choose_all">Выбрать всё</string>
+    <string name="move_selected_notes_to_trash">Переместить выбранные заметки в корзину</string>
+    <string name="search_for_a_note">Поиск заметки</string>
+    <string name="settings_and_trash_can">Настройки и мусорная корзина</string>
+    <string name="change_the_color_of_selected_notes">Поменяйте цвет выбранных заметок</string>
+    <string name="delete_selected_notes_permanently">Удалить выбранные заметки безвозвратно</string>
+    <string name="restore_selected_notes">Востановить выбранные заметки</string>
+    <string name="sorting_note_titles_on_screen">Сортировка заголовков заметок на экране</string>
+    <string name="exit_application">Выйти из приложения</string>
 </resources>
