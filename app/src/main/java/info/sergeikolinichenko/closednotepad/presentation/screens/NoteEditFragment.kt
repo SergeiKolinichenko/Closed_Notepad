@@ -7,10 +7,8 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -82,6 +80,8 @@ class NoteEditFragment : Fragment() {
         observeRetryNoteListFrag()
         observeGetSaveOption()
         observeIsShowColorButtons()
+        initEditTextTitle()
+        initEditTextItself()
         initLockButton()
         initBackPressed()
         initColorButtons()
@@ -117,6 +117,42 @@ class NoteEditFragment : Fragment() {
                     hideNoSaveFab()
                 }
             }
+        }
+    }
+
+    private fun initEditTextTitle() {
+        binding.etNoteEditTitle.customSelectionActionModeCallback = object : ActionMode.Callback{
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                //to keep the text selection capability available ( selection cursor)
+                return true
+            }
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                //to prevent the menu from appearing
+                p1?.clear()
+                return false
+            }
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return false
+            }
+            override fun onDestroyActionMode(p0: ActionMode?) {}
+        }
+    }
+
+    private fun initEditTextItself() {
+        binding.etNoteEditItself.customSelectionActionModeCallback = object : ActionMode.Callback{
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                //to keep the text selection capability available ( selection cursor)
+                return true
+            }
+            override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                //to prevent the menu from appearing
+                p1?.clear()
+                return false
+            }
+            override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
+                return false
+            }
+            override fun onDestroyActionMode(p0: ActionMode?) {}
         }
     }
 
@@ -183,7 +219,6 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initBottomAppBar() {
-
         with(binding) {
             if (isNight) {
                 ibNoteEditSelectAll.setImageResource(R.drawable.ic_select_all_white_36dp)
@@ -290,25 +325,29 @@ class NoteEditFragment : Fragment() {
             .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val data = clipboardManager.primaryClip
         val item = data?.getItemAt(0)
-        val copyString = item?.text.toString()
+        if (item != null) {
+            val copyString = item.text.toString()
 
-        val someView = requireActivity().currentFocus
-        val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
-        else binding.etNoteEditItself
+            val someView = requireActivity().currentFocus
+            val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
+            else binding.etNoteEditItself
 
-        val startIndex = view.selectionStart
-        val endIndex = view.selectionEnd
+            val startIndex = view.selectionStart
+            val endIndex = view.selectionEnd
 
-        val string = view.text
-        val startString = string?.substring(0, startIndex)
-        val endString = string?.substring(endIndex)
-        val fullString = startString + copyString + endString
+            val string = view.text
+            val startString = string?.substring(0, startIndex)
+            val endString = string?.substring(endIndex)
+            val fullString = startString + copyString + endString
 
-        val newCursorPosition = startIndex + copyString.length
+            val newCursorPosition = startIndex + copyString.length
 
-        view.text?.clear()
-        view.text = Editable.Factory.getInstance().newEditable(fullString)
-        view.setSelection(newCursorPosition)
+            view.text?.clear()
+            view.text = Editable.Factory.getInstance().newEditable(fullString)
+            view.setSelection(newCursorPosition)
+        } else {
+            showSnakebar(getString(R.string.nothing_on_clipboard))
+        }
     }
 
     private fun initColorButtons() {

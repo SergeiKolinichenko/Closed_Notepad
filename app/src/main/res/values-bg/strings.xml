@@ -91,4 +91,5 @@
     <string name="restore_selected_notes">Възстановяване на избрани бележки</string>
     <string name="sorting_note_titles_on_screen">Сортиране на заглавия на бележки на екрана</string>
     <string name="exit_application">Излезте от приложението</string>
+    <string name="nothing_on_clipboard">Няма нищо в клипборда</string>
 </resources>

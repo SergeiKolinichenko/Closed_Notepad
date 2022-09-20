@@ -190,7 +190,7 @@
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:textSize="26sp" />
+                android:textSize="26sp"/>
 
             <view
                 android:id="@+id/tv_note_edit_itself"
