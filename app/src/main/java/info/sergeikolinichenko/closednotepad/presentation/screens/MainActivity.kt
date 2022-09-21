@@ -2,6 +2,7 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import info.sergeikolinichenko.closednotepad.R
 
@@ -10,13 +11,17 @@ class MainActivity : AppCompatActivity(), NoteListFragment.FinishApp, NoteViewFr
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        launchNoteListFragment()
+
+        val tagFrag = supportFragmentManager.findFragmentByTag(NoteListFragment.NAME)?.tag
+        if (tagFrag != NoteListFragment.NAME) {
+            launchNoteListFragment()
+        }
     }
 
     private fun launchNoteListFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_container,
-            NoteListFragment.newInstance())
+            NoteListFragment.newInstance(), NoteListFragment.NAME)
             .addToBackStack(
                 NoteListFragment.NAME
             )

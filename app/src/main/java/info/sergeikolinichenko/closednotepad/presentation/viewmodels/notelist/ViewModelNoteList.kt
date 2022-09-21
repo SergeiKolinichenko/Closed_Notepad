@@ -9,7 +9,6 @@ import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
@@ -20,8 +19,6 @@ import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUse
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
 import kotlinx.coroutines.launch
-import java.util.*
-import kotlin.random.Random
 
 class ViewModelNoteList(
     getListNote: GetListNotesUseCase,
