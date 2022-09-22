@@ -7,7 +7,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager

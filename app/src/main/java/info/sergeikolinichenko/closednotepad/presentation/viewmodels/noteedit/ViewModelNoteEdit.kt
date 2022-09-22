@@ -1,7 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit
 
 import android.app.backup.BackupManager
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,14 +70,8 @@ class ViewModelNoteEdit(
         val title = parseString(inTitle)
         val itself = parseString(inItself)
 
-        if (title.isEmpty() && itself.isEmpty()) {
-            retryNoteListFragment()
-        } else {
-            _note.value = parseNote(title, itself)
-//            if (getSaveOption.value != true) {
-//                _getSaveOption.value = true
-//            }
-        }
+        if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
+        else _note.value = parseNote(title, itself)
     }
 
     fun editNote(inTitle: String?, inItself: String?) {

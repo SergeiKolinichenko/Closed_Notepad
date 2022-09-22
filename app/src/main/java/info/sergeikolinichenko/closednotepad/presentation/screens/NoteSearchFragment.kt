@@ -32,7 +32,6 @@ class NoteSearchFragment : Fragment() {
     }
 
     private val adapterSearchNote by lazy { NoteSearchAdapter() }
-    private lateinit var noteList: List<Note>
 
     private var isNight = false
 
@@ -69,8 +68,8 @@ class NoteSearchFragment : Fragment() {
     }
 
     private fun observeNoteList() {
-        viewModel.noteList.observe(viewLifecycleOwner) {
-            noteList = it
+        viewModel.locNoteList.observe(viewLifecycleOwner) {
+            adapterSearchNote.submitList(it)
         }
     }
 
@@ -98,7 +97,7 @@ class NoteSearchFragment : Fragment() {
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
                     if (newText.isNotEmpty()) {
-                        searchNote(it)
+                        viewModel.searchNote(it)
                     } else {
                         adapterSearchNote.submitList(null)
                     }
@@ -106,21 +105,6 @@ class NoteSearchFragment : Fragment() {
                 return false
             }
         })
-    }
-
-    private fun searchNote(search: String) {
-        val searchList = mutableListOf<Note>()
-        for (item in noteList) {
-            if (item.titleNote.contains(search, true)) {
-                searchList.add(item)
-            }
-        }
-        for (item in noteList) {
-            if (item.itselfNote.contains(search,true)) {
-                searchList.add(item)
-            }
-        }
-        adapterSearchNote.submitList(searchList)
     }
 
     private fun Fragment.hideSoftKeyboard() {
