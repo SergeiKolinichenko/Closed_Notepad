@@ -92,4 +92,6 @@
     <string name="sorting_note_titles_on_screen">Сортиране на заглавия на бележки на екрана</string>
     <string name="exit_application">Излезте от приложението</string>
     <string name="nothing_on_clipboard">Няма нищо в клипборда</string>
+    <string name="authentication_error">Грешка при удостоверяване:</string>
+    <string name="authentication_failed">Неуспешна идентификация</string>
 </resources>

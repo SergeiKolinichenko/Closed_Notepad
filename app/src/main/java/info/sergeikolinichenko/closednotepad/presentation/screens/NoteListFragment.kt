@@ -11,13 +11,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricPrompt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -28,10 +23,10 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
+import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
-import java.util.concurrent.Executor
 
 private var firstStart = true
 
@@ -241,7 +236,7 @@ class NoteListFragment : Fragment() {
         adapterNoteList.onNoteClick = {
             if (viewModel.isSelected.value == null || viewModel.isSelected.value == false) {
                 // Go to NoteViewFragment
-                if (it.isLocked) getBiometricSuccess(it.timeStamp)
+                if (it.isLocked) getBiometricSuccess(it.timeStamp, ::launchNoteViewFragment)
                 else launchNoteViewFragment(it.timeStamp)
 
                 if (binding.babNoteList.isScrolledDown) {
@@ -513,56 +508,13 @@ class NoteListFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun getBiometricSuccess(timeStamp: Long) {
-        val biometricManager = BiometricManager.from(requireContext())
-        val executor = ContextCompat.getMainExecutor(requireContext())
-        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> authUser(timeStamp, executor)
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
-                getString(R.string.hardware_not_available)
-            )
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
-                getString(R.string.hardware_unavailable_later)
-            )
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
-                showSnakebar(getString(R.string.no_blocking_method))
-            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
-                showSnakebar(getString(R.string.biometrical_error_security))
-            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
-                showSnakebar(getString(R.string.boimetric_error_unsuported))
-            }
-            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
-                showSnakebar(getString(R.string.biometric_status_unknoun))
-            }
+    private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long)-> Unit) {
+
+        val biometricVerification = BiometricVerification(this)
+
+        if (biometricVerification.readinessCheckBiometric(::showSnakebar)) {
+            biometricVerification.authUser(timeStamp, act, ::showSnakebar)
         }
-    }
-
-    private fun authUser(timeStamp: Long, executor: Executor) {
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.authentication_required))
-            .setSubtitle(getString(R.string.important_authentication))
-            .setDescription(getString(R.string.please_authenticate))
-            .setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
-//            .setDeviceCredentialAllowed(true)
-            .build()
-        val biomedicalPrompt = BiometricPrompt(this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    launchNoteViewFragment(timeStamp)
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                    showSnakebar("Authentication error: $errString")
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    showSnakebar("Authentication failed")
-                }
-            })
-        biomedicalPrompt.authenticate(promptInfo)
     }
 
     private fun launchNoteViewFragment(timeStamp: Long) {

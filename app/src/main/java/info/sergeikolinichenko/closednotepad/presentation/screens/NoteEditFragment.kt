@@ -12,9 +12,6 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
@@ -27,6 +24,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
+import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEdit
@@ -120,37 +118,43 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initEditTextTitle() {
-        binding.etNoteEditTitle.customSelectionActionModeCallback = object : ActionMode.Callback{
+        binding.etNoteEditTitle.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
                 //to keep the text selection capability available ( selection cursor)
                 return true
             }
+
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
                 //to prevent the menu from appearing
                 p1?.clear()
                 return false
             }
+
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
                 return false
             }
+
             override fun onDestroyActionMode(p0: ActionMode?) {}
         }
     }
 
     private fun initEditTextItself() {
-        binding.etNoteEditItself.customSelectionActionModeCallback = object : ActionMode.Callback{
+        binding.etNoteEditItself.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
                 //to keep the text selection capability available ( selection cursor)
                 return true
             }
+
             override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
                 //to prevent the menu from appearing
                 p1?.clear()
                 return false
             }
+
             override fun onActionItemClicked(p0: ActionMode?, p1: MenuItem?): Boolean {
                 return false
             }
+
             override fun onDestroyActionMode(p0: ActionMode?) {}
         }
     }
@@ -625,9 +629,11 @@ class NoteEditFragment : Fragment() {
 
         val snackBarView = snackBar.view
         val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text)
+            com.google.android.material.R.id.snackbar_text
+        )
         snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0)
+            icon, 0, 0, 0
+        )
         snackBarText.compoundDrawablePadding = 15
         snackBarText.gravity = Gravity.CENTER
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
@@ -636,26 +642,11 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun testBiometricSuccess() {
-        val biometricManager = BiometricManager.from(requireContext())
-        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> viewModel.setIsLock(true)
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
-                getString(R.string.hardware_not_available)
-            )
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
-                getString(R.string.hardware_unavailable_later)
-            )
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> //authUser(executor, timeStamp)
-                showSnakebar(getString(R.string.no_blocking_method))
-            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
-                showSnakebar(getString(R.string.biometrical_error_security))
-            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
-                showSnakebar(getString(R.string.boimetric_error_unsuported))
-            }
-            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
-                showSnakebar(getString(R.string.biometric_status_unknoun))
-            }
-        }
+
+        val biometricVerification = BiometricVerification(this)
+
+        if (biometricVerification.readinessCheckBiometric(::showSnakebar))
+            viewModel.setIsLock(true)
     }
 
     override fun onDestroyView() {
