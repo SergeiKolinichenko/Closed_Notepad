@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Gravity
@@ -22,8 +23,10 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentTrashCanListBinding
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.presentation.adapters.trashcanlist.TrashCanAdapter
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanlist.ViewModelTrashCanList
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanlist.ViewModelTrashCanListFactory
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelTrashCanList
+import javax.inject.Inject
 
 class TrashCanListFragment : Fragment() {
 
@@ -31,9 +34,8 @@ class TrashCanListFragment : Fragment() {
     private val binding: FragmentTrashCanListBinding
         get() = _binding ?: throw RuntimeException("FragmentTrashCanListBinding equals null")
 
-    private val viewModelFactory by lazy {
-        ViewModelTrashCanListFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelTrashCanList::class.java]
     }
@@ -45,6 +47,15 @@ class TrashCanListFragment : Fragment() {
 
     private var imgDelete = 0   // id ib_note_list_delete AppCompatImageView
     private var imgRecovery = 0   // id ib_note_list_delete AppCompatImageView
+
+    private val component by lazy {
+        (requireActivity().application as NotesApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

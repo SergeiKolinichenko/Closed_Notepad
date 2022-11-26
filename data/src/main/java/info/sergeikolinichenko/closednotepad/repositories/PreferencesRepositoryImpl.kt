@@ -1,19 +1,19 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
-import android.app.Application
-import info.sergeikolinichenko.closednotepad.preferences.SharedPrefNotes
+import android.content.SharedPreferences
+import javax.inject.Inject
 
-class PreferencesRepositoryImpl(application: Application): PreferencesRepository {
-
-    private val sharPref = SharedPrefNotes.getInstance(application)
+class PreferencesRepositoryImpl @Inject constructor(
+    private val sharPref: SharedPreferences
+) : PreferencesRepository {
 
     override fun setPrefOrderNoteList(order: String) {
         sharPref.edit().putString(ORDER_VIEW_NOTE_LIST, order).apply()
     }
 
     override fun getPrefOrderNoteList() =
-        sharPref.getString(ORDER_VIEW_NOTE_LIST, ERROR_GET_STRING) ?:
-        throw RuntimeException("preferences ORDER_VIEW_NOTE_LIST isn't exist")
+        sharPref.getString(ORDER_VIEW_NOTE_LIST, ERROR_GET_STRING)
+            ?: throw RuntimeException("preferences ORDER_VIEW_NOTE_LIST isn't exist")
 
 
     override fun setPrefColorIndex(index: Int) {
@@ -30,7 +30,7 @@ class PreferencesRepositoryImpl(application: Application): PreferencesRepository
         sharPref.edit().putInt(DAYS_BEFORE_DELETION, days).apply()
     }
 
-    companion object{
+    companion object {
         private const val DEFAULT_COLOR_INDEX = "default_color_index"
         private const val ORDER_VIEW_NOTE_LIST = "order_view_note_list"
         private const val DAYS_BEFORE_DELETION = "days_before_deletion"

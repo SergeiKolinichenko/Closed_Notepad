@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Gravity
@@ -14,10 +15,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentTrashCanViewBinding
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanview.ViewModelTrashCanView
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanview.ViewModelTrashCanViewFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelTrashCanView
+import javax.inject.Inject
 
 class TrashCanViewFragment : Fragment() {
 
@@ -25,9 +28,8 @@ class TrashCanViewFragment : Fragment() {
     private val binding: FragmentTrashCanViewBinding
         get() = _binding ?: throw RuntimeException("FragmentTrashCanViewBinding equals null")
 
-    private val viewModelFactory by lazy {
-        ViewModelTrashCanViewFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelTrashCanView::class.java]
     }
@@ -37,6 +39,14 @@ class TrashCanViewFragment : Fragment() {
         get() = _timeStamp ?: throw RuntimeException("timeStamp equals null")
 
     private var isNight = false
+
+    private val component by lazy {
+        (requireActivity().application as NotesApp).component
+    }
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

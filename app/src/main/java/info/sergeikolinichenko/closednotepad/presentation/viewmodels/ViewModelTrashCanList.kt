@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels.trashcanlist
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
 import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
@@ -13,8 +13,9 @@ import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNote
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.RecoveryRemovedNoteUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelTrashCanList(
+class ViewModelTrashCanList @Inject constructor(
     getRemovedNoteList: GetListRemovedNoteUseCase,
     getPrefOrderNoteList: GetPrefOrderNoteListUseCase,
     private val deleteRemovedNote: DeleteRemovedNoteUseCase,

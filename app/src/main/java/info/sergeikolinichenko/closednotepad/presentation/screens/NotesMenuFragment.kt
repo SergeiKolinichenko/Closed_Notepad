@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.screens
 
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
@@ -13,10 +14,17 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNotesMenuBinding
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesmenu.ViewModelNotesMenu
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesmenu.ViewModelNotesMenuFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesMenu
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
+import javax.inject.Inject
+
+/**
+Menu of application
+create 07.2022 by Sergei Kolinichenko
+ **/
 
 class NotesMenuFragment : Fragment() {
 
@@ -24,9 +32,8 @@ class NotesMenuFragment : Fragment() {
     private val binding: FragmentNotesMenuBinding
         get() = _binding ?: throw RuntimeException("FragmentSettingsBinding equals null")
 
-    private val viewModelFactory by lazy {
-        ViewModelNotesMenuFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNotesMenu::class.java]
     }
@@ -34,6 +41,15 @@ class NotesMenuFragment : Fragment() {
     private var isNight = false
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
     private var behaviorDaySetButtons = BottomSheetBehavior<ConstraintLayout>()
+
+    private val component by lazy {
+        (requireActivity().application as NotesApp).component
+    }
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +103,7 @@ class NotesMenuFragment : Fragment() {
         viewModel.daysBeforeDelete.observe(viewLifecycleOwner) {
             val daysPref = it
 
-            val text: String = if (daysPref != null && daysPref > 0){
+            val text: String = if (daysPref != null && daysPref > 0) {
                 val daysBefore = daysPref.toString()
                 val string = resources.getString(R.string.days_before_deletion)
                 "$daysBefore $string"

@@ -16,16 +16,17 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview.ViewModelNoteView
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview.ViewModelNoteViewFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteView
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import javax.inject.Inject
 
 class NoteViewFragment : Fragment() {
 
-    private val viewModelFactory by lazy {
-        ViewModelNoteViewFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteView::class.java]
     }
@@ -41,7 +42,12 @@ class NoteViewFragment : Fragment() {
     private val binding: FragmentNoteViewBinding
         get() = _binding ?: throw RuntimeException("FragmentNoteViewBinding equals null")
 
+    private val component by lazy {
+        (requireActivity().application as NotesApp).component
+    }
+
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
 
         if (context is SendNoteTo) {
@@ -186,9 +192,11 @@ class NoteViewFragment : Fragment() {
             }
         val snackBarView = snackBar.view
         val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text)
+            com.google.android.material.R.id.snackbar_text
+        )
         snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0)
+            icon, 0, 0, 0
+        )
         snackBarText.compoundDrawablePadding = 15
         snackBarText.gravity = Gravity.CENTER
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
@@ -242,7 +250,7 @@ class NoteViewFragment : Fragment() {
 
     private fun initOnScrollChangedListener() {
         binding.svNoteView.doOnDetach {
-            ViewTreeObserver.OnGlobalLayoutListener{
+            ViewTreeObserver.OnGlobalLayoutListener {
                 binding.svNoteView.viewTreeObserver.removeOnScrollChangedListener {
                     binding.svNoteView.viewTreeObserver.addOnScrollChangedListener {
                         onScrollChangedListener()
@@ -252,7 +260,7 @@ class NoteViewFragment : Fragment() {
         }
     }
 
-    private fun onScrollChangedListener(){
+    private fun onScrollChangedListener() {
         with(binding) {
             if (svNoteView.scrollY > 0) {
                 babNoteView.performHide()
@@ -284,9 +292,11 @@ class NoteViewFragment : Fragment() {
 
         val snackBarView = snackBar.view
         val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text)
+            com.google.android.material.R.id.snackbar_text
+        )
         snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0)
+            icon, 0, 0, 0
+        )
         snackBarText.compoundDrawablePadding = 15
         snackBarText.gravity = Gravity.CENTER
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE

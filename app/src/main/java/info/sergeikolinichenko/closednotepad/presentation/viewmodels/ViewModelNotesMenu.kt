@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesmenu
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
 import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
@@ -9,8 +9,9 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDel
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIndexUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefAutoDelReNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefColorIndexUseCase
+import javax.inject.Inject
 
-class ViewModelNotesMenu(
+class ViewModelNotesMenu @Inject constructor(
     private val setPrefColorIndex: SetPrefColorIndexUseCase,
     private val getPrefColorIndex: GetPrefColorIndexUseCase,
     private val setPrefAutoDelReNote: SetPrefAutoDelReNoteUseCase,

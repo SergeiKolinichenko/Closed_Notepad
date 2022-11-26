@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 
-abstract class SharedPrefNotes() {
+abstract class SharedPrefNotes {
 
     companion object {
         const val SHARED_PREFS_NAME = "shared_prefs_notes"

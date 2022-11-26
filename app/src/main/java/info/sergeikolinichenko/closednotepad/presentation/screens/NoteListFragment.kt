@@ -23,11 +23,19 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteList
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notelist.ViewModelNoteListFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import javax.inject.Inject
 
+/**
+Start fragment of notebook. List of notes
+create 07.2022 by Sergei Kolinichenko
+ **/
+
+//needed to define the first start of the fragment
 private var firstStart = true
 
 class NoteListFragment : Fragment() {
@@ -36,9 +44,8 @@ class NoteListFragment : Fragment() {
     private val binding: FragmentNoteListBinding
         get() = _binding ?: throw RuntimeException("NoteListFragmentBinding equals null")
 
-    private val viewModelFactory by lazy {
-        ViewModelNoteListFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteList::class.java]
     }
@@ -54,7 +61,18 @@ class NoteListFragment : Fragment() {
 
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
 
+    private val component by lazy {
+        (requireActivity().application as NotesApp)
+            .component
+            .fragmentComponentFactory()
+            .create(this)
+    }
+
+    @Inject
+    lateinit var biometricVerification: BiometricVerification
+
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
         if (context is FinishApp) {
             finishApp = context
@@ -508,9 +526,7 @@ class NoteListFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long)-> Unit) {
-
-        val biometricVerification = BiometricVerification(this)
+    private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long) -> Unit) {
 
         if (biometricVerification.readinessCheckBiometric(::showSnakebar)) {
             biometricVerification.authUser(timeStamp, act, ::showSnakebar)

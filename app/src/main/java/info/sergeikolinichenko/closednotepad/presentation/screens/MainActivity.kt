@@ -2,7 +2,6 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import info.sergeikolinichenko.closednotepad.R
 
@@ -12,6 +11,7 @@ class MainActivity : AppCompatActivity(), NoteListFragment.FinishApp, NoteViewFr
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // check, if there is no fragment, then start it
         val tagFrag = supportFragmentManager.findFragmentByTag(NoteListFragment.NAME)?.tag
         if (tagFrag != NoteListFragment.NAME) {
             launchNoteListFragment()

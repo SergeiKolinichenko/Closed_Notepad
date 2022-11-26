@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteview
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,8 +9,9 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelNoteView(
+class ViewModelNoteView @Inject constructor(
     private val getNoteEntryUseCase: GetNoteUseCase,
     private val removeNoteUseCase: RemoveNoteUseCase,
     private val addRemovedNote: AddRemovedNoteUseCase
@@ -41,10 +42,6 @@ class ViewModelNoteView(
             }
         }
         _endUsingFragment.value = Unit
-    }
-
-    fun showToast(str: String) {
-        _toast.value = str
     }
 
 }

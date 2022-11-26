@@ -3,8 +3,9 @@ package info.sergeikolinichenko.closednotepad.utils
 import info.sergeikolinichenko.closednotepad.dbmodels.RemovedNoteDbModel
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
+import javax.inject.Inject
 
-class RemovedNoteMapper {
+class RemovedNoteMapper @Inject constructor() {
 
     fun mapEntityToDbModel(removedNote: RemovedNote) = RemovedNoteDbModel(
         timeStamp = removedNote.timeStamp,

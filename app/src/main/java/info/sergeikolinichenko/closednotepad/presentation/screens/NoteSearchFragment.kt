@@ -18,9 +18,16 @@ import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteSearchBinding
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notesearch.NoteSearchAdapter
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesearch.ViewModelNoteSearch
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesearch.ViewModelNoteSearchFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteSearch
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import javax.inject.Inject
+
+/**
+Search note in database
+create 07.2022 by Sergei Kolinichenko
+ **/
 
 class NoteSearchFragment : Fragment() {
 
@@ -28,9 +35,8 @@ class NoteSearchFragment : Fragment() {
     private val binding: FragmentNoteSearchBinding
         get() = _binding ?: throw RuntimeException("FragmentNoteSearchBinding equals null")
 
-    private val viewModelFactory by lazy {
-        ViewModelNoteSearchFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteSearch::class.java]
     }
@@ -38,6 +44,21 @@ class NoteSearchFragment : Fragment() {
     private val adapterSearchNote by lazy { NoteSearchAdapter() }
 
     private var isNight = false
+
+    private val component by lazy {
+        (requireActivity().application as NotesApp)
+            .component
+            .fragmentComponentFactory()
+            .create(this)
+    }
+
+    @Inject
+    lateinit var biometricVerification: BiometricVerification
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,8 +151,6 @@ class NoteSearchFragment : Fragment() {
     }
 
     private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long) -> Unit) {
-
-        val biometricVerification = BiometricVerification(this)
 
         if (biometricVerification.readinessCheckBiometric(::showSnakebar)) {
             biometricVerification.authUser(timeStamp, act, ::showSnakebar)

@@ -1,12 +1,20 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels.notesearch
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
+import javax.inject.Inject
 
-class ViewModelNoteSearch(getNoteList: GetListNotesUseCase) : ViewModel() {
+/**
+ViewModel of NoteSearchFragment
+create 28.07.2022 by Sergei Kolinichenko
+ **/
+
+class ViewModelNoteSearch @Inject constructor(
+    getNoteList: GetListNotesUseCase
+) : ViewModel() {
 
     private val noteList: LiveData<List<Note>> = getNoteList.invoke()
     private val list = mutableListOf<Note>()

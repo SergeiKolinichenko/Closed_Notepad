@@ -24,24 +24,25 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
+import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEdit
-import info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit.ViewModelNoteEditFactory
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 /**
 Editing element of notebook
 create 28.07.2022 18:21 by Sergei Kolinichenko
- */
+ **/
 
 class NoteEditFragment : Fragment() {
 
-    private val viewModelFactory by lazy {
-        ViewModelNoteEditFactory(requireActivity().application)
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelNotesFactory
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[ViewModelNoteEdit::class.java]
     }
@@ -50,10 +51,28 @@ class NoteEditFragment : Fragment() {
     private val binding: FragmentNoteEditBinding
         get() = _binding ?: throw RuntimeException("FragmentNoteEditBinding equals null")
 
+    // mode device day or night
     private var isNight = false
+
+    // mode fragment add or edit
     private var workingMode: String = MODE_UNKNOWN
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
     private var behaviorBottomAppBar = HideBottomViewOnScrollBehavior<BottomAppBar>()
+
+    private val component by lazy {
+        (requireActivity().application as NotesApp)
+            .component
+            .fragmentComponentFactory()
+            .create(this)
+    }
+
+    @Inject
+    lateinit var biometricVerification: BiometricVerification
+
+    override fun onAttach(context: Context) {
+        component.inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +96,8 @@ class NoteEditFragment : Fragment() {
         observeRetryNoteListFrag()
         observeGetSaveOption()
         observeIsShowColorButtons()
-        initEditTextTitle()
-        initEditTextItself()
+        initEditTextTitle()     // hide edit popup menu title note EditText
+        initEditTextItself()    // hide edit popup menu note itself EditText
         initLockButton()
         initBackPressed()
         initColorButtons()
@@ -117,6 +136,7 @@ class NoteEditFragment : Fragment() {
         }
     }
 
+    // hide edit popup menu title note EditText
     private fun initEditTextTitle() {
         binding.etNoteEditTitle.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
@@ -138,6 +158,7 @@ class NoteEditFragment : Fragment() {
         }
     }
 
+    // hide edit popup menu note itself EditText
     private fun initEditTextItself() {
         binding.etNoteEditItself.customSelectionActionModeCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
@@ -160,10 +181,12 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initLockButton() {
+        // if enabled, then turn it off, if not, then check the possibility of locking the screen
         binding.cvNoteEditLock.setOnClickListener {
             if (viewModel.isLock.value == true) {
                 viewModel.changeIsLock()
             } else {
+                // check the possibility of locking the screen
                 testBiometricSuccess()
             }
         }
@@ -171,21 +194,15 @@ class NoteEditFragment : Fragment() {
 
     private fun initFabExit() {
         binding.fabNoteEditExit.setOnClickListener {
-            val title = binding.etNoteEditTitle.text.toString()
-            val itself = binding.etNoteEditItself.text.toString()
-            when (workingMode) {
-                MODE_ADD -> viewModel.addNote(title, itself)
-                MODE_EDIT -> viewModel.editNote(title, itself)
-            }
-            viewModel.setSaveOption()
+            exitFragment()
         }
     }
 
     private fun initFabSave() {
         binding.fabNoteEditSave.setOnClickListener {
             when (workingMode) {
-                MODE_ADD -> viewModel.addNoteToBase()
-                MODE_EDIT -> viewModel.editNoteToBase()
+                MODE_ADD -> viewModel.addNoteDatabase()
+                MODE_EDIT -> viewModel.editNoteDatabase()
             }
         }
     }
@@ -201,14 +218,8 @@ class NoteEditFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val title = binding.etNoteEditTitle.text.toString()
-                    val itself = binding.etNoteEditItself.text.toString()
-                    when (workingMode) {
-                        MODE_ADD -> viewModel.addNote(title, itself)
-                        MODE_EDIT -> viewModel.editNote(title, itself)
-                    }
+                    exitFragment()
                 }
-
             }
         )
     }
@@ -222,6 +233,12 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun initBottomAppBar() {
+        initImageBottomAppBar()
+        initOnClickListenerBottomAppBar()
+        behaviorBottomAppBar = binding.babNoteEdit.behavior
+    }
+
+    private fun initImageBottomAppBar() {
         with(binding) {
             if (isNight) {
                 ibNoteEditSelectAll.setImageResource(R.drawable.ic_select_all_white_36dp)
@@ -237,41 +254,135 @@ class NoteEditFragment : Fragment() {
                 ibNoteEditPallet.setImageResource(R.drawable.ic_palette_black_36dp)
             }
         }
+    }
 
+    private fun initOnClickListenerBottomAppBar() {
         with(binding) {
             ibNoteEditSelectAll.setOnClickListener {
                 selectAll()
             }
             ibNoteEditCut.setOnClickListener {
-                val extractedString = getExtractedStr()
-                extractedString?.let {
-                    getCutString()
-                    copySelToClip(extractedString)
-                }
+                getCutCopyString()
             }
             ibNoteEditCopy.setOnClickListener {
-                val extractedString = getExtractedStr()
-                extractedString?.let {
-                    copySelToClip(extractedString)
-                }
+                getCopyString()
             }
             ibNoteEditPaste.setOnClickListener {
                 setCopyFromClip()
             }
             ibNoteEditPallet.setOnClickListener {
-                val isShow = viewModel.isShowColorFabs.value
-                val buttonSaveOption = viewModel.getSaveOption.value
-                if (isShow == null || !isShow) {
-                    viewModel.setShowColorFabs(true)
-                    if (buttonSaveOption == true) viewModel.setSaveOption()
-                } else {
-                    viewModel.setShowColorFabs(false)
-                }
+                getEditColorNote()
             }
         }
-        behaviorBottomAppBar = binding.babNoteEdit.behavior
     }
 
+    private fun initColorButtons() {
+        behaviorColorButtons = BottomSheetBehavior.from(binding.clNoteEditColorButtons)
+        behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
+
+        setColorToColorButtons()
+        initOnClickListenerColorButtons()
+    }
+
+    private fun initOnClickListenerColorButtons() {
+        with(binding) {
+            mbNoteEditColorPink.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.PINK)
+            }
+            mbNoteEditColorPurple.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.PURPLE)
+            }
+            mbNoteEditColorIndigo.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.INDIGO)
+            }
+            mbNoteEditColorGreen.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.GREEN)
+            }
+            mbNoteEditColorOrange.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.ORANGE)
+            }
+            mbNoteEditColorBrown.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.BROWN)
+            }
+            mbNoteEditColorGray.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.GRAY)
+            }
+            mbNoteEditColorBlueGray.setOnClickListener {
+                viewModel.setColorIndex(NoteColors.BLUE_GRAY)
+            }
+        }
+    }
+
+    private fun setColorToColorButtons() {
+        val shadeColor = if (isNight) NoteColors.DARK_COLOR
+        else NoteColors.LIGHT_COLOR
+
+        with(binding) {
+            mbNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PINK])
+            )
+            mbNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PURPLE])
+            )
+            mbNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.INDIGO])
+            )
+            mbNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GREEN])
+            )
+            mbNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.ORANGE])
+            )
+            mbNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BROWN])
+            )
+            mbNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GRAY])
+            )
+            mbNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
+                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BLUE_GRAY])
+            )
+        }
+    }
+
+    private fun getCutCopyString() {
+        val extractedString = getExtractedString()
+        extractedString?.let {
+            getCutString()
+            copySelToClip(extractedString)
+        }
+    }
+
+    private fun getCopyString() {
+        val extractedString = getExtractedString()
+        extractedString?.let {
+            copySelToClip(extractedString)
+        }
+    }
+
+    private fun getEditColorNote() {
+        val isShow = viewModel.isShowColorFabs.value
+        val buttonSaveOption = viewModel.getSaveOption.value
+        if (isShow == null || !isShow) {
+            viewModel.setShowColorFabs(true)
+            if (buttonSaveOption == true) viewModel.setSaveOption()
+        } else {
+            viewModel.setShowColorFabs(false)
+        }
+    }
+
+    // validating entry in note fields, preparing to exit fragment
+    private fun exitFragment() {
+        val title = binding.etNoteEditTitle.text.toString()
+        val itself = binding.etNoteEditItself.text.toString()
+        when (workingMode) {
+            MODE_ADD -> viewModel.addNote(title, itself)
+            MODE_EDIT -> viewModel.editNote(title, itself)
+        }
+        viewModel.setSaveOption()
+    }
+
+    // select all text note itself
     private fun selectAll() {
         val text = binding.etNoteEditItself.text
         text?.let {
@@ -280,7 +391,7 @@ class NoteEditFragment : Fragment() {
         }
     }
 
-    private fun getExtractedStr(): String? {
+    private fun getExtractedString(): String? {
         val someView = requireActivity().currentFocus
         val view = if (someView == binding.etNoteEditTitle) binding.etNoteEditTitle
         else binding.etNoteEditItself
@@ -350,65 +461,6 @@ class NoteEditFragment : Fragment() {
             view.setSelection(newCursorPosition)
         } else {
             showSnakebar(getString(R.string.nothing_on_clipboard))
-        }
-    }
-
-    private fun initColorButtons() {
-        behaviorColorButtons = BottomSheetBehavior.from(binding.clNoteEditColorButtons)
-        behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
-
-        val shadeColor = if (isNight) NoteColors.DARK_COLOR
-        else NoteColors.LIGHT_COLOR
-
-        with(binding) {
-            mbNoteEditColorPink.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PINK])
-            )
-            mbNoteEditColorPurple.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.PURPLE])
-            )
-            mbNoteEditColorIndigo.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.INDIGO])
-            )
-            mbNoteEditColorGreen.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GREEN])
-            )
-            mbNoteEditColorOrange.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.ORANGE])
-            )
-            mbNoteEditColorBrown.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BROWN])
-            )
-            mbNoteEditColorGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.GRAY])
-            )
-            mbNoteEditColorBlueGray.backgroundTintList = ColorStateList.valueOf(
-                requireContext().getColor(NoteColors.noteColor[shadeColor][NoteColors.BLUE_GRAY])
-            )
-            mbNoteEditColorPink.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.PINK)
-            }
-            mbNoteEditColorPurple.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.PURPLE)
-            }
-            mbNoteEditColorIndigo.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.INDIGO)
-            }
-            mbNoteEditColorGreen.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.GREEN)
-            }
-            mbNoteEditColorOrange.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.ORANGE)
-            }
-            mbNoteEditColorBrown.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.BROWN)
-            }
-            mbNoteEditColorGray.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.GRAY)
-            }
-            mbNoteEditColorBlueGray.setOnClickListener {
-                viewModel.setColorIndex(NoteColors.BLUE_GRAY)
-            }
         }
     }
 
@@ -642,8 +694,6 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun testBiometricSuccess() {
-
-        val biometricVerification = BiometricVerification(this)
 
         if (biometricVerification.readinessCheckBiometric(::showSnakebar))
             viewModel.setIsLock(true)

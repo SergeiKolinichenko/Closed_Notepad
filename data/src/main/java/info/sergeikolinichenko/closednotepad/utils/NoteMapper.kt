@@ -4,8 +4,9 @@ import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import java.util.*
+import javax.inject.Inject
 
-class NoteMapper {
+class NoteMapper @Inject constructor() {
 
     fun mapEntityToDbModel(note: Note) = NoteDbModel(
         timeStamp = note.timeStamp,

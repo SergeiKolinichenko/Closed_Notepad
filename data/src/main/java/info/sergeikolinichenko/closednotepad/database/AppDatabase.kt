@@ -11,7 +11,7 @@ import info.sergeikolinichenko.closednotepad.dbmodels.RemovedNoteDbModel
     RemovedNoteDbModel::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
 
-    abstract fun noteEntriesDao(): NotesDao
+    abstract fun notesDao(): NotesDao
 
     companion object{
 

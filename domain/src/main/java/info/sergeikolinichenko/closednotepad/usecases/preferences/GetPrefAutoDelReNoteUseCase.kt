@@ -1,8 +1,11 @@
 package info.sergeikolinichenko.closednotepad.usecases.preferences
 
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepository
+import javax.inject.Inject
 
-class GetPrefAutoDelReNoteUseCase(private val prefRepository: PreferencesRepository) {
+class GetPrefAutoDelReNoteUseCase @Inject constructor(
+    private val prefRepository: PreferencesRepository
+    ) {
 
     operator fun invoke(): Int {
         return prefRepository.getPrefAutoDelReNote()

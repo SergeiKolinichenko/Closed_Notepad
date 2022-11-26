@@ -1,4 +1,4 @@
-package info.sergeikolinichenko.closednotepad.presentation.viewmodels.noteedit
+package info.sergeikolinichenko.closednotepad.presentation.viewmodels
 
 import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
@@ -14,8 +14,14 @@ import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIndexUseCase
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ViewModelNoteEdit(
+/**
+ViewModel of NoteEditFragment
+create 28.07.2022 by Sergei Kolinichenko
+ **/
+
+class ViewModelNoteEdit @Inject constructor(
     private val getNoteEntryUseCase: GetNoteUseCase,
     private val addNoteEntryUseCase: AddNoteUseCase,
     private val editNoteEntryUseCase: EditNoteUseCase,
@@ -57,7 +63,6 @@ class ViewModelNoteEdit(
             if (colorIndex != PreferencesRepositoryImpl.ERROR_GET_INT)
                 getPrefColorIndex.invoke()
             else NoteColors.GRAY
-
     }
 
     fun getNoteEntry() {
@@ -79,22 +84,19 @@ class ViewModelNoteEdit(
         val itself = parseString(inItself)
 
         if (
-            inTitle == note.value?.titleNote
+            (inTitle == note.value?.titleNote
             && inItself == note.value?.itselfNote
             && isLock.value == note.value?.isLocked
-            && colorIndex.value == note.value?.colorIndex
+            && colorIndex.value == note.value?.colorIndex)
             || (title.isEmpty() && itself.isEmpty())
         ) {
             retryNoteListFragment()
         } else {
             _note.value = parseNote(title, itself)
-//            if (getSaveOption.value != true) {
-//                _getSaveOption.value = true
-//            }
         }
     }
 
-    fun addNoteToBase() {
+    fun addNoteDatabase() {
         note.value?.let {
             viewModelScope.launch {
                 addNoteEntryUseCase.invoke(it)
@@ -104,7 +106,7 @@ class ViewModelNoteEdit(
         retryNoteListFragment()
     }
 
-    fun editNoteToBase() {
+    fun editNoteDatabase() {
         note.value?.let {
             viewModelScope.launch {
                 editNoteEntryUseCase.invoke(it)
@@ -187,8 +189,8 @@ class ViewModelNoteEdit(
 
     private fun parseString(txt: String?) = txt?.trim() ?: ""
 
-    fun setTimeStamp(ts: Long) {
-        _timeStamp = ts
+    fun setTimeStamp(timeStamp: Long) {
+        _timeStamp = timeStamp
     }
 
     fun setIsLock(lock: Boolean) {

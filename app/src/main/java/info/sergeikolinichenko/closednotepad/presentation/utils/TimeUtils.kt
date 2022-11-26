@@ -2,11 +2,9 @@ package info.sergeikolinichenko.closednotepad.presentation.utils
 
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.time.Duration.Companion.days
-import kotlin.time.days
 
 class TimeUtils {
-    companion object{
+    companion object {
         fun getDate(timeStamp: Long): String {
             val dateFormat = SimpleDateFormat("dd.MM.yy", Locale.getDefault())
             return dateFormat.format(timeStamp)
@@ -24,7 +22,7 @@ class TimeUtils {
 
         fun getDiffDays(timeStamp: Long): Int {
             val oneDay = 1000 * 60 * 60 * 24
-            val result = ((Date().time - timeStamp) / oneDay)+1
+            val result = ((Date().time - timeStamp) / oneDay) + 1
             return result.toInt()
         }
     }

@@ -1,17 +1,17 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import info.sergeikolinichenko.closednotepad.database.AppDatabase
+import info.sergeikolinichenko.closednotepad.database.NotesDao
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.utils.NoteMapper
+import javax.inject.Inject
 
-class NoteRepositoryImpl(application: Application) : NotesRepository {
-
-    private val notesDao = AppDatabase.getInstance(application).noteEntriesDao()
-    private val mapper = NoteMapper()
+class NoteRepositoryImpl @Inject constructor(
+    private val mapper: NoteMapper,
+    private val notesDao: NotesDao
+) : NotesRepository {
 
     // Implementation of getting a collection of notebook entries
 
@@ -19,8 +19,8 @@ class NoteRepositoryImpl(application: Application) : NotesRepository {
     override fun <T> getListNotes(): T {
         val noteList: LiveData<List<Note>> =
             Transformations.map(notesDao.getNoteList()) {
-            mapper.mapListDbModelToListEntity(it)
-        }
+                mapper.mapListDbModelToListEntity(it)
+            }
         return noteList as T
     }
 

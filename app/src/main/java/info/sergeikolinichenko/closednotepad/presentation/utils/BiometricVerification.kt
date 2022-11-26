@@ -1,18 +1,19 @@
 package info.sergeikolinichenko.closednotepad.presentation.utils
 
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import info.sergeikolinichenko.closednotepad.R
 import java.util.concurrent.Executor
+import javax.inject.Inject
 
-class BiometricVerification(private val fragment: Fragment) {
-
-    private val biometricManager = BiometricManager.from(fragment.requireActivity())
-    private val executor = ContextCompat.getMainExecutor(fragment.requireActivity())
+class BiometricVerification @Inject constructor(
+    private val fragment: Fragment,
+    private val biometricManager: BiometricManager,
+    private val executor: Executor
+    ) {
 
     fun readinessCheckBiometric(showMessage:(message: String)-> Unit):Boolean {
         var result = false

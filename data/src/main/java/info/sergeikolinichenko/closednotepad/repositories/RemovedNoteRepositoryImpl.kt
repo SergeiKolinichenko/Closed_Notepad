@@ -1,17 +1,17 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
-import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import info.sergeikolinichenko.closednotepad.database.AppDatabase
+import info.sergeikolinichenko.closednotepad.database.NotesDao
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.utils.RemovedNoteMapper
+import javax.inject.Inject
 
-class RemovedNoteRepositoryImpl(application: Application) : RemovedNoteRepository {
-
-    private val notesDao = AppDatabase.getInstance(application).noteEntriesDao()
-    private val mapper = RemovedNoteMapper()
+class RemovedNoteRepositoryImpl @Inject constructor(
+    private val mapper: RemovedNoteMapper,
+    private val notesDao: NotesDao
+) : RemovedNoteRepository {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListRemovedNotes(): T {
