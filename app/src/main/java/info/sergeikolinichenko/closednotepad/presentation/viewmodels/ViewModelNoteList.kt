@@ -18,6 +18,7 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNo
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -149,15 +150,17 @@ class ViewModelNoteList @Inject constructor(
     fun autoDeleteRemovedNote() {
         val days = getPrefDayBeforeDelete.invoke()
         val list = removedNoteList.value
-        list?.let {
-            for (item in list) {
-                if (TimeUtils.getDiffDays(item.timeStamp) > days) {
-                    viewModelScope.launch {
-                        deleteRemovedNote.invoke(item.timeStamp)
+        viewModelScope.launch(Dispatchers.Default) {
+            list?.let {
+                for (item in list) {
+                    if (TimeUtils.getDiffDays(item.timeStamp) > days) {
+                        viewModelScope.launch {
+                            deleteRemovedNote.invoke(item.timeStamp)
+                        }
                     }
                 }
+                NotesBackupAgent.requestBackup(backupManager)
             }
-            NotesBackupAgent.requestBackup(backupManager)
         }
         _removedNoteList.value = null
     }
