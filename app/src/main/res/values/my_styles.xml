@@ -145,4 +145,11 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
+    <!-- Style for TextView for title in view and edit fragment layout -->
+    <style name="ViewAndEditTitleTextTextViewStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLength">25</item>
+    </style>
+
 </resources>

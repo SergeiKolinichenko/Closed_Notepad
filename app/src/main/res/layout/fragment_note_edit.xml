@@ -42,8 +42,8 @@
                     android:gravity="center"
                     android:hint="@string/enter_note_title"
                     android:inputType="textCapSentences"
-                    android:maxLength="16"
-                    android:textSize="26sp"
+                    android:maxLength="25"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <View
@@ -200,7 +200,7 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:background="@android:color/transparent"
-                android:textSize="26sp" />
+                android:textSize="22sp" />
 
         </com.google.android.material.card.MaterialCardView>
 

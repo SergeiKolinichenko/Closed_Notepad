@@ -34,9 +34,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
-                        android:textSize="26sp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"
+                        android:maxLines="1"
                         tools:text="Title Note" />
 
                     <View
@@ -121,7 +124,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="4dp"
                         android:background="@android:color/transparent"
-                        android:textSize="26sp"
+                        android:textSize="20sp"
                         />
                 </ScrollView>
             </com.google.android.material.card.MaterialCardView>
