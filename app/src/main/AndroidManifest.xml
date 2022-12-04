@@ -18,7 +18,7 @@
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="unused" />
         <activity
-            android:name=".presentation.screens.MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -27,6 +27,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="androidx.work.WorkManagerInitializer"
+            android:name="androidx.startup.InitializationProvider"
+            tools:replace="android:authorities"
+            tools:node="remove"/>
     </application>
 
 </manifest>

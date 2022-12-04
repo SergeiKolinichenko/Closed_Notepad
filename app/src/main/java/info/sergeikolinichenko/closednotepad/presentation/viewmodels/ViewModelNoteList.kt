@@ -6,9 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
-import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
-import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetListNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
@@ -16,9 +14,9 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDel
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.SetPrefOrderNoteListUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
+import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemoveNotesUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.DeleteRemovedNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.GetListRemovedNoteUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,22 +24,16 @@ class ViewModelNoteList @Inject constructor(
     getListNote: GetListNotesUseCase,
     private val removeNote: RemoveNoteUseCase,
     private val editNote: EditNoteUseCase,
-    private val getRemovedNoteList: GetListRemovedNoteUseCase,
     private val addRemovedNote: AddRemovedNoteUseCase,
-    private val deleteRemovedNote: DeleteRemovedNoteUseCase,
     getPrefOrderListNote: GetPrefOrderNoteListUseCase,
     private val setPrefOrderListNote: SetPrefOrderNoteListUseCase,
-    private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
-    private val backupManager: BackupManager
+    private val backupManager: BackupManager,
+    deleteRemovedNotes: DeleteRemoveNotesUseCase
 ) : ViewModel() {
 
     private var _noteList: MutableLiveData<List<Note>> = getListNote.invoke()
     val noteList: LiveData<List<Note>>
         get() = _noteList
-
-    private var _removedNoteList = MutableLiveData<List<RemovedNote>>()
-    val removedNoteList: LiveData<List<RemovedNote>>
-        get() = _removedNoteList
 
     private var _orderViewNoteList: String? = getPrefOrderListNote.invoke()
     val orderViewNoteList: String
@@ -62,7 +54,7 @@ class ViewModelNoteList @Inject constructor(
     private val selectedNotes = mutableListOf<Note>()
 
     init {
-        initAutoDeleteRemovedNote()
+        deleteRemovedNotes.invoke()
     }
 
     fun selectNotes(note: Note) {
@@ -138,31 +130,6 @@ class ViewModelNoteList @Inject constructor(
     fun setStateShowOrderButtons() {
         _showOrderButtons.value =
             showOrderButtons.value == null || showOrderButtons.value == false
-    }
-
-    private fun initAutoDeleteRemovedNote() {
-        val days = getPrefDayBeforeDelete.invoke()
-        if (days > 0) {
-            _removedNoteList = getRemovedNoteList.invoke()
-        }
-    }
-
-    fun autoDeleteRemovedNote() {
-        val days = getPrefDayBeforeDelete.invoke()
-        val list = removedNoteList.value
-        viewModelScope.launch(Dispatchers.Default) {
-            list?.let {
-                for (item in list) {
-                    if (TimeUtils.getDiffDays(item.timeStamp) > days) {
-                        viewModelScope.launch {
-                            deleteRemovedNote.invoke(item.timeStamp)
-                        }
-                    }
-                }
-                NotesBackupAgent.requestBackup(backupManager)
-            }
-        }
-        _removedNoteList.value = null
     }
 
 }

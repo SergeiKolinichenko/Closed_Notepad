@@ -35,9 +35,6 @@ Start fragment of notebook. List of notes
 create 07.2022 by Sergei Kolinichenko
  **/
 
-//needed to define the first start of the fragment
-private var firstStart = true
-
 class NoteListFragment : Fragment() {
 
     private var _binding: FragmentNoteListBinding? = null
@@ -96,10 +93,7 @@ class NoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (firstStart) {
-            observeRemovedNoteList()
-            firstStart = false
-        }
+
         observeNoteList()
         observeIsSelected()
         observeShowColorButtons()
@@ -124,13 +118,6 @@ class NoteListFragment : Fragment() {
     private fun observeNoteList() {
         viewModel.noteList.observe(viewLifecycleOwner) {
             adapterNoteList.submitList(orderViewNoteList(it))
-        }
-    }
-
-    private fun observeRemovedNoteList() {
-        viewModel.removedNoteList.observe(viewLifecycleOwner) {
-            viewModel.autoDeleteRemovedNote()
-            viewModel.removedNoteList.removeObservers(viewLifecycleOwner)
         }
     }
 

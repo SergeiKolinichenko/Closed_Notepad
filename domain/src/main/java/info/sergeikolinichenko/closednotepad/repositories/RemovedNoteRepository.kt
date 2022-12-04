@@ -7,6 +7,8 @@ interface RemovedNoteRepository {
 
     fun <T> getListRemovedNotes(): T
 
+    fun deleteRemovedNotes()
+
     suspend fun getRemovedNote(timeStamp: Long): RemovedNote
 
     suspend fun addRemovedNote(removedNote: RemovedNote)
