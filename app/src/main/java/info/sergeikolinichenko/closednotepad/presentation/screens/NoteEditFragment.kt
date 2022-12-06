@@ -24,7 +24,9 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
+import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.stateful.*
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
@@ -90,12 +92,7 @@ class NoteEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeIsLock()
-        observeColorIndex()
-        observeNote()
-        observeRetryNoteListFrag()
-        observeGetSaveOption()
-        observeIsShowColorButtons()
+        observeStateNoteEdit()
         initEditTextTitle()     // hide edit popup menu title note EditText
         initEditTextItself()    // hide edit popup menu note itself EditText
         initLockButton()
@@ -111,29 +108,6 @@ class NoteEditFragment : Fragment() {
 
     private fun getNoteEntry() {
         viewModel.getNoteEntry()
-    }
-
-    private fun observeRetryNoteListFrag() {
-        viewModel.retryNoteListFrag.observe(viewLifecycleOwner) {
-            lifecycleScope.launch {
-                hideSoftKeyboard()
-            }
-            retryNoteListFragment()
-        }
-    }
-
-    private fun observeGetSaveOption() {
-        viewModel.getSaveOption.observe(viewLifecycleOwner) {
-            it?.let {
-                if (it) {
-                    showSaveFab()
-                    showNoSaveFab()
-                } else {
-                    hideSaveFab()
-                    hideNoSaveFab()
-                }
-            }
-        }
     }
 
     // hide edit popup menu title note EditText
@@ -183,8 +157,12 @@ class NoteEditFragment : Fragment() {
     private fun initLockButton() {
         // if enabled, then turn it off, if not, then check the possibility of locking the screen
         binding.cvNoteEditLock.setOnClickListener {
-            if (viewModel.isLock.value == true) {
-                viewModel.changeIsLock()
+
+            val isLock = binding.tvNoteEditLock.text == resources.getString(R.string.lock_note)
+
+            if (isLock) {
+                // set unlock note
+                setLockNote(NOTE_UNLOCK)
             } else {
                 // check the possibility of locking the screen
                 testBiometricSuccess()
@@ -361,13 +339,11 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun getEditColorNote() {
-        val isShow = viewModel.isShowColorFabs.value
-        val buttonSaveOption = viewModel.getSaveOption.value
-        if (isShow == null || !isShow) {
-            viewModel.setShowColorFabs(true)
-            if (buttonSaveOption == true) viewModel.setSaveOption()
+        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
+            viewModel.setShowColorButtons()
+            if (binding.fabNoteEditSave.isClickable) viewModel.hideExtraFABs()
         } else {
-            viewModel.setShowColorFabs(false)
+            viewModel.setHideColorButtons()
         }
     }
 
@@ -375,11 +351,12 @@ class NoteEditFragment : Fragment() {
     private fun exitFragment() {
         val title = binding.etNoteEditTitle.text.toString()
         val itself = binding.etNoteEditItself.text.toString()
+        val isLock = binding.tvNoteEditLock.text == resources.getString(R.string.lock_note)
         when (workingMode) {
-            MODE_ADD -> viewModel.addNote(title, itself)
-            MODE_EDIT -> viewModel.editNote(title, itself)
+            MODE_ADD -> viewModel.addNote(title, itself, isLock)
+            MODE_EDIT -> viewModel.editNote(title, itself, isLock)
         }
-        viewModel.setSaveOption()
+        viewModel.showExtraFABs()
     }
 
     // select all text note itself
@@ -464,16 +441,6 @@ class NoteEditFragment : Fragment() {
         }
     }
 
-    private fun observeIsShowColorButtons() {
-        viewModel.isShowColorFabs.observe(viewLifecycleOwner) {
-            if (it) {
-                showColorButtons()
-            } else {
-                hideColorButtons()
-            }
-        }
-    }
-
     private fun showColorButtons() {
         behaviorBottomAppBar.slideDown(binding.babNoteEdit)
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
@@ -497,12 +464,11 @@ class NoteEditFragment : Fragment() {
 
     private fun launchAddMode() {
         viewModel.setTimeStamp(Date().time)
-        viewModel.setIsLock(false)
+        setLockNote(NOTE_UNLOCK)
+        viewModel.getDefaultColorIndex()
 
         with(binding) {
-
             tvNoteEditFullDate.text = TimeUtils.getFullDate(viewModel.timeStamp)
-
             etNoteEditItself.requestFocus()
             showSoftKeyboard()
         }
@@ -512,56 +478,69 @@ class NoteEditFragment : Fragment() {
         getNoteEntry()
     }
 
-    private fun observeNote() {
-        viewModel.note.observe(viewLifecycleOwner) {
+    private fun setNote(note: Note) {
+        setLockNote(note.isLocked)
+        viewModel.setColorIndex(note.colorIndex)
 
-            viewModel.setIsLock(it.isLocked)
-            viewModel.setColorIndex(it.colorIndex)
+        with(binding) {
+            // fill fields with text
+            etNoteEditTitle.text = Editable.Factory.getInstance().newEditable(note.titleNote)
+            etNoteEditItself.text = Editable.Factory.getInstance().newEditable(note.itselfNote)
+            tvNoteEditFullDate.text = TimeUtils.getFullDate(note.timeStamp)
+            // set focus to EditText and move cursor to end
+            etNoteEditItself.requestFocus()
+            etNoteEditItself.setSelection(etNoteEditItself.text.toString().length)
 
-            with(binding) {
-                // fill fields with text
-                etNoteEditTitle.text = Editable.Factory.getInstance().newEditable(it.titleNote)
-                etNoteEditItself.text = Editable.Factory.getInstance().newEditable(it.itselfNote)
-                tvNoteEditFullDate.text = TimeUtils.getFullDate(it.timeStamp)
-                // set focus to EditText and move cursor to end
-                etNoteEditItself.requestFocus()
-                etNoteEditItself.setSelection(etNoteEditItself.text.toString().length)
+            showSoftKeyboard()
+        }
+    }
 
-                showSoftKeyboard()
+    private fun observeStateNoteEdit() {
+        viewModel.stateNoteEdit.observe(viewLifecycleOwner) { it ->
+            when (it) {
+                is NoteEditNote -> {
+                    it.note?.let {
+                        setNote(it)
+                    }
+                }
+                is ColorIndex -> setColorIndex(it.index)
+                Lock -> setLockNote(NOTE_LOCK)
+                Unlock -> setLockNote(NOTE_UNLOCK)
+                RetryNoteListFragment -> retryNoteListFragment()
+                ShowColorButtonsNoteEdit -> showColorButtons()
+                HideColorButtonsNoteEdit -> hideColorButtons()
+                ShowExtraFABs -> showExtraFABs()
+                HideExtraFABs -> hideExtraFABs()
             }
         }
     }
 
-    private fun observeIsLock() {
+    private fun setLockNote(isLock: Boolean) {
         val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
         else R.drawable.ic_lock_black_36dp
         val imgUnlock = if (isNight) R.drawable.ic_lock_open_white_36dp
         else R.drawable.ic_lock_open_black_36dp
 
-        viewModel.isLock.observe(viewLifecycleOwner) {
-            with(binding) {
-                if (it) {
-                    tvNoteEditLock.text = requireContext().getText(R.string.unlock_note)
-                    ivNoteEditLock.setImageResource(imgLock)
-                } else {
-                    tvNoteEditLock.text = requireContext().getText(R.string.lock_note)
-                    ivNoteEditLock.setImageResource(imgUnlock)
-                }
+        with(binding) {
+            if (isLock) {
+                tvNoteEditLock.text = requireContext().getText(R.string.lock_note)
+                ivNoteEditLock.setImageResource(imgLock)
+            } else {
+                tvNoteEditLock.text = requireContext().getText(R.string.unlock_note)
+                ivNoteEditLock.setImageResource(imgUnlock)
             }
         }
     }
 
-    private fun observeColorIndex() {
-        viewModel.colorIndex.observe(viewLifecycleOwner) {
-            val colorNote =
-                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
-                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
-            with(binding) {
-                cvNoteEditTitle.setBackgroundResource(colorNote)
-                cvNoteEditLock.setBackgroundResource(colorNote)
-                cvNoteEditCreate.setBackgroundResource(colorNote)
-                cvNoteEditItself.setBackgroundResource(colorNote)
-            }
+    private fun setColorIndex(colorIndex: Int) {
+        val colorNote =
+            if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][colorIndex]
+            else NoteColors.noteColor[NoteColors.LIGHT_COLOR][colorIndex]
+        with(binding) {
+            cvNoteEditTitle.setBackgroundResource(colorNote)
+            cvNoteEditLock.setBackgroundResource(colorNote)
+            cvNoteEditCreate.setBackgroundResource(colorNote)
+            cvNoteEditItself.setBackgroundResource(colorNote)
         }
     }
 
@@ -585,6 +564,9 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun retryNoteListFragment() {
+        lifecycleScope.launch {
+            hideSoftKeyboard()
+        }
         requireActivity().supportFragmentManager.popBackStack(
             NoteListFragment.NAME,
             0
@@ -594,6 +576,16 @@ class NoteEditFragment : Fragment() {
     private fun isNightMode() {
         isNight = (resources.configuration.uiMode.and(Configuration.UI_MODE_NIGHT_MASK) ==
                 Configuration.UI_MODE_NIGHT_YES)
+    }
+
+    private fun showExtraFABs() {
+        showSaveFab()
+        showNoSaveFab()
+    }
+
+    private fun hideExtraFABs() {
+        hideSaveFab()
+        hideNoSaveFab()
     }
 
     private fun showSoftKeyboard() {
@@ -623,7 +615,9 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun hideSaveFab() {
-        val anim = if (viewModel.isShowColorFabs.value == false) R.anim.fab_save_hide
+        val anim = if (
+            behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN
+        ) R.anim.fab_save_hide
         else R.anim.fab_save_other_hide
 
         val animHideFabSave =
@@ -653,7 +647,9 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun hideNoSaveFab() {
-        val anim = if (viewModel.isShowColorFabs.value == false) R.anim.fab_no_save_hide
+        val anim = if (
+            behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN
+        ) R.anim.fab_no_save_hide
         else R.anim.fab_no_save_other_hide
 
         val animHideFabSave =
@@ -695,8 +691,10 @@ class NoteEditFragment : Fragment() {
 
     private fun testBiometricSuccess() {
 
-        if (biometricVerification.readinessCheckBiometric(::showSnakebar))
-            viewModel.setIsLock(true)
+        if (
+            biometricVerification.readinessCheckBiometric(::showSnakebar)
+        )
+            setLockNote(NOTE_LOCK)
     }
 
     override fun onDestroyView() {
@@ -713,6 +711,9 @@ class NoteEditFragment : Fragment() {
         private const val MODE_EDIT = "edit_mode"
         private const val WORKING_MODE = "working_mode"
         private const val MODE_UNKNOWN = ""
+        private const val NOTE_UNLOCK = false
+        private const val NOTE_LOCK = true
+
 
         @JvmStatic
         fun newInstanceEditMode(timeStamp: Long) =

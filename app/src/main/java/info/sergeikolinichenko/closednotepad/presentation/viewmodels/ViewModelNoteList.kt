@@ -90,7 +90,7 @@ class ViewModelNoteList @Inject constructor(
     }
 
     fun setColorIndex(colorIndex: Int) {
-        _stateNoteList.value = HideColorButtons
+        _stateNoteList.value = HideColorButtonsNoteList
         for (item in selectedNotes) {
             val newItem = item.copy(colorIndex = colorIndex)
             viewModelScope.launch {
@@ -116,11 +116,11 @@ class ViewModelNoteList @Inject constructor(
     }
 
     fun showColorButtons() {
-        _stateNoteList.value = ShowColorButtons
+        _stateNoteList.value = ShowColorButtonsNoteList
     }
 
     fun hideColorButtons() {
-        _stateNoteList.value = HideColorButtons
+        _stateNoteList.value = HideColorButtonsNoteList
     }
 
     fun showOrderButtons() {

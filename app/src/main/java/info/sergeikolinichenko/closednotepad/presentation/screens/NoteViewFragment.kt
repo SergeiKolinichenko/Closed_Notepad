@@ -277,32 +277,36 @@ class NoteViewFragment : Fragment() {
 
     private fun observeStateFragment() {
         viewModel.stateNoteView.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 EndUsing -> {
                     retryPreviousFragment()
                 }
                 is NoteViewNote -> {
-                    val colorNote =
-                        if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it.note.colorIndex]
-                        else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it.note.colorIndex]
-
-                    val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
-                    else R.drawable.ic_lock_black_36dp
-
-                    with(binding) {
-                        cvNoteViewItselfNote.setBackgroundResource(colorNote)
-                        cvNoteViewTitle.setBackgroundResource(colorNote)
-                        ivNoteViewLock.setImageResource(imgLock)
-
-                        tvNoteViewFulldate.text = TimeUtils.getFullDate(it.note.timeStamp)
-                        tvNoteViewTitleNote.text = it.note.titleNote
-                        tvNoteViewItselfNote.text = it.note.itselfNote
-
-                        binding.ivNoteViewLock.visibility = if (it.note.isLocked) View.VISIBLE
-                        else View.INVISIBLE
-                    }
+                    setNote(it.note)
                 }
             }
+        }
+    }
+
+    private fun setNote(note: Note) {
+        val colorNote =
+            if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][note.colorIndex]
+            else NoteColors.noteColor[NoteColors.LIGHT_COLOR][note.colorIndex]
+
+        val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
+        else R.drawable.ic_lock_black_36dp
+
+        with(binding) {
+            cvNoteViewItselfNote.setBackgroundResource(colorNote)
+            cvNoteViewTitle.setBackgroundResource(colorNote)
+            ivNoteViewLock.setImageResource(imgLock)
+
+            tvNoteViewFulldate.text = TimeUtils.getFullDate(note.timeStamp)
+            tvNoteViewTitleNote.text = note.titleNote
+            tvNoteViewItselfNote.text = note.itselfNote
+
+            binding.ivNoteViewLock.visibility = if (note.isLocked) View.VISIBLE
+            else View.INVISIBLE
         }
     }
 

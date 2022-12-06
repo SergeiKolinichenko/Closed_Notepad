@@ -12,8 +12,8 @@
     <string name="edit_note">Редактировать</string>
     <string name="copy_itsels_note">Копировать</string>
     <string name="send_itself_note">Отправить</string>
-    <string name="lock_note">Заблокировать</string>
-    <string name="unlock_note">Разблокировать</string>
+    <string name="lock_note">Заблокировано</string>
+    <string name="unlock_note">Разблокировано</string>
 
     <string name="note_color_pink">Розовый</string>
     <string name="note_color_purple">Пурпурный</string>

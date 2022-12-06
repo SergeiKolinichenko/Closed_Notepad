@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.presentation.stateful.*
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
-import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl
+import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl.Companion.ERROR_GET_INT
 import info.sergeikolinichenko.closednotepad.usecases.notepad.AddNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.EditNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase
@@ -25,79 +26,62 @@ class ViewModelNoteEdit @Inject constructor(
     private val getNoteEntryUseCase: GetNoteUseCase,
     private val addNoteEntryUseCase: AddNoteUseCase,
     private val editNoteEntryUseCase: EditNoteUseCase,
-    getPrefColorIndex: GetPrefColorIndexUseCase,
+    private val getPrefColorIndex: GetPrefColorIndexUseCase,
     private val backupManager: BackupManager
 ) : ViewModel() {
 
-    private var _note = MutableLiveData<Note>()
-    val note: LiveData<Note>
-        get() = _note
+    private var _stateNoteEdit = MutableLiveData<StateNoteEdit>()
+    val stateNoteEdit: LiveData<StateNoteEdit>
+        get() = _stateNoteEdit
 
     private var _timeStamp: Long? = null
     val timeStamp: Long
         get() = _timeStamp ?: throw RuntimeException("timeStamp equals null")
 
-    private var _isLock = MutableLiveData<Boolean>()
-    val isLock: LiveData<Boolean>
-        get() = _isLock
-
-    private var _colorIndex = MutableLiveData<Int>()
-    val colorIndex: LiveData<Int>
-        get() = _colorIndex
-
-    private var _retryNoteListFrag = MutableLiveData<Unit>()
-    val retryNoteListFrag: LiveData<Unit>
-        get() = _retryNoteListFrag
-
-    private var _getSaveOption = MutableLiveData<Boolean>()
-    val getSaveOption: LiveData<Boolean>
-        get() = _getSaveOption
-
-    private var _isShowColorFabs = MutableLiveData<Boolean>()
-    val isShowColorFabs: LiveData<Boolean>
-        get() = _isShowColorFabs
-
-    init {
-        val colorIndex = getPrefColorIndex.invoke()
-        _colorIndex.value =
-            if (colorIndex != PreferencesRepositoryImpl.ERROR_GET_INT)
-                getPrefColorIndex.invoke()
-            else NoteColors.GRAY
-    }
+    private var note: Note? = null
+    private var colorIndex: Int = NoteColors.GRAY
 
     fun getNoteEntry() {
         viewModelScope.launch {
-            _note.value = getNoteEntryUseCase.invoke(timeStamp)
+            note = getNoteEntryUseCase.invoke(timeStamp)
+            _stateNoteEdit.value = NoteEditNote(note = note)
         }
     }
 
-    fun addNote(inTitle: String?, inItself: String?) {
+    fun getDefaultColorIndex() {
+        colorIndex = if (getPrefColorIndex.invoke() == ERROR_GET_INT) NoteColors.GRAY
+        else getPrefColorIndex.invoke()
+
+        _stateNoteEdit.value = ColorIndex(index = colorIndex)
+
+    }
+
+    fun addNote(inTitle: String?, inItself: String?, isLock: Boolean) {
         val title = parseString(inTitle)
         val itself = parseString(inItself)
 
         if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
-        else _note.value = parseNote(title, itself)
+        else note = parseNote(title, itself, isLock)
     }
 
-    fun editNote(inTitle: String?, inItself: String?) {
+    fun editNote(inTitle: String?, inItself: String?, isLock: Boolean) {
         val title = parseString(inTitle)
         val itself = parseString(inItself)
-
         if (
-            (inTitle == note.value?.titleNote
-            && inItself == note.value?.itselfNote
-            && isLock.value == note.value?.isLocked
-            && colorIndex.value == note.value?.colorIndex)
+            (inTitle == note?.titleNote
+                    && inItself == note?.itselfNote
+                    && isLock == note?.isLocked
+                    && colorIndex == note?.colorIndex)
             || (title.isEmpty() && itself.isEmpty())
         ) {
             retryNoteListFragment()
         } else {
-            _note.value = parseNote(title, itself)
+            note = parseNote(title, itself, isLock)
         }
     }
 
     fun addNoteDatabase() {
-        note.value?.let {
+        note?.let {
             viewModelScope.launch {
                 addNoteEntryUseCase.invoke(it)
             }
@@ -107,7 +91,7 @@ class ViewModelNoteEdit @Inject constructor(
     }
 
     fun editNoteDatabase() {
-        note.value?.let {
+        note?.let {
             viewModelScope.launch {
                 editNoteEntryUseCase.invoke(it)
             }
@@ -116,13 +100,9 @@ class ViewModelNoteEdit @Inject constructor(
         retryNoteListFragment()
     }
 
-    private fun parseNote(inTitle: String, inItself: String): Note {
+    private fun parseNote(inTitle: String, inItself: String, isLock: Boolean): Note {
         var title = inTitle
         var itself = inItself
-        val lock: Boolean = isLock.value
-            ?: throw RuntimeException("isLock equals null")
-        val index: Int = colorIndex.value
-            ?: throw RuntimeException("colorIndex equals null")
 
         if (title.isEmpty()) {
             title = makeTitle(itself)
@@ -136,8 +116,8 @@ class ViewModelNoteEdit @Inject constructor(
             timeStamp = timeStamp,
             titleNote = title,
             itselfNote = itself,
-            colorIndex = index,
-            isLocked = lock,
+            colorIndex = colorIndex,
+            isLocked = isLock,
             isSelected = false
         )
     }
@@ -193,31 +173,30 @@ class ViewModelNoteEdit @Inject constructor(
         _timeStamp = timeStamp
     }
 
-    fun setIsLock(lock: Boolean) {
-        _isLock.value = lock
-    }
-
-    fun changeIsLock() {
-        isLock.value?.let {
-            _isLock.value = !it
-        }
-    }
-
     fun setColorIndex(index: Int) {
-        _colorIndex.value = index
-        setShowColorFabs(false)
+        _stateNoteEdit.value = ColorIndex(index = index)
+        colorIndex = index
+        setHideColorButtons()
     }
 
-    fun setShowColorFabs(state: Boolean) {
-        _isShowColorFabs.value = state
+    fun setShowColorButtons() {
+        _stateNoteEdit.value = ShowColorButtonsNoteEdit
     }
 
-    fun setSaveOption() {
-        _getSaveOption.value = getSaveOption.value == null || getSaveOption.value == false
+    fun setHideColorButtons() {
+        _stateNoteEdit.value = HideColorButtonsNoteEdit
+    }
+
+    fun showExtraFABs() {
+        _stateNoteEdit.value = ShowExtraFABs
+    }
+
+    fun hideExtraFABs() {
+        _stateNoteEdit.value = HideExtraFABs
     }
 
     fun retryNoteListFragment() {
-        _retryNoteListFrag.value = Unit
+        _stateNoteEdit.value = RetryNoteListFragment
     }
 
     companion object {

@@ -254,10 +254,10 @@ class NoteListFragment : Fragment() {
                     setStateUnselected()
                     isSelected = false
                 }
-                ShowColorButtons -> {
+                ShowColorButtonsNoteList -> {
                     showColorButtons()
                 }
-                HideColorButtons -> {
+                HideColorButtonsNoteList -> {
                     hideColorButtons()
                 }
                 ShowOrderButtons -> {

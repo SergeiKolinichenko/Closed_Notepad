@@ -12,8 +12,8 @@
     <string name="edit_note">Редактиране</string>
     <string name="copy_itsels_note">Копие</string>
     <string name="send_itself_note">Изпратете</string>
-    <string name="lock_note">Заключете</string>
-    <string name="unlock_note">Отключете</string>
+    <string name="lock_note">Отблокиран</string>
+    <string name="unlock_note">Отключена</string>
 
     <string name="note_color_pink">Розово</string>
     <string name="note_color_purple">Лилаво</string>

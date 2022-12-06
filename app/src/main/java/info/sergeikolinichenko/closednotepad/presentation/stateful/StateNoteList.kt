@@ -6,7 +6,7 @@ sealed class StateNoteList
 
 object ItemSelected : StateNoteList()
 object ItemUnselected : StateNoteList()
-object ShowColorButtons : StateNoteList()
-object HideColorButtons : StateNoteList()
+object ShowColorButtonsNoteList : StateNoteList()
+object HideColorButtonsNoteList : StateNoteList()
 object ShowOrderButtons : StateNoteList()
 object HideOrderButtons : StateNoteList()

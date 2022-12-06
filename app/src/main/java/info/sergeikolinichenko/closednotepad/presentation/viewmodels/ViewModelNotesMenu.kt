@@ -4,6 +4,7 @@ import android.app.backup.BackupManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import info.sergeikolinichenko.closednotepad.presentation.stateful.*
 import info.sergeikolinichenko.closednotepad.presentation.utils.NotesBackupAgent
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDelReNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIndexUseCase
@@ -15,50 +16,42 @@ class ViewModelNotesMenu @Inject constructor(
     private val setPrefColorIndex: SetPrefColorIndexUseCase,
     private val getPrefColorIndex: GetPrefColorIndexUseCase,
     private val setPrefAutoDelReNote: SetPrefAutoDelReNoteUseCase,
-    getPrefAutoDelReNote: GetPrefAutoDelReNoteUseCase,
+    private val getPrefAutoDelReNote: GetPrefAutoDelReNoteUseCase,
     private val backupManager: BackupManager
-): ViewModel() {
+) : ViewModel() {
 
-    private val _defaultColorIndex = MutableLiveData<Int>()
-    val defaultColorIndex: LiveData<Int>
-    get() = _defaultColorIndex
+    private val _stateNotesMenu = MutableLiveData<StateNotesMenu>()
+    val stateNotesMenu: LiveData<StateNotesMenu>
+        get() = _stateNotesMenu
 
-    private val _daysBeforeDelete = MutableLiveData<Int>()
-    val daysBeforeDelete: LiveData<Int>
-        get() = _daysBeforeDelete
-
-    private var _showColorButtons = MutableLiveData(false)
-    val showColorButtons: LiveData<Boolean>
-    get() = _showColorButtons
-
-    private var _showDaySetButtons = MutableLiveData(false)
-    val showDaySetButtons: LiveData<Boolean>
-        get() = _showDaySetButtons
+//    private var _showDaySetButtons = MutableLiveData(false)
+//    val showDaySetButtons: LiveData<Boolean>
+//        get() = _showDaySetButtons
 
     init {
-        _defaultColorIndex.value = getPrefColorIndex.invoke()
-        _daysBeforeDelete.value = getPrefAutoDelReNote.invoke()
+        _stateNotesMenu.value = DefaultColorIndex(index = getPrefColorIndex.invoke())
+        _stateNotesMenu.value = DaysBeforeDelete(days = getPrefAutoDelReNote.invoke())
     }
 
     fun setDefaultColor(color: Int) {
         setPrefColorIndex.invoke(color)
-        _defaultColorIndex.value = getPrefColorIndex.invoke()
-        _showColorButtons.value = false
+        _stateNotesMenu.value = DefaultColorIndex(index = getPrefColorIndex.invoke())
+        _stateNotesMenu.value = HideColorButtonsNotesMenu
         NotesBackupAgent.requestBackup(backupManager)
     }
 
     fun setDaysBeforeDelete(days: Int) {
         setPrefAutoDelReNote.invoke(days)
-        _daysBeforeDelete.value = days
-        _showDaySetButtons.value = false
+        _stateNotesMenu.value = DaysBeforeDelete(days = getPrefAutoDelReNote.invoke())
+        _stateNotesMenu.value = HideSetDaysButtons
         NotesBackupAgent.requestBackup(backupManager)
     }
 
     fun showSetDaysButton() {
-        _showDaySetButtons.value = true
+        _stateNotesMenu.value = ShowSetDaysButtons
     }
 
     fun showColorButtons() {
-        _showColorButtons.value = true
+        _stateNotesMenu.value = ShowColorButtonsNotesMenu
     }
 }

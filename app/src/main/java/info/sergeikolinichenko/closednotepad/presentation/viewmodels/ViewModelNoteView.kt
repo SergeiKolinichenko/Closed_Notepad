@@ -23,10 +23,6 @@ class ViewModelNoteView @Inject constructor(
     val stateNoteView: LiveData<StateNoteView>
         get() = _stateNoteView
 
-//    private var _note = MutableLiveData<Note>()
-//    val note: LiveData<Note>
-//        get() = _note
-
     fun getNote(timeStamp: Long) {
         viewModelScope.launch {
             _stateNoteView.value = NoteViewNote(note = getNoteEntryUseCase.invoke(timeStamp))

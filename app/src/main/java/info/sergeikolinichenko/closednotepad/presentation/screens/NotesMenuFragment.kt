@@ -15,6 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNotesMenuBinding
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.stateful.*
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesMenu
@@ -61,10 +62,7 @@ class NotesMenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeDefaultColorIndex()
-        observeShowColorButtons()
-        observeDaysBeforeDelete()
-        observeDaySetButtons()
+        observeStateNotesMenu()
         isNightMode()
         initSettingsButtons()
         initFabExit()
@@ -78,48 +76,42 @@ class NotesMenuFragment : Fragment() {
         _binding = null
     }
 
-    private fun observeDefaultColorIndex() {
-        viewModel.defaultColorIndex.observe(viewLifecycleOwner) {
-            val colorNote: Int = if (it != PreferencesRepositoryImpl.ERROR_GET_INT) {
-                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it]
-                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it]
-            } else {
-                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][NoteColors.GRAY]
-                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][NoteColors.GRAY]
+    private fun observeStateNotesMenu() {
+        viewModel.stateNotesMenu.observe(viewLifecycleOwner) {
+            when (it) {
+                is DefaultColorIndex -> setDefaultColorIndex(it.index)
+                is DaysBeforeDelete -> setDaysBeforeDelete(it.days)
+                ShowColorButtonsNotesMenu -> showColorButtons()
+                HideColorButtonsNotesMenu -> hideColorButtons()
+                ShowSetDaysButtons -> showDaySetButtons()
+                HideSetDaysButtons -> hideDaySetButtons()
             }
-            binding.mbMenuDefaultColor.backgroundTintList =
-                resources.getColorStateList(colorNote, null)
         }
     }
 
-    private fun observeShowColorButtons() {
-        viewModel.showColorButtons.observe(viewLifecycleOwner) {
-            if (it) showColorButtons()
-            else hideColorButtons()
+    private fun setDefaultColorIndex(index: Int) {
+        val colorNote: Int = if (index != PreferencesRepositoryImpl.ERROR_GET_INT) {
+            if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][index]
+            else NoteColors.noteColor[NoteColors.LIGHT_COLOR][index]
+        } else {
+            if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][NoteColors.GRAY]
+            else NoteColors.noteColor[NoteColors.LIGHT_COLOR][NoteColors.GRAY]
         }
+        binding.mbMenuDefaultColor.backgroundTintList =
+            resources.getColorStateList(colorNote, null)
     }
 
-    private fun observeDaysBeforeDelete() {
-        viewModel.daysBeforeDelete.observe(viewLifecycleOwner) {
-            val daysPref = it
+    private fun setDaysBeforeDelete(days: Int) {
 
-            val text: String = if (daysPref != null && daysPref > 0) {
-                val daysBefore = daysPref.toString()
-                val string = resources.getString(R.string.days_before_deletion)
-                "$daysBefore $string"
-            } else {
-                resources.getString(R.string.manual_delete_trash)
-            }
-
-            binding.mbMenuDaysBeforeDelete.text = text
+        val text: String = if (days > 0) {
+            val daysBefore = days.toString()
+            val string = resources.getString(R.string.days_before_deletion)
+            "$daysBefore $string"
+        } else {
+            resources.getString(R.string.manual_delete_trash)
         }
-    }
 
-    private fun observeDaySetButtons() {
-        viewModel.showDaySetButtons.observe(viewLifecycleOwner) {
-            if (it) showDaySetButtons()
-            else hideDaySetButtons()
-        }
+        binding.mbMenuDaysBeforeDelete.text = text
     }
 
     private fun initSettingsButtons() {
