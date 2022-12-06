@@ -1,16 +1,15 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
-import info.sergeikolinichenko.closednotepad.workers.RemovedNoteListWorker
 import info.sergeikolinichenko.closednotepad.database.NotesDao
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.utils.RemovedNoteMapper
+import info.sergeikolinichenko.closednotepad.workers.RemovedNoteListWorker
 import javax.inject.Inject
 
 class RemovedNoteRepositoryImpl @Inject constructor(
@@ -29,7 +28,6 @@ class RemovedNoteRepositoryImpl @Inject constructor(
     }
 
     override fun deleteRemovedNotes() {
-        Log.d("MyLog", "deleteRemovedNotes")
         val workManager = WorkManager.getInstance(application)
         workManager.enqueueUniqueWork(
             RemovedNoteListWorker.WORKER_NAME,

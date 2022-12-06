@@ -23,7 +23,7 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentTrashCanListBinding
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
 import info.sergeikolinichenko.closednotepad.presentation.adapters.trashcanlist.TrashCanAdapter
-import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelTrashCanList
 import javax.inject.Inject

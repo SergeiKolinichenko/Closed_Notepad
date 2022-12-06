@@ -24,7 +24,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
-import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils

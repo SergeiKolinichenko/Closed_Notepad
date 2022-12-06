@@ -29,7 +29,7 @@ class DrawLines(context: Context, attrs: AttributeSet): MaterialTextView(context
 
         if (lineCount > count) count = lineCount
 
-        var baseline = getLineBounds(0, rect).toFloat()
+        var baseline = (getLineBounds(0, rect) + LINE_SHIFT_DOWN).toFloat()
         val fLeftRect = rect.left.toFloat()
         val fRightRect = rect.right.toFloat()
 
@@ -50,5 +50,6 @@ class DrawLines(context: Context, attrs: AttributeSet): MaterialTextView(context
 
     companion object{
         private const val STROKE_WIDTH = 2f
+        private const val LINE_SHIFT_DOWN = 2
     }
 }

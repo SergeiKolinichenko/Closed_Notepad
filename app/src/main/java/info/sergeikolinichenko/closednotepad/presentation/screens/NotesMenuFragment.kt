@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNotesMenuBinding
-import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesMenu

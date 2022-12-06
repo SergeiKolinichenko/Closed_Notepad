@@ -190,13 +190,14 @@
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:textSize="26sp"/>
+                android:textSize="22sp"/>
 
             <view
                 android:id="@+id/tv_note_edit_itself"
                 class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
                 android:layout_marginStart="4dp"
                 android:layout_marginEnd="4dp"
                 android:background="@android:color/transparent"

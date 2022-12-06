@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteSearchBinding
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notesearch.NoteSearchAdapter
-import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteSearch
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory

@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.presentation.stateful.EndUsing
+import info.sergeikolinichenko.closednotepad.presentation.stateful.NoteViewNote
+import info.sergeikolinichenko.closednotepad.presentation.stateful.StateNoteView
 import info.sergeikolinichenko.closednotepad.usecases.notepad.GetNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.notepad.RemoveNoteUseCase
 import info.sergeikolinichenko.closednotepad.usecases.trashcan.AddRemovedNoteUseCase
@@ -17,31 +19,27 @@ class ViewModelNoteView @Inject constructor(
     private val addRemovedNote: AddRemovedNoteUseCase
 ) : ViewModel() {
 
-    private var _note = MutableLiveData<Note>()
-    val note: LiveData<Note>
-        get() = _note
+    private var _stateNoteView = MutableLiveData<StateNoteView>()
+    val stateNoteView: LiveData<StateNoteView>
+        get() = _stateNoteView
 
-    private var _endUsingFragment = MutableLiveData<Unit>()
-    val endUsingFragment: LiveData<Unit>
-        get() = _endUsingFragment
-
-    private var _toast = MutableLiveData<String>()
-    val toast: LiveData<String>
-        get() = _toast
+//    private var _note = MutableLiveData<Note>()
+//    val note: LiveData<Note>
+//        get() = _note
 
     fun getNote(timeStamp: Long) {
         viewModelScope.launch {
-            _note.value = getNoteEntryUseCase.invoke(timeStamp)
+            _stateNoteView.value = NoteViewNote(note = getNoteEntryUseCase.invoke(timeStamp))
         }
     }
 
-    fun removeNote() {
-        note.value?.let {
-            viewModelScope.launch {
-                addRemovedNote.invoke(removeNoteUseCase.invoke(it))
-            }
+    fun removeNote(timeStamp: Long) {
+        viewModelScope.launch {
+            val note = getNoteEntryUseCase.invoke(timeStamp)
+            addRemovedNote.invoke(removeNoteUseCase.invoke(note))
         }
-        _endUsingFragment.value = Unit
+
+        _stateNoteView.value = EndUsing
     }
 
 }

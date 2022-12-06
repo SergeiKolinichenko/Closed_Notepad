@@ -8,6 +8,7 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDel
 import info.sergeikolinichenko.closednotepad.utils.RemovedNoteMapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -38,6 +39,11 @@ class RemovedNoteListWorker(
             }
         }
         return Result.success()
+    }
+
+    override fun onStopped() {
+        super.onStopped()
+        coroutineScope.cancel()
     }
 
     private fun Long.getDiffDays(): Int {

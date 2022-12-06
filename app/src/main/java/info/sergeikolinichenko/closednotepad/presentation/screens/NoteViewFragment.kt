@@ -7,7 +7,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.doOnDetach
 import androidx.fragment.app.Fragment
@@ -16,7 +15,10 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteViewBinding
-import info.sergeikolinichenko.closednotepad.presentation.di.NotesApp
+import info.sergeikolinichenko.closednotepad.models.Note
+import info.sergeikolinichenko.closednotepad.presentation.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.stateful.EndUsing
+import info.sergeikolinichenko.closednotepad.presentation.stateful.NoteViewNote
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteView
@@ -78,9 +80,8 @@ class NoteViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeNoteEntry()
-        observeViewToast()
-        observeEndUsingFragment()
+        getNote()
+        observeStateFragment()
         initOnScrollChangedListener()
         initActionBar()
         initBackPressed()
@@ -188,7 +189,7 @@ class NoteViewFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
             .setAction(R.string.move_note) {
-                viewModel.removeNote()
+                viewModel.removeNote(timeStamp)
             }
         val snackBarView = snackBar.view
         val snackBarText = snackBarView.findViewById<TextView>(
@@ -222,29 +223,7 @@ class NoteViewFragment : Fragment() {
         )
     }
 
-    private fun observeNoteEntry() {
-        viewModel.note.observe(viewLifecycleOwner) {
-
-            val colorNote =
-                if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it.colorIndex]
-                else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it.colorIndex]
-
-            val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
-            else R.drawable.ic_lock_black_36dp
-
-            with(binding) {
-                cvNoteViewItselfNote.setBackgroundResource(colorNote)
-                cvNoteViewTitle.setBackgroundResource(colorNote)
-                ivNoteViewLock.setImageResource(imgLock)
-
-                tvNoteViewFulldate.text = TimeUtils.getFullDate(it.timeStamp)
-                tvNoteViewTitleNote.text = it.titleNote
-                tvNoteViewItselfNote.text = it.itselfNote
-
-                binding.ivNoteViewLock.visibility = if (it.isLocked) View.VISIBLE
-                else View.INVISIBLE
-            }
-        }
+    private fun getNote() {
         viewModel.getNote(timeStamp)
     }
 
@@ -272,14 +251,6 @@ class NoteViewFragment : Fragment() {
         }
     }
 
-    private fun observeViewToast() {
-        viewModel.toast.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT)
-                .show()
-        }
-    }
-
-
     private fun showSnakebar(message: String) {
         val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
         else R.drawable.ic_information_variant_white_48dp
@@ -304,9 +275,34 @@ class NoteViewFragment : Fragment() {
         snackBar.show()
     }
 
-    private fun observeEndUsingFragment() {
-        viewModel.endUsingFragment.observe(viewLifecycleOwner) {
-            retryPreviousFragment()
+    private fun observeStateFragment() {
+        viewModel.stateNoteView.observe(viewLifecycleOwner) {
+            when(it) {
+                EndUsing -> {
+                    retryPreviousFragment()
+                }
+                is NoteViewNote -> {
+                    val colorNote =
+                        if (isNight) NoteColors.noteColor[NoteColors.DARK_COLOR][it.note.colorIndex]
+                        else NoteColors.noteColor[NoteColors.LIGHT_COLOR][it.note.colorIndex]
+
+                    val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
+                    else R.drawable.ic_lock_black_36dp
+
+                    with(binding) {
+                        cvNoteViewItselfNote.setBackgroundResource(colorNote)
+                        cvNoteViewTitle.setBackgroundResource(colorNote)
+                        ivNoteViewLock.setImageResource(imgLock)
+
+                        tvNoteViewFulldate.text = TimeUtils.getFullDate(it.note.timeStamp)
+                        tvNoteViewTitleNote.text = it.note.titleNote
+                        tvNoteViewItselfNote.text = it.note.itselfNote
+
+                        binding.ivNoteViewLock.visibility = if (it.note.isLocked) View.VISIBLE
+                        else View.INVISIBLE
+                    }
+                }
+            }
         }
     }
 

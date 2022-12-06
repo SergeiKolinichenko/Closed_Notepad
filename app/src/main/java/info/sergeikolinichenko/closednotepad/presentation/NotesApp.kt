@@ -1,7 +1,8 @@
-package info.sergeikolinichenko.closednotepad.presentation.di
+package info.sergeikolinichenko.closednotepad.presentation
 
 import android.app.Application
 import androidx.work.Configuration
+import info.sergeikolinichenko.closednotepad.presentation.di.DaggerApplicationComponent
 import info.sergeikolinichenko.closednotepad.workers.RemovedNoteListWorkerFactory
 import javax.inject.Inject
 
