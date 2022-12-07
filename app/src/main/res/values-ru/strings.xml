@@ -92,6 +92,6 @@
     <string name="sorting_note_titles_on_screen">Сортировка заголовков заметок на экране</string>
     <string name="exit_application">Выйти из приложения</string>
     <string name="nothing_on_clipboard">В буфере обмена ничего нет</string>
-    <string name="authentication_error">Ошибка аутентификации:</string>
-    <string name="authentication_failed">Ошибка аутентификации</string>
+    <string name="authentication_error">Ошибка аутентификации: %1$s. Код ошибки: %2$s. Сообщите, пожалуйста, код ошибки разработчику программы.</string>
+    <string name="authentication_failed">Ошибка аутентификации! Проверьте, пожалуйста, исправность оборудования аутентификации.</string>
 </resources>

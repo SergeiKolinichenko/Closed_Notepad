@@ -40,6 +40,7 @@ class ViewModelNoteEdit @Inject constructor(
 
     private var note: Note? = null
     private var colorIndex: Int = NoteColors.GRAY
+    private var stateShowExtraButton: String = HIDE_EXTRA_BUTTON
 
     fun getNoteEntry() {
         viewModelScope.launch {
@@ -187,8 +188,14 @@ class ViewModelNoteEdit @Inject constructor(
         _stateNoteEdit.value = HideColorButtonsNoteEdit
     }
 
-    fun showExtraFABs() {
-        _stateNoteEdit.value = ShowExtraFABs
+    fun switchExtraFABs() {
+        if (stateShowExtraButton != SHOW_EXTRA_BUTTON) {
+            _stateNoteEdit.value = ShowExtraFABs
+            stateShowExtraButton = SHOW_EXTRA_BUTTON
+        } else {
+            _stateNoteEdit.value = HideExtraFABs
+            stateShowExtraButton = HIDE_EXTRA_BUTTON
+        }
     }
 
     fun hideExtraFABs() {
@@ -201,6 +208,8 @@ class ViewModelNoteEdit @Inject constructor(
 
     companion object {
         private const val MAX_TITLE_LENGTH = 25
+        private const val SHOW_EXTRA_BUTTON = "SHOW_EXTRA_BUTTON"
+        private const val HIDE_EXTRA_BUTTON = "HIDE_EXTRA_BUTTON"
     }
 
 }

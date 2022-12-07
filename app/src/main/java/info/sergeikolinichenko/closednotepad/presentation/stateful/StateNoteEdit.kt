@@ -8,10 +8,10 @@ sealed class StateNoteEdit
 
 class NoteEditNote(val note: Note?): StateNoteEdit()
 class ColorIndex(val index: Int): StateNoteEdit()
+object ShowExtraFABs: StateNoteEdit()
+object HideExtraFABs: StateNoteEdit()
 object Lock: StateNoteEdit()
 object Unlock: StateNoteEdit()
 object RetryNoteListFragment: StateNoteEdit()
 object ShowColorButtonsNoteEdit: StateNoteEdit()
 object HideColorButtonsNoteEdit: StateNoteEdit()
-object ShowExtraFABs: StateNoteEdit()
-object HideExtraFABs: StateNoteEdit()

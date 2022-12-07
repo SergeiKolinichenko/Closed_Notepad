@@ -99,7 +99,7 @@
     <string name="sorting_note_titles_on_screen">Sorting note titles on the screen</string>
     <string name="exit_application">Exit application</string>
     <string name="nothing_on_clipboard">There is nothing on the clipboard</string>
-    <string name="authentication_error">Authentication error:</string>
-    <string name="authentication_failed">Authentication failed</string>
+    <string name="authentication_error">Authentication failed: %1$s. Error code: %2$s. Please report the error code to the program developer.</string>
+    <string name="authentication_failed">Authentication Error! Please check the integrity of the authentication equipment.</string>
 
 </resources>

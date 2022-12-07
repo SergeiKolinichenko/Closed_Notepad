@@ -56,8 +56,11 @@ class BiometricVerification @Inject constructor(
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     showMessage(
-                        fragment.requireActivity().getString(R.string.authentication_error)
-                                +"$errString"
+                        fragment.requireActivity().getString(
+                            R.string.authentication_error,
+                            errString,
+                            errorCode.toString()
+                        )
                     )
                 }
 

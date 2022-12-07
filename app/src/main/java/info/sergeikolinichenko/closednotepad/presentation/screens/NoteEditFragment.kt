@@ -356,7 +356,7 @@ class NoteEditFragment : Fragment() {
             MODE_ADD -> viewModel.addNote(title, itself, isLock)
             MODE_EDIT -> viewModel.editNote(title, itself, isLock)
         }
-        viewModel.showExtraFABs()
+        viewModel.switchExtraFABs()
     }
 
     // select all text note itself
@@ -504,13 +504,13 @@ class NoteEditFragment : Fragment() {
                     }
                 }
                 is ColorIndex -> setColorIndex(it.index)
+                ShowExtraFABs -> showExtraFABs()
+                HideExtraFABs -> hideExtraFABs()
                 Lock -> setLockNote(NOTE_LOCK)
                 Unlock -> setLockNote(NOTE_UNLOCK)
                 RetryNoteListFragment -> retryNoteListFragment()
                 ShowColorButtonsNoteEdit -> showColorButtons()
                 HideColorButtonsNoteEdit -> hideColorButtons()
-                ShowExtraFABs -> showExtraFABs()
-                HideExtraFABs -> hideExtraFABs()
             }
         }
     }
