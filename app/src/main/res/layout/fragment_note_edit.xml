@@ -207,6 +207,115 @@
 
     </LinearLayout>
 
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_edit"
+        style="@style/MyBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
+        app:elevation="10dp"
+        app:fabAlignmentMode="end"
+        app:fabCradleRoundedCornerRadius="2dp"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/choose_all"
+                android:src="@drawable/ic_select_all_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/cut_the_selected_text"
+                android:src="@drawable/ic_content_cut_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/copy_the_selected_text"
+                android:src="@drawable/ic_content_copy_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_paste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/paste_text_from_clipboard"
+                android:src="@drawable/ic_content_paste_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_pallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/change_note_color"
+                android:src="@drawable/ic_palette_black_36dp" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:contentDescription="@string/exit_fragment"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        app:behavior_hideable="true"
+        app:elevation="15dp"
+        app:layout_anchor="@id/bab_note_edit"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:layout_dodgeInsetEdges="bottom"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:clickable="false"
+        android:contentDescription="@string/save_note"
+        android:src="@drawable/ic_content_save_black_48dp"
+        android:visibility="visible"
+        app:elevation="10dp"
+        app:layout_dodgeInsetEdges="bottom"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_not_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:clickable="false"
+        android:contentDescription="@string/don_t_save_note"
+        android:src="@drawable/ic_content_save_off_black_48dp"
+        android:visibility="visible"
+        app:elevation="10dp"
+        app:layout_dodgeInsetEdges="bottom"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_note_edit_color_buttons"
@@ -326,111 +435,5 @@
             app:strokeWidth="1dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bab_note_edit"
-        style="@style/MyBottomAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        app:contentInsetEnd="5dp"
-        app:contentInsetStart="5dp"
-        app:elevation="10dp"
-        app:fabAlignmentMode="end"
-        app:fabCradleRoundedCornerRadius="2dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_edit_select_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/choose_all"
-                android:src="@drawable/ic_select_all_black_36dp" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_edit_cut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/cut_the_selected_text"
-                android:src="@drawable/ic_content_cut_black_36dp" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_edit_copy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/copy_the_selected_text"
-                android:src="@drawable/ic_content_copy_black_36dp" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_edit_paste"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/paste_text_from_clipboard"
-                android:src="@drawable/ic_content_paste_black_36dp" />
-
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/ib_note_edit_pallet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="100dp"
-                android:layout_weight="1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:contentDescription="@string/change_note_color"
-                android:src="@drawable/ic_palette_black_36dp" />
-        </LinearLayout>
-
-    </com.google.android.material.bottomappbar.BottomAppBar>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_edit_exit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondaryVariant"
-        android:contentDescription="@string/exit_fragment"
-        android:src="@drawable/ic_arrow_left_bold_black_48dp"
-        app:behavior_hideable="true"
-        app:elevation="15dp"
-        app:layout_anchor="@id/bab_note_edit"
-        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_edit_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="?attr/colorSecondaryVariant"
-        android:clickable="false"
-        android:contentDescription="@string/save_note"
-        android:src="@drawable/ic_content_save_black_48dp"
-        android:visibility="invisible"
-        app:elevation="10dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_note_edit_not_save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="?attr/colorSecondaryVariant"
-        android:clickable="false"
-        android:contentDescription="@string/don_t_save_note"
-        android:src="@drawable/ic_content_save_off_black_48dp"
-        android:visibility="invisible"
-        app:elevation="10dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

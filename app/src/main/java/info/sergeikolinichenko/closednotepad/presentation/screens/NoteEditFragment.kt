@@ -7,7 +7,6 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
-import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -18,8 +17,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -34,14 +31,13 @@ import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit.Companion.MAX_TITLE_LENGTH
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
-/**
-Editing element of notebook
-create 28.07.2022 18:21 by Sergei Kolinichenko
- **/
+/** Created by Sergei Kolinichenko on 28.07.2022 at 18:21 (GMT+3) **/
 
 class NoteEditFragment : Fragment() {
 
@@ -61,7 +57,6 @@ class NoteEditFragment : Fragment() {
     // mode fragment add or edit
     private var workingMode: String = MODE_UNKNOWN
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
-    private var behaviorBottomAppBar = HideBottomViewOnScrollBehavior<BottomAppBar>()
 
     private val component by lazy {
         (requireActivity().application as NotesApp)
@@ -174,7 +169,14 @@ class NoteEditFragment : Fragment() {
 
     private fun initFabExit() {
         binding.fabNoteEditExit.setOnClickListener {
-            exitFragment()
+            val title = binding.etNoteEditTitle.text.toString()
+            val itself = binding.etNoteEditItself.text.toString()
+            val isLock = binding.tvNoteEditLock.text == resources.getString(R.string.lock_note)
+            when (workingMode) {
+                MODE_ADD -> viewModel.addNote(title, itself, isLock)
+                MODE_EDIT -> viewModel.editNote(title, itself, isLock)
+            }
+            viewModel.switchExtraFABs()
         }
     }
 
@@ -185,12 +187,14 @@ class NoteEditFragment : Fragment() {
                 MODE_EDIT -> viewModel.editNoteDatabase()
             }
         }
+        binding.fabNoteEditSave.isClickable = false
     }
 
     private fun initFabNoSave() {
         binding.fabNoteEditNotSave.setOnClickListener {
             viewModel.retryNoteListFragment()
         }
+        binding.fabNoteEditNotSave.isClickable = false
     }
 
     private fun initBackPressed() {
@@ -198,7 +202,7 @@ class NoteEditFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    exitFragment()
+                    viewModel.switchExtraFABs()
                 }
             }
         )
@@ -215,7 +219,6 @@ class NoteEditFragment : Fragment() {
     private fun initBottomAppBar() {
         initImageBottomAppBar()
         initOnClickListenerBottomAppBar()
-        behaviorBottomAppBar = binding.babNoteEdit.behavior
     }
 
     private fun initImageBottomAppBar() {
@@ -349,18 +352,6 @@ class NoteEditFragment : Fragment() {
         }
     }
 
-    // validating entry in note fields, preparing to exit fragment
-    private fun exitFragment() {
-        val title = binding.etNoteEditTitle.text.toString()
-        val itself = binding.etNoteEditItself.text.toString()
-        val isLock = binding.tvNoteEditLock.text == resources.getString(R.string.lock_note)
-        when (workingMode) {
-            MODE_ADD -> viewModel.addNote(title, itself, isLock)
-            MODE_EDIT -> viewModel.editNote(title, itself, isLock)
-        }
-        viewModel.switchExtraFABs()
-    }
-
     // select all text note itself
     private fun selectAll() {
         val text = binding.etNoteEditItself.text
@@ -434,7 +425,7 @@ class NoteEditFragment : Fragment() {
             val fullString = startString + copyString + endString
 
             var newCursorPosition = startIndex + copyString.length
-            if (view ==  binding.etNoteEditTitle && newCursorPosition > MAX_TITLE_LENGTH) {
+            if (view == binding.etNoteEditTitle && newCursorPosition > MAX_TITLE_LENGTH) {
                 newCursorPosition = MAX_TITLE_LENGTH
             }
 
@@ -448,9 +439,12 @@ class NoteEditFragment : Fragment() {
     }
 
     private fun showColorButtons() {
-        behaviorBottomAppBar.slideDown(binding.babNoteEdit)
-        if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
-            behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
+        lifecycleScope.launch {
+            hideSoftKeyboard()
+            delay(100)
+            if (behaviorColorButtons.state == BottomSheetBehavior.STATE_HIDDEN) {
+                behaviorColorButtons.state = BottomSheetBehavior.STATE_EXPANDED
+            }
         }
     }
 
@@ -458,7 +452,6 @@ class NoteEditFragment : Fragment() {
         if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
             behaviorColorButtons.state = BottomSheetBehavior.STATE_HIDDEN
         }
-        behaviorBottomAppBar.slideUp(binding.babNoteEdit)
     }
 
     private fun launchModes() {
@@ -706,6 +699,7 @@ class NoteEditFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        lifecycleScope.cancel()
     }
 
     companion object {

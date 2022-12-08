@@ -17,10 +17,7 @@ import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefColorIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
-ViewModel of NoteEditFragment
-create 28.07.2022 by Sergei Kolinichenko
- **/
+/** Created by Sergei Kolinichenko on 28.07.2022 at 18:45 (GMT+3) **/
 
 class ViewModelNoteEdit @Inject constructor(
     private val getNoteEntryUseCase: GetNoteUseCase,
@@ -40,7 +37,8 @@ class ViewModelNoteEdit @Inject constructor(
 
     private var note: Note? = null
     private var colorIndex: Int = NoteColors.GRAY
-    private var stateShowExtraButton: String = HIDE_EXTRA_BUTTON
+    private var stateShowExtraButton: String = HIDE_EXTRA_FAB
+    private var haveParsedNote: String = NOT_HAVE_PARSED_NOTE
 
     fun getNoteEntry() {
         viewModelScope.launch {
@@ -58,26 +56,30 @@ class ViewModelNoteEdit @Inject constructor(
     }
 
     fun addNote(inTitle: String?, inItself: String?, isLock: Boolean) {
-        val title = parseString(inTitle)
-        val itself = parseString(inItself)
+        if (haveParsedNote == NOT_HAVE_PARSED_NOTE) {
+            val title = parseString(inTitle)
+            val itself = parseString(inItself)
 
-        if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
-        else note = parseNote(title, itself, isLock)
+            if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
+            else note = parseNote(title, itself, isLock)
+        }
     }
 
     fun editNote(inTitle: String?, inItself: String?, isLock: Boolean) {
-        val title = parseString(inTitle)
-        val itself = parseString(inItself)
-        if (
-            (inTitle == note?.titleNote
-                    && inItself == note?.itselfNote
-                    && isLock == note?.isLocked
-                    && colorIndex == note?.colorIndex)
-            || (title.isEmpty() && itself.isEmpty())
-        ) {
-            retryNoteListFragment()
-        } else {
-            note = parseNote(title, itself, isLock)
+        if (haveParsedNote == NOT_HAVE_PARSED_NOTE) {
+            val title = parseString(inTitle)
+            val itself = parseString(inItself)
+            if (
+                (inTitle == note?.titleNote
+                        && inItself == note?.itselfNote
+                        && isLock == note?.isLocked
+                        && colorIndex == note?.colorIndex)
+                || (title.isEmpty() && itself.isEmpty())
+            ) {
+                retryNoteListFragment()
+            } else {
+                note = parseNote(title, itself, isLock)
+            }
         }
     }
 
@@ -87,6 +89,7 @@ class ViewModelNoteEdit @Inject constructor(
                 addNoteEntryUseCase.invoke(it)
             }
         }
+        haveParsedNote = NOT_HAVE_PARSED_NOTE
         NotesBackupAgent.requestBackup(backupManager)
         retryNoteListFragment()
     }
@@ -97,6 +100,7 @@ class ViewModelNoteEdit @Inject constructor(
                 editNoteEntryUseCase.invoke(it)
             }
         }
+        haveParsedNote = NOT_HAVE_PARSED_NOTE
         NotesBackupAgent.requestBackup(backupManager)
         retryNoteListFragment()
     }
@@ -113,6 +117,7 @@ class ViewModelNoteEdit @Inject constructor(
         if (title.length > MAX_TITLE_LENGTH) {
             title = makeTitle(title)
         }
+        haveParsedNote = HAVE_PARSED_NOTE
         return Note(
             timeStamp = timeStamp,
             titleNote = title,
@@ -189,12 +194,12 @@ class ViewModelNoteEdit @Inject constructor(
     }
 
     fun switchExtraFABs() {
-        if (stateShowExtraButton != SHOW_EXTRA_BUTTON) {
+        if (stateShowExtraButton == HIDE_EXTRA_FAB) {
             _stateNoteEdit.value = ShowExtraFABs
-            stateShowExtraButton = SHOW_EXTRA_BUTTON
+            stateShowExtraButton = SHOW_EXTRA_FAB
         } else {
             _stateNoteEdit.value = HideExtraFABs
-            stateShowExtraButton = HIDE_EXTRA_BUTTON
+            stateShowExtraButton = HIDE_EXTRA_FAB
         }
     }
 
@@ -208,8 +213,10 @@ class ViewModelNoteEdit @Inject constructor(
 
     companion object {
         const val MAX_TITLE_LENGTH = 25
-        private const val SHOW_EXTRA_BUTTON = "SHOW_EXTRA_BUTTON"
-        private const val HIDE_EXTRA_BUTTON = "HIDE_EXTRA_BUTTON"
+        private const val SHOW_EXTRA_FAB = "SHOW_EXTRA_FAB"
+        private const val HIDE_EXTRA_FAB = "HIDE_EXTRA_FAB"
+        private const val HAVE_PARSED_NOTE = "HAVE_PARSED_NOTE"
+        private const val NOT_HAVE_PARSED_NOTE = "NOT_HAVE_PARSED_NOTE"
     }
 
 }
