@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
@@ -31,6 +32,7 @@ import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerific
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit.Companion.MAX_TITLE_LENGTH
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import kotlinx.coroutines.launch
 import java.util.*
@@ -431,7 +433,11 @@ class NoteEditFragment : Fragment() {
             val endString = string?.substring(endIndex)
             val fullString = startString + copyString + endString
 
-            val newCursorPosition = startIndex + copyString.length
+            var newCursorPosition = startIndex + copyString.length
+            if (view ==  binding.etNoteEditTitle && newCursorPosition > MAX_TITLE_LENGTH) {
+                newCursorPosition = MAX_TITLE_LENGTH
+            }
+
 
             view.text?.clear()
             view.text = Editable.Factory.getInstance().newEditable(fullString)

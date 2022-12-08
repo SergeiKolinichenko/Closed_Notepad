@@ -207,7 +207,7 @@ class ViewModelNoteEdit @Inject constructor(
     }
 
     companion object {
-        private const val MAX_TITLE_LENGTH = 25
+        const val MAX_TITLE_LENGTH = 25
         private const val SHOW_EXTRA_BUTTON = "SHOW_EXTRA_BUTTON"
         private const val HIDE_EXTRA_BUTTON = "HIDE_EXTRA_BUTTON"
     }
