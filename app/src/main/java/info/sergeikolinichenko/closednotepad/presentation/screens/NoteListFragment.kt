@@ -4,29 +4,29 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.biometric.BiometricManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteListBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.adapters.notelist.NoteListAdapter
 import info.sergeikolinichenko.closednotepad.presentation.stateful.*
-import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
+import info.sergeikolinichenko.closednotepad.presentation.utils.authUser
+import info.sergeikolinichenko.closednotepad.presentation.utils.readinessCheckBiometric
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteList
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import javax.inject.Inject
@@ -57,15 +57,7 @@ class NoteListFragment : Fragment() {
 
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
 
-    private val component by lazy {
-        (requireActivity().application as NotesApp)
-            .component
-            .fragmentComponentFactory()
-            .create(this)
-    }
-
-    @Inject
-    lateinit var biometricVerification: BiometricVerification
+    private val component by lazy { (requireActivity().application as NotesApp).component }
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -467,6 +459,9 @@ class NoteListFragment : Fragment() {
     private fun removeNotes() {
         if (isSelected) {
             showSnakebar(
+                requireActivity().findViewById(R.id.main_container),
+                binding.fabAddNoteList,
+                isNight,
                 resources.getString(R.string.confirm_remove_notes),
                 R.string.move_note,
                 { viewModel.removeNotes() },
@@ -474,71 +469,24 @@ class NoteListFragment : Fragment() {
         }
     }
 
-    private fun showSnakebar(
-        message: String,
-        textButton: Int,
-        action: () -> Unit,
-        cancel: () -> Unit
-    ) {
-        val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
-        else R.drawable.ic_map_marker_question_outline_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-            .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                    cancel()
-                }
-            })
-            .setAction(textButton) {
-                action()
-            }
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabAddNoteList
-        snackBar.show()
-    }
-
-    private fun showSnakebar(message: String) {
-        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
-        else R.drawable.ic_information_variant_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabAddNoteList
-        snackBar.show()
-    }
-
     private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long) -> Unit) {
-
-        if (biometricVerification.readinessCheckBiometric(::showSnakebar)) {
-            biometricVerification.authUser(timeStamp, act, ::showSnakebar)
+        val check = readinessCheckBiometric(
+            this,
+            BiometricManager.from(requireActivity().application),
+            binding.fabAddNoteList,
+            isNight,
+            ::showSnakebar
+        )
+        if (check) {
+            authUser(
+                this,
+                ContextCompat.getMainExecutor(requireActivity().application),
+                binding.fabAddNoteList,
+                isNight,
+                timeStamp,
+                act,
+                ::showSnakebar
+            )
         }
     }
 

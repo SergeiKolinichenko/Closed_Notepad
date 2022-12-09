@@ -43,9 +43,7 @@ class NotesMenuFragment : Fragment() {
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
     private var behaviorDaySetButtons = BottomSheetBehavior<ConstraintLayout>()
 
-    private val component by lazy {
-        (requireActivity().application as NotesApp).component
-    }
+    private val component by lazy { (requireActivity().application as NotesApp).component }
 
     override fun onAttach(context: Context) {
         component.inject(this)

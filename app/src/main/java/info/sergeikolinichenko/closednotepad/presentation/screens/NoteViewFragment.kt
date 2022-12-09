@@ -21,6 +21,7 @@ import info.sergeikolinichenko.closednotepad.presentation.stateful.EndUsing
 import info.sergeikolinichenko.closednotepad.presentation.stateful.NoteViewNote
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteView
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import javax.inject.Inject
@@ -168,7 +169,12 @@ class NoteViewFragment : Fragment() {
 
         clipboardManager.setPrimaryClip(clip)
 
-        showSnakebar(getString(R.string.copy_text_clipboard))
+        showSnakebar(
+            requireActivity().findViewById(R.id.main_container),
+            binding.fabNoteViewExit,
+            isNight,
+            getString(R.string.copy_text_clipboard)
+        )
     }
 
     private fun sendNoteTo() {
@@ -249,30 +255,6 @@ class NoteViewFragment : Fragment() {
                 fabNoteViewExit.show()
             }
         }
-    }
-
-    private fun showSnakebar(message: String) {
-        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
-        else R.drawable.ic_information_variant_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabNoteViewExit
-        snackBar.show()
     }
 
     private fun observeStateFragment() {

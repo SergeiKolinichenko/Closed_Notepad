@@ -3,27 +3,22 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentTrashCanListBinding
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
-import info.sergeikolinichenko.closednotepad.presentation.adapters.trashcanlist.TrashCanAdapter
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
+import info.sergeikolinichenko.closednotepad.presentation.adapters.trashcanlist.TrashCanAdapter
+import info.sergeikolinichenko.closednotepad.presentation.utils.readinessCheckBiometric
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelTrashCanList
 import javax.inject.Inject
@@ -142,7 +137,7 @@ class TrashCanListFragment : Fragment() {
     private fun initTrashCanClickListeners() {
         adapterTrashCanList.onReNoteClick = {
             if (viewModel.isSelected.value == false || viewModel.isSelected.value == null) {
-                if (it.isLocked) getBiometricSuccess(it.timeStamp)
+                if (it.isLocked) getBiometricSuccess(it.timeStamp, ::launchTrashCanViewFragment)
                 else launchTrashCanViewFragment(it.timeStamp)
             } else {
                 viewModel.selectRemovedNotes(it)
@@ -168,19 +163,25 @@ class TrashCanListFragment : Fragment() {
             imgRecovery = R.drawable.ic_delete_off_black_36dp
         }
         binding.ibTrashCanListDelete.setOnClickListener {
-            showSnackbar(
-                R.string.confirm_deletion_notes,
+            showSnakebar(
+                requireActivity().findViewById(R.id.main_container),
+                binding.fabTrashCanListExit,
+                isNight,
+                resources.getString(R.string.confirm_deletion_notes),
                 R.string.delete_note,
-                { viewModel.reselectRemovedNotes() },
-                { viewModel.deleteRemovedNotes() }
+                { viewModel.deleteRemovedNotes() },
+                { viewModel.reselectRemovedNotes() }
             )
         }
         binding.ibTrashCanListDeleteOff.setOnClickListener {
-            showSnackbar(
-                R.string.confirm_recovery_notes,
+            showSnakebar(
+                requireActivity().findViewById(R.id.main_container),
+                binding.fabTrashCanListExit,
+                isNight,
+                resources.getString(R.string.confirm_recovery_notes),
                 R.string.recovery_note,
-                { viewModel.reselectRemovedNotes() },
-                { viewModel.recoveryRemovedNotes() }
+                { viewModel.recoveryRemovedNotes() },
+                { viewModel.reselectRemovedNotes() }
             )
         }
         binding.ibTrashCanListDelete.isClickable = false
@@ -239,116 +240,25 @@ class TrashCanListFragment : Fragment() {
             .commit()
     }
 
-    private fun getBiometricSuccess(timeStamp: Long) {
-        val biometricManager = BiometricManager.from(requireContext())
-        when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)) {
-            BiometricManager.BIOMETRIC_SUCCESS -> authUser(timeStamp)
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> showSnakebar(
-                getString(R.string.hardware_not_available)
+    private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long) -> Unit) {
+        val check = readinessCheckBiometric(
+            this,
+            BiometricManager.from(requireActivity().application),
+            binding.fabTrashCanListExit,
+            isNight,
+            ::showSnakebar
+        )
+        if (check) {
+            info.sergeikolinichenko.closednotepad.presentation.utils.authUser(
+                this,
+                ContextCompat.getMainExecutor(requireActivity().application),
+                binding.fabTrashCanListExit,
+                isNight,
+                timeStamp,
+                act,
+                ::showSnakebar
             )
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE -> showSnakebar(
-                getString(R.string.hardware_unavailable_later)
-            )
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> //authUser(executor, timeStamp)
-                showSnakebar(getString(R.string.no_blocking_method))
-            BiometricManager.BIOMETRIC_ERROR_SECURITY_UPDATE_REQUIRED ->
-                showSnakebar(getString(R.string.biometrical_error_security))
-            BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED -> {
-                showSnakebar(getString(R.string.boimetric_error_unsuported))
-            }
-            BiometricManager.BIOMETRIC_STATUS_UNKNOWN -> {
-                showSnakebar(getString(R.string.biometric_status_unknoun))
-            }
         }
-    }
-
-    private fun authUser(timeStamp: Long) {
-        val executor = ContextCompat.getMainExecutor(requireContext())
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
-            .setTitle(getString(R.string.authentication_required))
-            .setSubtitle(getString(R.string.important_authentication))
-            .setDescription(getString(R.string.please_authenticate))
-            .setAllowedAuthenticators(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
-            .build()
-        val biomedicalPrompt = BiometricPrompt(this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                    launchTrashCanViewFragment(timeStamp)
-                }
-
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                    showSnakebar("Authentication error: $errString")
-                }
-
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                    showSnakebar("Authentication failed")
-                }
-            })
-        biomedicalPrompt.authenticate(promptInfo)
-    }
-
-    private fun showSnakebar(message: String) {
-        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
-        else R.drawable.ic_information_variant_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabTrashCanListExit
-        snackBar.show()
-    }
-
-    private fun showSnackbar(
-        message: Int,
-        textButton: Int,
-        cancel: () -> Unit,
-        action: () -> Unit
-    ) {
-        val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
-        else R.drawable.ic_map_marker_question_outline_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            resources.getString(message),
-            Snackbar.LENGTH_LONG
-        )
-            .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                    super.onDismissed(transientBottomBar, event)
-                    cancel()
-                }
-            })
-            .setAction(textButton) {
-                action()
-            }
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabTrashCanListExit
-        snackBar.show()
     }
 
     private fun isNightMode() {

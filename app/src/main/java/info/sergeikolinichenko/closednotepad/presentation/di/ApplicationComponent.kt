@@ -23,10 +23,11 @@ interface ApplicationComponent {
     fun inject(fragment: NoteViewFragment)
     fun inject(fragment: TrashCanListFragment)
     fun inject(fragment: TrashCanViewFragment)
+    fun inject(fragment: NoteEditFragment)
+    fun inject(fragment: NoteListFragment)
+    fun inject(fragment: NoteSearchFragment)
 
     fun inject(application: NotesApp)
-
-    fun fragmentComponentFactory(): FragmentComponent.Factory
 
     @Component.Factory
     interface Factory {

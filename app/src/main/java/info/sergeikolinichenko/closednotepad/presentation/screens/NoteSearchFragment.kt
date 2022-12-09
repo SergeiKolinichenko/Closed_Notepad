@@ -3,23 +3,23 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.appcompat.widget.SearchView
+import androidx.biometric.BiometricManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteSearchBinding
-import info.sergeikolinichenko.closednotepad.presentation.adapters.notesearch.NoteSearchAdapter
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
-import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
+import info.sergeikolinichenko.closednotepad.presentation.adapters.notesearch.NoteSearchAdapter
+import info.sergeikolinichenko.closednotepad.presentation.utils.authUser
+import info.sergeikolinichenko.closednotepad.presentation.utils.readinessCheckBiometric
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteSearch
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import javax.inject.Inject
@@ -45,15 +45,7 @@ class NoteSearchFragment : Fragment() {
 
     private var isNight = false
 
-    private val component by lazy {
-        (requireActivity().application as NotesApp)
-            .component
-            .fragmentComponentFactory()
-            .create(this)
-    }
-
-    @Inject
-    lateinit var biometricVerification: BiometricVerification
+    private val component by lazy { (requireActivity().application as NotesApp).component }
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -151,34 +143,24 @@ class NoteSearchFragment : Fragment() {
     }
 
     private fun getBiometricSuccess(timeStamp: Long, act: (tm: Long) -> Unit) {
-
-        if (biometricVerification.readinessCheckBiometric(::showSnakebar)) {
-            biometricVerification.authUser(timeStamp, act, ::showSnakebar)
+        val check = readinessCheckBiometric(
+            this,
+            BiometricManager.from(requireActivity().application),
+            binding.fabNoteSearchExit,
+            isNight,
+            ::showSnakebar
+        )
+        if (check) {
+            authUser(
+                this,
+                ContextCompat.getMainExecutor(requireActivity().application),
+                binding.fabNoteSearchExit,
+                isNight,
+                timeStamp,
+                act,
+                ::showSnakebar
+            )
         }
-    }
-
-    private fun showSnakebar(message: String) {
-        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
-        else R.drawable.ic_information_variant_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabNoteSearchExit
-        snackBar.show()
     }
 
     private fun launchNoteViewFragment(timeStamp: Long) {

@@ -17,15 +17,4 @@ class AppModule {
     fun provideBackupManager(application: Application): BackupManager {
         return BackupManager(application)
     }
-
-    @Provides
-    fun provideBiometricManager(application: Application): BiometricManager {
-        return BiometricManager.from(application)
-    }
-
-    @Provides
-    fun provideExecutor(application: Application): Executor {
-        return ContextCompat.getMainExecutor(application)
-    }
-
 }

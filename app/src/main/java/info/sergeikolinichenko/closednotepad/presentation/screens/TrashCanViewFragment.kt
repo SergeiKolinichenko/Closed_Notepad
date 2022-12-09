@@ -3,21 +3,18 @@ package info.sergeikolinichenko.closednotepad.presentation.screens
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentTrashCanViewBinding
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelTrashCanView
 import javax.inject.Inject
@@ -43,6 +40,7 @@ class TrashCanViewFragment : Fragment() {
     private val component by lazy {
         (requireActivity().application as NotesApp).component
     }
+
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
@@ -122,7 +120,7 @@ class TrashCanViewFragment : Fragment() {
         val imgRemove = if (isNight) R.drawable.ic_delete_white_24dp
         else R.drawable.ic_delete_black_24dp
 
-        with(binding){
+        with(binding) {
             ivTrashCanViewPencil.setImageResource(imgPencil)
             ivTrashCanViewRemove.setImageResource(imgRemove)
         }
@@ -138,16 +136,26 @@ class TrashCanViewFragment : Fragment() {
                 ibTrashCanViewDeleteOff.setImageResource(R.drawable.ic_delete_off_black_36dp)
             }
             ibTrashCanViewDeleteOff.setOnClickListener {
-                showSnackbar(
-                    R.string.confirm_recovery_note,
-                    R.string.recovery_note
-                ) { viewModel.recoveryRemovedNote() }
+                showSnakebar(
+                    requireActivity().findViewById(R.id.main_container),
+                    binding.fabTrashCanViewExit,
+                    isNight,
+                    resources.getString(R.string.confirm_recovery_note),
+                    R.string.recovery_note,
+                    { viewModel.recoveryRemovedNote() },
+                    {}
+                )
             }
             ibTrashCanViewDelete.setOnClickListener {
-                showSnackbar(
-                    R.string.confirm_deletion_note,
-                    R.string.delete_note
-                ) { viewModel.deleteRemovedNote() }
+                showSnakebar(
+                    requireActivity().findViewById(R.id.main_container),
+                    binding.fabTrashCanViewExit,
+                    isNight,
+                    resources.getString(R.string.confirm_deletion_note),
+                    R.string.delete_note,
+                    { viewModel.deleteRemovedNote() },
+                    {}
+                )
             }
         }
     }
@@ -170,7 +178,7 @@ class TrashCanViewFragment : Fragment() {
         )
     }
 
-    private fun onScrollViewChangeListener(){
+    private fun onScrollViewChangeListener() {
         binding.svTrashCanView.viewTreeObserver.addOnScrollChangedListener {
             with(binding) {
                 if (svTrashCanView.scrollY > 0) {
@@ -182,36 +190,6 @@ class TrashCanViewFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun showSnackbar(
-        message: Int,
-        textButton: Int,
-        action: () -> Unit
-    ) {
-        val icon = if (isNight) R.drawable.ic_map_marker_question_outline_black_48dp
-        else R.drawable.ic_map_marker_question_outline_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            resources.getString(message),
-            Snackbar.LENGTH_LONG
-        )
-            .setAction(textButton) {
-                action()
-            }
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabTrashCanViewExit
-        snackBar.show()
     }
 
     private fun isNightMode() {

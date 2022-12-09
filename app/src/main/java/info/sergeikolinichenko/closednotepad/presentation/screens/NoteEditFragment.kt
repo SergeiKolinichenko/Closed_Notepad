@@ -10,24 +10,23 @@ import android.text.Editable
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.biometric.BiometricManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.databinding.FragmentNoteEditBinding
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
 import info.sergeikolinichenko.closednotepad.presentation.stateful.*
-import info.sergeikolinichenko.closednotepad.presentation.utils.BiometricVerification
 import info.sergeikolinichenko.closednotepad.presentation.utils.NoteColors
 import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
+import info.sergeikolinichenko.closednotepad.presentation.utils.readinessCheckBiometric
+import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit.Companion.MAX_TITLE_LENGTH
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
@@ -58,15 +57,7 @@ class NoteEditFragment : Fragment() {
     private var workingMode: String = MODE_UNKNOWN
     private var behaviorColorButtons = BottomSheetBehavior<ConstraintLayout>()
 
-    private val component by lazy {
-        (requireActivity().application as NotesApp)
-            .component
-            .fragmentComponentFactory()
-            .create(this)
-    }
-
-    @Inject
-    lateinit var biometricVerification: BiometricVerification
+    private val component by lazy { (requireActivity().application as NotesApp).component }
 
     override fun onAttach(context: Context) {
         component.inject(this)
@@ -372,7 +363,12 @@ class NoteEditFragment : Fragment() {
             val string = view.text
             string?.substring(startIndex, endIndex)
         } else {
-            showSnakebar(getString(R.string.select_text_to_copy))
+            showSnakebar(
+                requireActivity().findViewById(R.id.main_container),
+                binding.fabNoteEditExit,
+                isNight,
+                getString(R.string.select_text_to_copy)
+            )
             null
         }
     }
@@ -401,7 +397,12 @@ class NoteEditFragment : Fragment() {
             .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clip = ClipData.newPlainText(null, extractedString)
         clipboardManager.setPrimaryClip(clip)
-        showSnakebar(getString(R.string.sel_text_copied_clipboard))
+        showSnakebar(
+            requireActivity().findViewById(R.id.main_container),
+            binding.fabNoteEditExit,
+            isNight,
+            getString(R.string.sel_text_copied_clipboard)
+        )
     }
 
     private fun setCopyFromClip() {
@@ -434,7 +435,12 @@ class NoteEditFragment : Fragment() {
             view.text = Editable.Factory.getInstance().newEditable(fullString)
             view.setSelection(newCursorPosition)
         } else {
-            showSnakebar(getString(R.string.nothing_on_clipboard))
+            showSnakebar(
+                requireActivity().findViewById(R.id.main_container),
+                binding.fabNoteEditExit,
+                isNight,
+                getString(R.string.nothing_on_clipboard)
+            )
         }
     }
 
@@ -664,36 +670,17 @@ class NoteEditFragment : Fragment() {
         }
     }
 
-    private fun showSnakebar(message: String) {
-        val icon = if (isNight) R.drawable.ic_information_variant_black_48dp
-        else R.drawable.ic_information_variant_white_48dp
-
-        val snackBar = Snackbar.make(
-            requireActivity().findViewById(R.id.main_container),
-            message,
-            Snackbar.LENGTH_LONG
-        )
-
-        val snackBarView = snackBar.view
-        val snackBarText = snackBarView.findViewById<TextView>(
-            com.google.android.material.R.id.snackbar_text
-        )
-        snackBarText.setCompoundDrawablesWithIntrinsicBounds(
-            icon, 0, 0, 0
-        )
-        snackBarText.compoundDrawablePadding = 15
-        snackBarText.gravity = Gravity.CENTER
-        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
-        snackBar.anchorView = binding.fabNoteEditExit
-        snackBar.show()
-    }
-
     private fun testBiometricSuccess() {
 
-        if (
-            biometricVerification.readinessCheckBiometric(::showSnakebar)
+        val check = readinessCheckBiometric(
+            this,
+            BiometricManager.from(requireActivity().application),
+            binding.fabNoteEditExit,
+            isNight,
+            ::showSnakebar
         )
-            setLockNote(NOTE_LOCK)
+        if (check) setLockNote(NOTE_LOCK)
+
     }
 
     override fun onDestroyView() {
