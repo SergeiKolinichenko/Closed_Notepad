@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -178,9 +179,9 @@ class NoteViewFragment : Fragment() {
     }
 
     private fun sendNoteTo() {
-        val txtTitleNote = binding.tvNoteViewTitleNote.toString()
+        val txtTitleNote = binding.tvNoteViewTitleNote.text.toString()
 
-        val txtItselfNote = binding.tvNoteViewItselfNote.toString()
+        val txtItselfNote = binding.tvNoteViewItselfNote.text.toString()
 
         sendNoteTo.sendNoteTO(txtTitleNote, txtItselfNote)
     }
