@@ -39,8 +39,40 @@ class ViewModelNoteEdit @Inject constructor(
     private var colorIndex: Int = NoteColors.GRAY
     private var stateShowExtraButton: String = HIDE_EXTRA_FAB
     private var haveParsedNote: String = NOT_HAVE_PARSED_NOTE
+    private var noteTitle: String = EMPTY_STRING
+    private var noteItself: String = EMPTY_STRING
 
-    fun getNoteEntry() {
+    fun getAddNoteMode() {
+        _stateNoteEdit.value = NoteEditNote(
+            Note(
+                timeStamp = timeStamp,
+                titleNote = EMPTY_STRING,
+                itselfNote = EMPTY_STRING,
+                colorIndex = colorIndex,
+                isLocked = NOTE_UNLOCK,
+                isSelected = NOTE_UNSELECTED
+            )
+        )
+    }
+
+    fun getExtraAddNoteMode() {
+        if (noteItself.isNotEmpty()) {
+            _stateNoteEdit.value = NoteEditNote(
+                Note(
+                    timeStamp = timeStamp,
+                    titleNote = noteTitle,
+                    itselfNote = noteItself,
+                    colorIndex = colorIndex,
+                    isLocked = NOTE_UNLOCK,
+                    isSelected = NOTE_UNSELECTED
+                )
+            )
+        } else {
+            _stateNoteEdit.value = RetryNoteListFragment
+        }
+    }
+
+    fun getEditNoteMode() {
         viewModelScope.launch {
             note = getNoteEntryUseCase.invoke(timeStamp)
             _stateNoteEdit.value = NoteEditNote(note = note)
@@ -83,6 +115,21 @@ class ViewModelNoteEdit @Inject constructor(
         }
     }
 
+    fun getAddNoteDatabase() {
+        addNoteDatabase()
+        retryNoteListFragment()
+    }
+
+    fun getExtraAddNoteDatabase() {
+        addNoteDatabase()
+        getNoteListFragment()
+    }
+
+    fun getEditNoteDatabase() {
+        editNoteDatabase()
+        retryNoteListFragment()
+    }
+
     fun addNoteDatabase() {
         note?.let {
             viewModelScope.launch {
@@ -91,7 +138,6 @@ class ViewModelNoteEdit @Inject constructor(
         }
         haveParsedNote = NOT_HAVE_PARSED_NOTE
         NotesBackupAgent.requestBackup(backupManager)
-        retryNoteListFragment()
     }
 
     fun editNoteDatabase() {
@@ -102,7 +148,6 @@ class ViewModelNoteEdit @Inject constructor(
         }
         haveParsedNote = NOT_HAVE_PARSED_NOTE
         NotesBackupAgent.requestBackup(backupManager)
-        retryNoteListFragment()
     }
 
     private fun parseNote(inTitle: String, inItself: String, isLock: Boolean): Note {
@@ -211,12 +256,27 @@ class ViewModelNoteEdit @Inject constructor(
         _stateNoteEdit.value = RetryNoteListFragment
     }
 
+    fun getNoteListFragment() {
+        _stateNoteEdit.value = GetNoteListFragment
+    }
+
+    fun setNoteTitle(title: String) {
+        noteTitle = title
+    }
+
+    fun setNoteItself(itself: String) {
+        noteItself = itself
+    }
+
     companion object {
         const val MAX_TITLE_LENGTH = 25
         private const val SHOW_EXTRA_FAB = "SHOW_EXTRA_FAB"
         private const val HIDE_EXTRA_FAB = "HIDE_EXTRA_FAB"
         private const val HAVE_PARSED_NOTE = "HAVE_PARSED_NOTE"
         private const val NOT_HAVE_PARSED_NOTE = "NOT_HAVE_PARSED_NOTE"
+        private const val NOTE_UNLOCK = false
+        private const val NOTE_UNSELECTED = false
+        const val EMPTY_STRING = ""
     }
 
 }

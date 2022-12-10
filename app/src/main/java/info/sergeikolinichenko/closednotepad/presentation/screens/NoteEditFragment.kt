@@ -28,6 +28,7 @@ import info.sergeikolinichenko.closednotepad.presentation.utils.TimeUtils
 import info.sergeikolinichenko.closednotepad.presentation.utils.readinessCheckBiometric
 import info.sergeikolinichenko.closednotepad.presentation.utils.showSnakebar
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit.Companion.EMPTY_STRING
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNoteEdit.Companion.MAX_TITLE_LENGTH
 import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
 import kotlinx.coroutines.cancel
@@ -92,10 +93,6 @@ class NoteEditFragment : Fragment() {
         initFabSave()
         initFabNoSave()
         launchModes()
-    }
-
-    private fun getNoteEntry() {
-        viewModel.getNoteEntry()
     }
 
     // hide edit popup menu title note EditText
@@ -165,6 +162,7 @@ class NoteEditFragment : Fragment() {
             val isLock = binding.tvNoteEditLock.text == resources.getString(R.string.lock_note)
             when (workingMode) {
                 MODE_ADD -> viewModel.addNote(title, itself, isLock)
+                MODE_EXTRA_ADD -> viewModel.addNote(title, itself, isLock)
                 MODE_EDIT -> viewModel.editNote(title, itself, isLock)
             }
             viewModel.switchExtraFABs()
@@ -174,8 +172,9 @@ class NoteEditFragment : Fragment() {
     private fun initFabSave() {
         binding.fabNoteEditSave.setOnClickListener {
             when (workingMode) {
-                MODE_ADD -> viewModel.addNoteDatabase()
-                MODE_EDIT -> viewModel.editNoteDatabase()
+                MODE_ADD -> viewModel.getAddNoteDatabase()
+                MODE_EXTRA_ADD -> viewModel.getExtraAddNoteDatabase()
+                MODE_EDIT -> viewModel.getEditNoteDatabase()
             }
         }
         binding.fabNoteEditSave.isClickable = false
@@ -183,7 +182,11 @@ class NoteEditFragment : Fragment() {
 
     private fun initFabNoSave() {
         binding.fabNoteEditNotSave.setOnClickListener {
-            viewModel.retryNoteListFragment()
+            when(workingMode) {
+                MODE_ADD -> viewModel.retryNoteListFragment()
+                MODE_EXTRA_ADD -> viewModel.getNoteListFragment()
+                MODE_EDIT -> viewModel.retryNoteListFragment()
+            }
         }
         binding.fabNoteEditNotSave.isClickable = false
     }
@@ -464,6 +467,7 @@ class NoteEditFragment : Fragment() {
         when (workingMode) {
             MODE_ADD -> launchAddMode()
             MODE_EDIT -> launchEditMode()
+            MODE_EXTRA_ADD -> launchExtraAddMode()
         }
     }
 
@@ -471,16 +475,21 @@ class NoteEditFragment : Fragment() {
         viewModel.setTimeStamp(Date().time)
         setLockNote(NOTE_UNLOCK)
         viewModel.getDefaultColorIndex()
+        viewModel.getAddNoteMode()
 
-        with(binding) {
-            tvNoteEditFullDate.text = TimeUtils.getFullDate(viewModel.timeStamp)
-            etNoteEditItself.requestFocus()
-            showSoftKeyboard()
-        }
+        binding.etNoteEditItself.requestFocus()
+        showSoftKeyboard()
+    }
+
+    private fun launchExtraAddMode() {
+        viewModel.setTimeStamp(Date().time)
+        setLockNote(NOTE_UNLOCK)
+        viewModel.getDefaultColorIndex()
+        viewModel.getExtraAddNoteMode()
     }
 
     private fun launchEditMode() {
-        getNoteEntry()
+        viewModel.getEditNoteMode()
     }
 
     private fun setNote(note: Note) {
@@ -506,6 +515,7 @@ class NoteEditFragment : Fragment() {
                 is NoteEditNote -> {
                     it.note?.let {
                         setNote(it)
+                        setColorIndex(it.colorIndex)
                     }
                 }
                 is ColorIndex -> setColorIndex(it.index)
@@ -514,6 +524,7 @@ class NoteEditFragment : Fragment() {
                 Lock -> setLockNote(NOTE_LOCK)
                 Unlock -> setLockNote(NOTE_UNLOCK)
                 RetryNoteListFragment -> retryNoteListFragment()
+                GetNoteListFragment -> launchNoteListFragment()
                 ShowColorButtonsNoteEdit -> showColorButtons()
                 HideColorButtonsNoteEdit -> hideColorButtons()
             }
@@ -555,7 +566,7 @@ class NoteEditFragment : Fragment() {
             throw RuntimeException("Param working mode is absent")
         }
         val mode = args.getString(WORKING_MODE)
-        if (mode != MODE_ADD && mode != MODE_EDIT) {
+        if (mode != MODE_ADD && mode != MODE_EDIT && mode != MODE_EXTRA_ADD) {
             throw RuntimeException("Unknown working mode $mode")
         }
         workingMode = mode
@@ -565,6 +576,9 @@ class NoteEditFragment : Fragment() {
                 throw RuntimeException("Arguments don't contains timeStamp")
             }
             viewModel.setTimeStamp(args.getLong(TIME_STAMP))
+        } else if (workingMode == MODE_EXTRA_ADD) {
+            viewModel.setNoteTitle(args.getString(NOTE_TITLE, EMPTY_STRING))
+            viewModel.setNoteItself(args.getString(NOTE_ITSELF, EMPTY_STRING))
         }
     }
 
@@ -576,6 +590,19 @@ class NoteEditFragment : Fragment() {
             NoteListFragment.NAME,
             0
         )
+    }
+
+    private fun launchNoteListFragment() {
+        requireActivity().supportFragmentManager.popBackStack()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.main_container,
+                NoteListFragment.newInstance(), NoteListFragment.NAME
+            )
+            .addToBackStack(
+                NoteListFragment.NAME
+            )
+            .commit()
     }
 
     private fun isNightMode() {
@@ -696,7 +723,10 @@ class NoteEditFragment : Fragment() {
         private const val TIME_STAMP = "time_stamp"
         private const val MODE_ADD = "add_mode"
         private const val MODE_EDIT = "edit_mode"
+        private const val MODE_EXTRA_ADD = "MODE_EXTRA_ADD"
         private const val WORKING_MODE = "working_mode"
+        private const val NOTE_TITLE = "NOTE_TITLE"
+        private const val NOTE_ITSELF = "NOTE_ITSELF"
         private const val MODE_UNKNOWN = ""
         private const val NOTE_UNLOCK = false
         private const val NOTE_LOCK = true
@@ -715,6 +745,18 @@ class NoteEditFragment : Fragment() {
         fun newInstanceAddMode() = NoteEditFragment().apply {
             arguments = Bundle().apply {
                 putString(WORKING_MODE, MODE_ADD)
+            }
+        }
+
+        @JvmStatic
+        fun newInstanceExtraAddMode(
+            noteTitle: String,
+            noteItself: String
+        ) = NoteEditFragment().apply {
+            arguments = Bundle().apply {
+                putString(WORKING_MODE, MODE_EXTRA_ADD)
+                putString(NOTE_TITLE, noteTitle)
+                putString(NOTE_ITSELF, noteItself)
             }
         }
     }
