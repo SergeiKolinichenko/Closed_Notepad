@@ -95,6 +95,7 @@ class ViewModelNoteEdit @Inject constructor(
             if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
             else note = parseNote(title, itself, isLock)
         }
+        _stateNoteEdit.value = NoteEditNote(note = note)
     }
 
     fun editNote(inTitle: String?, inItself: String?, isLock: Boolean) {
@@ -111,6 +112,7 @@ class ViewModelNoteEdit @Inject constructor(
                 retryNoteListFragment()
             } else {
                 note = parseNote(title, itself, isLock)
+                _stateNoteEdit.value = NoteEditNote(note = note)
             }
         }
     }
@@ -130,7 +132,7 @@ class ViewModelNoteEdit @Inject constructor(
         retryNoteListFragment()
     }
 
-    fun addNoteDatabase() {
+    private fun addNoteDatabase() {
         note?.let {
             viewModelScope.launch {
                 addNoteEntryUseCase.invoke(it)
@@ -140,7 +142,7 @@ class ViewModelNoteEdit @Inject constructor(
         NotesBackupAgent.requestBackup(backupManager)
     }
 
-    fun editNoteDatabase() {
+    private fun editNoteDatabase() {
         note?.let {
             viewModelScope.launch {
                 editNoteEntryUseCase.invoke(it)
@@ -250,6 +252,7 @@ class ViewModelNoteEdit @Inject constructor(
 
     fun hideExtraFABs() {
         _stateNoteEdit.value = HideExtraFABs
+        stateShowExtraButton = HIDE_EXTRA_FAB
     }
 
     fun retryNoteListFragment() {

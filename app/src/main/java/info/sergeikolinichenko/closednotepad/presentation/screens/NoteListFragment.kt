@@ -131,10 +131,13 @@ class NoteListFragment : Fragment() {
             } else {
                 ivOutlineNoteList.setImageResource(R.drawable.ic_exit_to_app_black_36dp)
             }
+
             setImageSortVariant()
+
             ivOutlineNoteList.setOnClickListener {
-                finishApp.finishApp()
+                finishApp.finishApp()   // exit app in main_activity
             }
+
             ivNoteListSortShown.setOnClickListener {
                 if (clNoteListSort.isClickable) {
                     viewModel.hideOrderButtons()
@@ -142,6 +145,7 @@ class NoteListFragment : Fragment() {
                     viewModel.showOrderButtons()
                 }
             }
+
         }
     }
 
@@ -179,6 +183,7 @@ class NoteListFragment : Fragment() {
 
     private fun initBottomAppBar() {
         with(binding) {
+
             if (isNight) {
                 ibNoteListMenu.setImageResource(R.drawable.ic_menu_white_36dp)
                 ibNoteListMagnify.setImageResource(R.drawable.ic_magnify_white_36dp)
@@ -190,9 +195,11 @@ class NoteListFragment : Fragment() {
                 imgDelete = R.drawable.ic_delete_black_36dp
                 imgPallet = R.drawable.ic_palette_black_36dp
             }
+
             ibNoteListMenu.setOnClickListener {
                 launchMenuFragment()
             }
+
             ibNoteListPalette.setOnClickListener {
                 if (behaviorColorButtons.state == BottomSheetBehavior.STATE_EXPANDED) {
                     viewModel.hideColorButtons()
@@ -200,12 +207,15 @@ class NoteListFragment : Fragment() {
                     viewModel.showColorButtons()
                 }
             }
+
             ibNoteListDelete.setOnClickListener {
                 removeNotes()
             }
+
             ibNoteListMagnify.setOnClickListener {
                 launchNoteSearchFragment()
             }
+
         }
     }
 
@@ -215,6 +225,7 @@ class NoteListFragment : Fragment() {
     }
 
     private fun initNoteClickListeners() {
+
         adapterNoteList.onNoteClick = {
             if (isSelected) {
                 // Deselecting elements collections
@@ -224,15 +235,18 @@ class NoteListFragment : Fragment() {
                 if (it.isLocked) getBiometricSuccess(it.timeStamp, ::launchNoteViewFragment)
                 else launchNoteViewFragment(it.timeStamp)
 
+                // if fabAddNoteList and babNoteList are hide show them
                 if (binding.babNoteList.isScrolledDown) {
                     showFabAndBab()
                 }
             }
         }
+
         adapterNoteList.onNoteLongClick = {
             // Selecting elements collections
             viewModel.selectNotes(it)
         }
+
     }
 
     private fun observeStateNoteList() {
@@ -263,12 +277,15 @@ class NoteListFragment : Fragment() {
     }
 
     private fun setStateSelected() {
+
         with(binding) {
             ibNoteListDelete.setImageResource(imgDelete)
             ibNoteListPalette.setImageResource(imgPallet)
             ibNoteListDelete.isClickable = true
             ibNoteListPalette.isClickable = true
         }
+
+        // if fabAddNoteList and babNoteList are hide show them
         if (binding.babNoteList.isScrolledDown) {
             showFabAndBab()
             wasBabHiden = true
@@ -282,6 +299,7 @@ class NoteListFragment : Fragment() {
             ibNoteListDelete.isClickable = false
             ibNoteListPalette.isClickable = false
         }
+        // if fabAddNoteList and babNoteList are show and they were hide before, hide them
         if (binding.babNoteList.isScrolledUp && wasBabHiden) {
             hideFabAndBab()
             wasBabHiden = false
@@ -430,10 +448,13 @@ class NoteListFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!isSelected) {
                     if (dy > 0) {
+
+                        // if fabAddNoteList and babNoteList are show hide them
                         if (binding.babNoteList.isScrolledUp) {
                             hideFabAndBab()
                         }
                     } else {
+                        // if fabAddNoteList and babNoteList are hide show them
                         if (binding.babNoteList.isScrolledDown) {
                             showFabAndBab()
                         }
