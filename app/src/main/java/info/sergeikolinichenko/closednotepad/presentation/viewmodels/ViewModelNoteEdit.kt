@@ -88,32 +88,34 @@ class ViewModelNoteEdit @Inject constructor(
     }
 
     fun addNote(inTitle: String?, inItself: String?, isLock: Boolean) {
-        if (haveParsedNote == NOT_HAVE_PARSED_NOTE) {
-            val title = parseString(inTitle)
-            val itself = parseString(inItself)
+        val title = parseString(inTitle)
+        val itself = parseString(inItself)
 
-            if (title.isEmpty() && itself.isEmpty()) retryNoteListFragment()
-            else note = parseNote(title, itself, isLock)
-        }
+        if (title.isEmpty()
+            && itself.isEmpty()
+            && haveParsedNote == NOT_HAVE_PARSED_NOTE
+        )
+            retryNoteListFragment()
+        else note = parseNote(title, itself, isLock)
         _stateNoteEdit.value = NoteEditNote(note = note)
     }
 
     fun editNote(inTitle: String?, inItself: String?, isLock: Boolean) {
-        if (haveParsedNote == NOT_HAVE_PARSED_NOTE) {
-            val title = parseString(inTitle)
-            val itself = parseString(inItself)
-            if (
-                (inTitle == note?.titleNote
-                        && inItself == note?.itselfNote
-                        && isLock == note?.isLocked
-                        && colorIndex == note?.colorIndex)
-                || (title.isEmpty() && itself.isEmpty())
-            ) {
-                retryNoteListFragment()
-            } else {
-                note = parseNote(title, itself, isLock)
-                _stateNoteEdit.value = NoteEditNote(note = note)
-            }
+        val title = parseString(inTitle)
+        val itself = parseString(inItself)
+        if (
+            (inTitle == note?.titleNote
+                    && inItself == note?.itselfNote
+                    && isLock == note?.isLocked
+                    && colorIndex == note?.colorIndex)
+            || (title.isEmpty()
+                    && itself.isEmpty()
+                    && haveParsedNote == NOT_HAVE_PARSED_NOTE)
+        ) {
+            retryNoteListFragment()
+        } else {
+            note = parseNote(title, itself, isLock)
+            _stateNoteEdit.value = NoteEditNote(note = note)
         }
     }
 

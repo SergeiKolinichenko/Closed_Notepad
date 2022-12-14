@@ -19,7 +19,7 @@ android {
         applicationId "info.sergeikolinichenko.closednotepad"
         minSdk 23
         targetSdk 32
-        versionCode 5
+        versionCode 6
         versionName "2.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
