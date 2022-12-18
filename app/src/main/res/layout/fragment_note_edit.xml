@@ -103,8 +103,9 @@
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
                                 android:padding="3dp"
-                                android:textSize="14sp"
                                 android:textStyle="bold|italic"
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="16sp"
                                 tools:text="13.10.1961 23:23" />
 
                         </LinearLayout>
@@ -143,9 +144,10 @@
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="5dp"
                                 android:gravity="end|center_vertical"
-                                android:textSize="14sp"
                                 android:textStyle="bold|italic"
-                                tools:text="@string/lock_note" />
+                                app:autoSizeTextType="uniform"
+                                app:autoSizeMaxTextSize="16sp"
+                                tools:text="Разблокировано" />
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/iv_note_edit_lock"
