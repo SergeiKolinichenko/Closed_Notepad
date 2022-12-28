@@ -1,14 +1,18 @@
 package info.sergeikolinichenko.closednotepad.presentation.utils
 
+import android.os.Build
+import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import info.sergeikolinichenko.closednotepad.R
 
 /** Created by Sergei Kolinichenko on 09.12.2022 at 12:50 (GMT+3) **/
-
 
 fun showSnakebar(
     viewContainer: View,
@@ -32,6 +36,11 @@ fun showSnakebar(
     snackBarText.setCompoundDrawablesWithIntrinsicBounds(
         icon, 0, 0, 0
     )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        snackBarText.setAutoSizeTextTypeWithDefaults(
+            TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        )
+    }
     snackBarText.compoundDrawablePadding = 5
     snackBarText.gravity = Gravity.CENTER
     snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
@@ -72,6 +81,11 @@ fun showSnakebar(
     snackBarText.setCompoundDrawablesWithIntrinsicBounds(
         icon, 0, 0, 0
     )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        snackBarText.setAutoSizeTextTypeWithDefaults(
+            TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        )
+    }
     snackBarText.compoundDrawablePadding = 5
     snackBarText.gravity = Gravity.CENTER
     snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE

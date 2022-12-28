@@ -707,7 +707,6 @@ class NoteEditFragment : Fragment() {
             ::showSnakebar
         )
         if (check) setLockNote(NOTE_LOCK)
-
     }
 
     override fun onDestroyView() {

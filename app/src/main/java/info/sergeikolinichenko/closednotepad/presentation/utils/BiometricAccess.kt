@@ -19,9 +19,13 @@ fun readinessCheckBiometric(
 ):Boolean {
     var result = false
 
-    val container = fragment.requireActivity().findViewById<FragmentContainerView>(R.id.main_container)
+    val container = fragment.requireActivity()
+        .findViewById<FragmentContainerView>(R.id.main_container)
 
-    when (biometricManager.canAuthenticate(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)) {
+    when (biometricManager.canAuthenticate(
+        BiometricManager.Authenticators.DEVICE_CREDENTIAL or
+                BiometricManager.Authenticators.BIOMETRIC_WEAK)
+    ) {
         BiometricManager.BIOMETRIC_SUCCESS -> result = true
         BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
             showMessage(
@@ -76,13 +80,17 @@ fun authUser(
     showMessage:(viewContainer: View, anchorObject: View, isNight: Boolean, message: String)-> Unit
 ) {
 
-    val container = fragment.requireActivity().findViewById<FragmentContainerView>(R.id.main_container)
+    val container = fragment.requireActivity()
+        .findViewById<FragmentContainerView>(R.id.main_container)
 
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
         .setTitle(fragment.requireActivity().getString(R.string.authentication_required))
         .setSubtitle(fragment.requireActivity().getString(R.string.important_authentication))
         .setDescription(fragment.requireActivity().getString(R.string.please_authenticate))
-        .setAllowedAuthenticators(BiometricManager.Authenticators.DEVICE_CREDENTIAL or BiometricManager.Authenticators.BIOMETRIC_WEAK)
+        .setAllowedAuthenticators(
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL or
+                    BiometricManager.Authenticators.BIOMETRIC_WEAK
+        )
         .build()
     val biomedicalPrompt = BiometricPrompt(fragment, executor,
         object : BiometricPrompt.AuthenticationCallback() {
