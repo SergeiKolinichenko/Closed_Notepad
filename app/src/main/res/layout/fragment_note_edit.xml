@@ -57,6 +57,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:background="@android:color/transparent"
@@ -66,7 +67,7 @@
                         android:id="@+id/cv_note_edit_create"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="2dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginEnd="2dp"
                         android:layout_marginBottom="4dp"
@@ -86,6 +87,7 @@
                             android:layout_marginEnd="5dp"
                             android:layout_marginBottom="1dp"
                             android:background="@android:color/transparent"
+                            android:gravity="start|center_vertical"
                             android:orientation="horizontal">
 
                             <androidx.appcompat.widget.AppCompatImageView
@@ -93,19 +95,23 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_marginEnd="4dp"
+                                android:scaleType="centerInside"
                                 android:src="@drawable/ic_pencil_black_36dp" />
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/tv_note_edit_full_date"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="start|center_vertical"
                                 android:layout_weight="1"
                                 android:gravity="center_vertical"
+                                android:lines="1"
                                 android:padding="3dp"
                                 android:textStyle="bold|italic"
-                                app:autoSizeTextType="uniform"
                                 app:autoSizeMaxTextSize="16sp"
+                                app:autoSizeMinTextSize="8sp"
+                                app:autoSizeStepGranularity="2sp"
+                                app:autoSizeTextType="uniform"
                                 tools:text="13.10.1961 23:23" />
 
                         </LinearLayout>
@@ -131,29 +137,34 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="end"
-                            android:layout_marginStart="5dp"
+                            android:layout_marginStart="2dp"
                             android:layout_marginTop="1dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginEnd="2dp"
                             android:layout_marginBottom="1dp"
                             android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical"
                             android:orientation="horizontal">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:id="@+id/tv_note_edit_lock"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_marginEnd="5dp"
-                                android:gravity="end|center_vertical"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="2dp"
+                                android:layout_weight="1"
+                                android:lines="1"
                                 android:textStyle="bold|italic"
-                                app:autoSizeTextType="uniform"
                                 app:autoSizeMaxTextSize="16sp"
+                                app:autoSizeMinTextSize="8sp"
+                                app:autoSizeStepGranularity="2sp"
+                                app:autoSizeTextType="uniform"
                                 tools:text="Разблокировано" />
 
                             <androidx.appcompat.widget.AppCompatImageView
                                 android:id="@+id/iv_note_edit_lock"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="match_parent"
                                 android:layout_marginStart="5dp"
+                                android:scaleType="centerInside"
                                 android:src="@drawable/ic_lock_black_36dp"
                                 android:visibility="visible" />
 
@@ -192,15 +203,15 @@
                 android:overScrollMode="always"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:textSize="22sp"/>
+                android:textSize="22sp" />
 
             <view
                 android:id="@+id/tv_note_edit_itself"
                 class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="2dp"
                 android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="4dp"
                 android:background="@android:color/transparent"
                 android:textSize="22sp" />
@@ -287,7 +298,7 @@
         app:elevation="15dp"
         app:layout_anchor="@id/bab_note_edit"
         app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
-        app:layout_dodgeInsetEdges="bottom"/>
+        app:layout_dodgeInsetEdges="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_note_edit_save"
@@ -302,7 +313,7 @@
         android:src="@drawable/ic_content_save_black_48dp"
         android:visibility="visible"
         app:elevation="10dp"
-        app:layout_dodgeInsetEdges="bottom"/>
+        app:layout_dodgeInsetEdges="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_note_edit_not_save"
@@ -317,7 +328,7 @@
         android:src="@drawable/ic_content_save_off_black_48dp"
         android:visibility="visible"
         app:elevation="10dp"
-        app:layout_dodgeInsetEdges="bottom"/>
+        app:layout_dodgeInsetEdges="bottom" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_note_edit_color_buttons"

@@ -278,6 +278,9 @@ class NoteViewFragment : Fragment() {
         val imgLock = if (isNight) R.drawable.ic_lock_white_36dp
         else R.drawable.ic_lock_black_36dp
 
+        val imgUnlock = if (isNight) R.drawable.ic_lock_open_white_36dp
+        else R.drawable.ic_lock_open_black_36dp
+
         with(binding) {
             cvNoteViewItselfNote.setBackgroundResource(colorNote)
             cvNoteViewTitle.setBackgroundResource(colorNote)
@@ -287,8 +290,14 @@ class NoteViewFragment : Fragment() {
             tvNoteViewTitleNote.text = note.titleNote
             tvNoteViewItselfNote.text = note.itselfNote
 
-            binding.ivNoteViewLock.visibility = if (note.isLocked) View.VISIBLE
-            else View.INVISIBLE
+            if (note.isLocked) {
+                ivNoteViewLock.setImageResource(imgLock)
+                tvNoteViewLock.text = requireActivity().resources.getString(R.string.lock_note)
+            } else {
+                ivNoteViewLock.setImageResource(imgUnlock)
+                tvNoteViewLock.text = requireActivity().resources.getString(R.string.unlock_note)
+            }
+
         }
     }
 

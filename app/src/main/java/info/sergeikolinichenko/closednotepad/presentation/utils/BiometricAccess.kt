@@ -5,7 +5,6 @@ import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import info.sergeikolinichenko.closednotepad.R
 import java.util.concurrent.Executor
 

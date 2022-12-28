@@ -32,7 +32,7 @@ fun showSnakebar(
     snackBarText.setCompoundDrawablesWithIntrinsicBounds(
         icon, 0, 0, 0
     )
-    snackBarText.compoundDrawablePadding = 15
+    snackBarText.compoundDrawablePadding = 5
     snackBarText.gravity = Gravity.CENTER
     snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
     snackBar.anchorView = anchorObject
@@ -72,7 +72,7 @@ fun showSnakebar(
     snackBarText.setCompoundDrawablesWithIntrinsicBounds(
         icon, 0, 0, 0
     )
-    snackBarText.compoundDrawablePadding = 15
+    snackBarText.compoundDrawablePadding = 5
     snackBarText.gravity = Gravity.CENTER
     snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_SLIDE
     snackBar.anchorView = anchorObject
