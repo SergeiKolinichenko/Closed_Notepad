@@ -66,15 +66,6 @@
     <string name="days_before_deletion_90">90 дней</string>
     <string name="days_before_deletion_180">180 дней</string>
     <string name="days_before_deletion_360">360 дней</string>
-    <string name="hardware_not_available">Биометрическое оборудование отсутствует на этом устройстве.</string>
-    <string name="hardware_unavailable_later">Аппаратное обеспечение недоступно. Попробуйте позже.</string>
-    <string name="no_blocking_method">В настройках \"Безопасность - Защита устройства\" отсутствует способ блокировки.</string>
-    <string name="biometrical_error_security">Обнаружена уязвимость в системе безопасности, и датчик недоступен, пока эта проблема не будет устранена в обновлении для системы безопасности.</string>
-    <string name="biometric_status_unknoun">Неизвестный статус биметрического оборудования, обратитесь к поставщику устройства.</string>
-    <string name="boimetric_error_unsuported">Невозможно пройти аутентификацию, поскольку указанные параметры несовместимы с текущей версией Android.</string>
-    <string name="authentication_required">Авторизация!</string>
-    <string name="please_authenticate">Пожалуйста, авторизируйтесь, чтобы иметь возможность просматривать заблокированные заметки.</string>
-    <string name="important_authentication">Требуется аутентификация.</string>
     <string name="manual_delete_trash">Самостоятельное удаление заметок из корзины</string>
     <string name="enter_note_text">Введите текст заметки</string>
     <string name="enter_note_title">Введите заголовок</string>
@@ -92,6 +83,15 @@
     <string name="sorting_note_titles_on_screen">Сортировка заголовков заметок на экране</string>
     <string name="exit_application">Выйти из приложения</string>
     <string name="nothing_on_clipboard">В буфере обмена ничего нет</string>
+    <string name="hardware_not_available">Биометрическое оборудование отсутствует на этом устройстве.</string>
+    <string name="hardware_unavailable_later">Аппаратное обеспечение недоступно. Попробуйте позже.</string>
+    <string name="no_blocking_method">В настройках \"Безопасность - Защита устройства\" отсутствует способ блокировки.</string>
+    <string name="biometrical_error_security">Обнаружена уязвимость в системе безопасности, и датчик недоступен, пока эта проблема не будет устранена в обновлении для системы безопасности.</string>
+    <string name="biometric_status_unknoun">Неизвестный статус биметрического оборудования, обратитесь к поставщику устройства.</string>
+    <string name="boimetric_error_unsuported">Невозможно пройти аутентификацию, поскольку указанные параметры несовместимы с текущей версией Android.</string>
+    <string name="please_authenticate">Пожалуйста, авторизируйтесь, чтобы иметь возможность просматривать заблокированные заметки.</string>
+    <string name="important_authentication">Требуется аутентификация.</string>
+    <string name="authentication_required">Авторизация!</string>
     <string name="authentication_error">Ошибка аутентификации: %1$s. Код ошибки: %2$s. Сообщите, пожалуйста, код ошибки разработчику программы.</string>
     <string name="authentication_failed">Ошибка аутентификации! Проверьте, пожалуйста, исправность оборудования аутентификации.</string>
 </resources>

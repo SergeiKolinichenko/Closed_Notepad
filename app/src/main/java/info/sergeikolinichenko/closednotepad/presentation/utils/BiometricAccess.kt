@@ -2,6 +2,8 @@ package info.sergeikolinichenko.closednotepad.presentation.utils
 
 import android.view.View
 import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_WEAK
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -22,9 +24,7 @@ fun readinessCheckBiometric(
     val container = fragment.requireActivity()
         .findViewById<FragmentContainerView>(R.id.main_container)
 
-    when (biometricManager.canAuthenticate(
-        BiometricManager.Authenticators.DEVICE_CREDENTIAL or
-                BiometricManager.Authenticators.BIOMETRIC_WEAK)
+    when (biometricManager.canAuthenticate(DEVICE_CREDENTIAL or BIOMETRIC_WEAK)
     ) {
         BiometricManager.BIOMETRIC_SUCCESS -> result = true
         BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
@@ -87,10 +87,7 @@ fun authUser(
         .setTitle(fragment.requireActivity().getString(R.string.authentication_required))
         .setSubtitle(fragment.requireActivity().getString(R.string.important_authentication))
         .setDescription(fragment.requireActivity().getString(R.string.please_authenticate))
-        .setAllowedAuthenticators(
-            BiometricManager.Authenticators.DEVICE_CREDENTIAL or
-                    BiometricManager.Authenticators.BIOMETRIC_WEAK
-        )
+        .setAllowedAuthenticators( DEVICE_CREDENTIAL or BIOMETRIC_WEAK )
         .build()
     val biomedicalPrompt = BiometricPrompt(fragment, executor,
         object : BiometricPrompt.AuthenticationCallback() {
