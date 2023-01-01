@@ -88,6 +88,7 @@ class NoteViewFragment : Fragment() {
         initBackPressed()
         initBottomAppBar()
         initFab()
+        initNoteInfoViewFontSize()
     }
 
     override fun onDestroyView() {
@@ -214,6 +215,18 @@ class NoteViewFragment : Fragment() {
     private fun initFab() {
         binding.fabNoteViewExit.setOnClickListener {
             retryPreviousFragment()
+        }
+    }
+
+    private fun initNoteInfoViewFontSize() {
+        with(binding) {
+            val sizeFontTextDate  = tvNoteViewFulldate.textSize
+            val sizeFontTextLock  = tvNoteViewLock.textSize
+            if (sizeFontTextDate < sizeFontTextLock) {
+                tvNoteViewLock.textSize = sizeFontTextDate
+            } else {
+                tvNoteViewFulldate.textSize = sizeFontTextLock
+            }
         }
     }
 
