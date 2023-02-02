@@ -63,6 +63,7 @@ class NotesMenuFragment : Fragment() {
         observeStateNotesMenu()
         isNightMode()
         initSettingsButtons()
+        initOnClickListeners()
         initFabExit()
         initColorButtons()
         initDaySetButtons()
@@ -135,7 +136,11 @@ class NotesMenuFragment : Fragment() {
                     R.drawable.ic_delete_black_48dp
                 )
             }
+        }
+    }
 
+    private fun initOnClickListeners() {
+        with(binding) {
             mbMenuDaysBeforeDelete.setOnClickListener {
                 viewModel.showSetDaysButton()
             }

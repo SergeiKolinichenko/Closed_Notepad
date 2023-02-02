@@ -45,7 +45,11 @@
             style="@style/SettingsButtons"
             android:text="@string/days_before_deletion"
             app:cornerRadius="5dp"
-            app:icon="@drawable/ic_delete_clock_outline_black_48dp" />
+            app:icon="@drawable/ic_delete_clock_outline_black_48dp"
+            app:autoSizeMaxTextSize="16sp"
+            app:autoSizeMinTextSize="8sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mb_menu_wastebasket"

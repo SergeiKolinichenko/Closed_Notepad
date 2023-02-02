@@ -92,7 +92,6 @@ class NoteEditFragment : Fragment() {
         initFabExit()
         initFabSave()
         initFabNoSave()
-        initNoteInfoViewFontSize()
         launchModes()
     }
 
@@ -190,18 +189,6 @@ class NoteEditFragment : Fragment() {
             }
         }
         binding.fabNoteEditNotSave.isClickable = false
-    }
-
-    private fun initNoteInfoViewFontSize() {
-        with(binding) {
-            val sizeFontTextDate  = tvNoteEditFullDate.textSize
-            val sizeFontTextLock  = tvNoteEditLock.textSize
-            if (sizeFontTextDate < sizeFontTextLock) {
-                tvNoteEditLock.textSize = sizeFontTextDate
-            } else {
-                tvNoteEditFullDate.textSize = sizeFontTextLock
-            }
-        }
     }
 
     private fun initBackPressed() {

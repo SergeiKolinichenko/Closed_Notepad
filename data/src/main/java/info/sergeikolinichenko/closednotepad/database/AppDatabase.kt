@@ -7,8 +7,11 @@ import androidx.room.RoomDatabase
 import info.sergeikolinichenko.closednotepad.dbmodels.NoteDbModel
 import info.sergeikolinichenko.closednotepad.dbmodels.RemovedNoteDbModel
 
-@Database(entities = [NoteDbModel::class,
-    RemovedNoteDbModel::class], version = 1, exportSchema = false)
+@Database(
+    entities = [NoteDbModel::class, RemovedNoteDbModel::class],
+    version = 1,
+    exportSchema = false
+)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun notesDao(): NotesDao

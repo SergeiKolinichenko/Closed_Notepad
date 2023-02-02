@@ -40,6 +40,7 @@
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:maxLines="1"
+                        android:textColor="?attr/colorOnPrimary"
                         tools:text="Title Note" />
 
                     <View
@@ -76,6 +77,7 @@
                             android:textStyle="bold|italic"
                             android:layout_weight="1"
                             android:lines="1"
+                            android:textColor="?attr/colorOnPrimary"
                             app:autoSizeTextType="uniform"
                             app:autoSizeMaxTextSize="16sp"
                             app:autoSizeMinTextSize="8sp"
@@ -99,6 +101,7 @@
                             android:layout_marginEnd="5dp"
                             android:layout_marginStart="4dp"
                             android:lines="1"
+                            android:textColor="?attr/colorOnPrimary"
                             app:autoSizeTextType="uniform"
                             app:autoSizeMaxTextSize="16sp"
                             app:autoSizeMinTextSize="8sp"
@@ -137,6 +140,7 @@
                         android:layout_marginEnd="4dp"
                         android:background="@android:color/transparent"
                         android:textSize="20sp"
+                        android:textColor="?attr/colorOnPrimary"
                         />
                 </ScrollView>
             </com.google.android.material.card.MaterialCardView>
