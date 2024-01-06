@@ -41,6 +41,7 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'info.sergeikolinichenko.closednotepad'
 }
 
 dependencies {
