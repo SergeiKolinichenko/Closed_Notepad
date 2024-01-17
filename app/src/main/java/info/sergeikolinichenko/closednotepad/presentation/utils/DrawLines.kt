@@ -23,7 +23,7 @@ class DrawLines(context: Context, attrs: AttributeSet): MaterialTextView(context
         paint.color = context.getColorResCompat(android.R.attr.colorPrimary)
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
 
         var count = height/lineHeight
 
