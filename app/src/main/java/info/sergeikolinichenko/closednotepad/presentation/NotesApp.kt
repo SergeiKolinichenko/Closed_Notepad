@@ -17,13 +17,14 @@ class NotesApp: Application(), Configuration.Provider {
         DaggerApplicationComponent.factory().create(this)
     }
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return Configuration.Builder().setWorkerFactory(workerFactory).build()
-    }
-
     override fun onCreate() {
         component.inject(this)
         super.onCreate()
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
 }

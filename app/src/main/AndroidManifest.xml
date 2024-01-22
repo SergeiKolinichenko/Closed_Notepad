@@ -32,11 +32,25 @@
                 <data android:mimeType="text/plain"/>
             </intent-filter>
         </activity>
+
         <provider
             android:authorities="androidx.work.WorkManagerInitializer"
             android:name="androidx.startup.InitializationProvider"
             tools:replace="android:authorities"
             tools:node="remove"/>
+
+<!--        <provider-->
+<!--            android:name="androidx.startup.InitializationProvider"-->
+<!--            android:authorities="${applicationId}.androidx-startup"-->
+<!--            android:exported="false"-->
+<!--            tools:node="merge">-->
+<!--            &lt;!&ndash; If you are using androidx.startup to initialize other components &ndash;&gt;-->
+<!--            <meta-data-->
+<!--                android:name="androidx.work.WorkManagerInitializer"-->
+<!--                android:value="androidx.startup"-->
+<!--                tools:node="remove" />-->
+<!--        </provider>-->
+
     </application>
 
 </manifest>

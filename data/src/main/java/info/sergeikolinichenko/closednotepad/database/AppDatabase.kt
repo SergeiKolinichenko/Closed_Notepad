@@ -10,7 +10,7 @@ import info.sergeikolinichenko.closednotepad.dbmodels.RemovedNoteDbModel
 @Database(
     entities = [NoteDbModel::class, RemovedNoteDbModel::class],
     version = 1,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
 

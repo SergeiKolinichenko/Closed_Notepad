@@ -1,7 +1,7 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import info.sergeikolinichenko.closednotepad.database.NotesDao
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.RemovedNote
@@ -18,7 +18,7 @@ class NoteRepositoryImpl @Inject constructor(
     @Suppress("UNCHECKED_CAST")
     override fun <T> getListNotes(): T {
         val noteList: LiveData<List<Note>> =
-            Transformations.map(notesDao.getNoteList()) {
+            notesDao.getNoteList().map {
                 mapper.mapListDbModelToListEntity(it)
             }
         return noteList as T
