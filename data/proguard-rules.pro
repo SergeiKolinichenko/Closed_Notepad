@@ -19,3 +19,17 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# -------------------------------------------------------------------------------
+# Please add these rules to your existing keep rules in order to suppress warnings.
+# This is generated automatically by the Android Gradle plugin.
+-dontwarn info.sergeikolinichenko.closednotepad.database.AppDatabase$Companion
+-dontwarn info.sergeikolinichenko.closednotepad.database.NotesDao
+-dontwarn info.sergeikolinichenko.closednotepad.preferences.SharedPrefNotes$Companion
+-dontwarn info.sergeikolinichenko.closednotepad.preferences.SharedPrefNotes
+-dontwarn info.sergeikolinichenko.closednotepad.repositories.NoteRepositoryImpl_Factory
+-dontwarn info.sergeikolinichenko.closednotepad.repositories.PreferencesRepositoryImpl_Factory
+-dontwarn info.sergeikolinichenko.closednotepad.repositories.RemovedNoteRepositoryImpl_Factory
+-dontwarn info.sergeikolinichenko.closednotepad.utils.NoteMapper_Factory
+-dontwarn info.sergeikolinichenko.closednotepad.utils.RemovedNoteMapper_Factory
+-dontwarn info.sergeikolinichenko.closednotepad.workers.RemovedNoteListWorkerFactory
+-dontwarn info.sergeikolinichenko.closednotepad.workers.RemovedNoteListWorker_Factory_Factory
