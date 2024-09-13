@@ -1,6 +1,5 @@
 package info.sergeikolinichenko.closednotepad.usecases.trashcan
 
-import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
 import info.sergeikolinichenko.closednotepad.repositories.RemovedNoteRepository
 import javax.inject.Inject
 

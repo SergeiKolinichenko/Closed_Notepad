@@ -496,17 +496,15 @@ class NoteEditFragment : Fragment() {
         setLockNote(note.isLocked)
         viewModel.setColorIndex(note.colorIndex)
 
-        with(binding) {
-            // fill fields with text
-            etNoteEditTitle.text = Editable.Factory.getInstance().newEditable(note.titleNote)
-            etNoteEditItself.text = Editable.Factory.getInstance().newEditable(note.itselfNote)
-            tvNoteEditFullDate.text = TimeUtils.getFullDate(note.timeStamp)
-            // set focus to EditText and move cursor to end
-            etNoteEditItself.requestFocus()
-            etNoteEditItself.setSelection(etNoteEditItself.text.toString().length)
+        // fill fields with text
+        binding.etNoteEditTitle.text = Editable.Factory.getInstance().newEditable(note.titleNote)
+        binding.etNoteEditItself.text = Editable.Factory.getInstance().newEditable(note.itselfNote)
+        binding.tvNoteEditFullDate.text = TimeUtils.getFullDate(note.timeStamp)
+        // set focus to EditText and move cursor to end
+        binding.etNoteEditItself.requestFocus()
+        binding.etNoteEditItself.setSelection(binding.etNoteEditItself.text.toString().length)
 
-            showSoftKeyboard()
-        }
+        showSoftKeyboard()
     }
 
     private fun observeStateNoteEdit() {

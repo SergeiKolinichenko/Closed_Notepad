@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id("com.google.devtools.ksp")
+    id 'androidx.room'
 }
 
 android {
@@ -13,11 +14,12 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -29,23 +31,27 @@ android {
         jvmTarget = '17'
     }
     namespace 'info.sergeikolinichenko.data'
+
+    room {
+        schemaDirectory "$projectDir/schemas"
+    }
 }
 
 dependencies {
 
     implementation project(path: ':domain')
     testImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.6.1")
     // LiveData
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.5")
     // for ROOM
     implementation ("androidx.room:room-runtime:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     ksp ("androidx.room:room-compiler:2.6.1")
 
-    implementation ("com.google.dagger:dagger:2.51.1")
-    ksp ("com.google.dagger:dagger-compiler:2.51.1")
+    implementation ("com.google.dagger:dagger:2.52")
+    ksp ("com.google.dagger:dagger-compiler:2.52")
 
-    implementation ("androidx.work:work-runtime-ktx:2.9.0")
+    implementation ("androidx.work:work-runtime-ktx:2.9.1")
 }

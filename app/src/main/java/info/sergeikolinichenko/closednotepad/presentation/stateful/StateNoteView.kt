@@ -6,5 +6,5 @@ import info.sergeikolinichenko.closednotepad.models.Note
 
 sealed class StateNoteView
 
-object EndUsing: StateNoteView()
+data object EndUsing: StateNoteView()
 class NoteViewNote(val note: Note): StateNoteView()
