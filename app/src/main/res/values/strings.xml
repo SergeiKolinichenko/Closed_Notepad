@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">Notepad</string>
+
+    <string name="test_text_view">Test TextView</string>
+    <string name="remove_note_from_notes">Remove</string>
+    <string name="add_note_in_notes">Add</string>
+    <string name="settings_notes">Settings</string>
+    <string name="title_note_list">Notepad</string>
+    <string name="confirm_deletion_notes">Confirm deletion of selected notes</string>
+    <string name="confirm_deletion_note">Confirm the deletion of the selected note</string>
+    <string name="delete_note">Delete</string>
+    <string name="move_note">Move</string>
+    <string name="edit_note">Edit</string>
+    <string name="copy_itsels_note">Copy</string>
+    <string name="send_itself_note">Send</string>
+    <string name="lock_note">Blocked</string>
+    <string name="unlock_note">Unlocked</string>
+    <string name="select_text_to_copy">Select text to copy</string>
+
+    <!-- Entries Colors -->
+    <string name="note_color_pink">Pink</string>
+    <string name="note_color_purple">Purple</string>
+    <string name="note_color_indigo">Indigo</string>
+    <string name="note_color_green">Green</string>
+    <string name="note_color_orange">Orange</string>
+    <string name="note_color_brown">Brown</string>
+    <string name="note_color_gray">Gray</string>
+    <string name="note_color_blue_gray">Blue-gray</string>
+
+
+    <string name="copy_text_clipboard">Note text copied to clipboard</string>
+    <string name="sel_text_copied_clipboard">Selected text copied to clipboard</string>
+    <string name="exit_fragment">Exit fragment</string>
+    <string name="save_note">Save note</string>
+    <string name="don_t_save_note">Don\'t save note</string>
+
+    <string name="set_note_color_to_pink">Set note color pink</string>
+    <string name="set_note_color_to_purple">Set note color purple</string>
+    <string name="set_note_color_indigo">Set note color indigo</string>
+    <string name="set_note_color_green">Set note color green</string>
+    <string name="set_note_color_orange">Set note color orange</string>
+    <string name="set_note_color_brown">Set note color brown</string>
+    <string name="set_note_color_gray">Set note color gray</string>
+    <string name="set_note_color_blue_gray">Set note color blue gray</string>
+
+    <!-- Sort notes -->
+    <string name="sort_shown_by_time_stamp">Time of creation</string>
+    <string name="sort_shown_by_title">Title</string>
+    <string name="sort_shown_by_palette">Color</string>
+    <string name="description_sort_time_stamp_ascending">Sort the list by creation time in ascending order</string>
+    <string name="description_sort_time_stamp_descending">Sort the list by creation time in descending order</string>
+    <string name="description_sort_title_ascending">Sort the list by titles in ascending order</string>
+    <string name="description_sort_title_descending">Sort the list by titles in descending order</string>
+    <string name="sort_list_by_palette">Sort list by note color</string>
+    <string name="description_add_note">Add note</string>
+    <string name="hint_search_enter_search_words">Enter search words</string>
+    <string name="description_leave_search">Leave search</string>
+    <string name="description_leave_note_view">Leave page</string>
+    <string name="please_enter_search_text">Enter search text</string>
+
+    <string name="title_application_menu">Configuration</string>
+    <string name="settings_default_note_color">Default note color</string>
+    <string name="settings_wastebasket">Wastebasket</string>
+    <string name="confirm_recovery_notes">Confirm recovery of selected notes</string>
+    <string name="confirm_recovery_note">Confirm the restoration of the selected note</string>
+    <string name="recovery_note">Recovery</string>
+    <string name="confirm_remove_notes">Move selected notes to trash</string>
+    <string name="confirm_remove_note">Move note to trash</string>
+    <string name="days_before_deletion">days before auto-delete from wastebasket</string>
+    <string name="no_days_before_deletion">no auto-delete</string>
+    <string name="days_before_deletion_10">10 days</string>
+    <string name="days_before_deletion_30">30 days</string>
+    <string name="days_before_deletion_90">90 days</string>
+    <string name="days_before_deletion_180">180 days</string>
+    <string name="days_before_deletion_360">360 days</string>
+    <string name="no_blocking_method">There is no blocking method in the \"Security - Device protection\" settings.</string>
+    <string name="hardware_unavailable_later">The hardware is unavailable. Try again later.</string>
+    <string name="hardware_not_available">Biometric hardware is not available on this device.</string>
+    <string name="biometrical_error_security">A security vulnerability has been discovered and the sensor is unavailable until a security update has addressed this issue.</string>
+    <string name="biometric_status_unknoun">Unknown status of the biometric equipment, contact the device vendor.</string>
+    <string name="boimetric_error_unsuported">Unable to authenticate because the specified settings are incompatible with the current version of Android.</string>
+    <string name="authentication_required">Authentication!</string>
+    <string name="please_authenticate">Please authenticate to be able to view locked notes.</string>
+    <string name="important_authentication">Required authentication</string>
+    <string name="manual_delete_trash">Self-deleting notes from the trash</string>
+    <string name="enter_note_text">Enter note text</string>
+    <string name="enter_note_title">Enter title</string>
+    <string name="copy_the_selected_text">Copy the selected text</string>
+    <string name="cut_the_selected_text">Cut the selected text</string>
+    <string name="change_note_color">Change note color</string>
+    <string name="paste_text_from_clipboard">Paste text from clipboard</string>
+    <string name="choose_all">Choose all</string>
+    <string name="move_selected_notes_to_trash">Move selected notes to trash</string>
+    <string name="search_for_a_note">Search for a note</string>
+    <string name="settings_and_trash_can">Settings and trash can</string>
+    <string name="change_the_color_of_selected_notes">Change the color of selected notes</string>
+    <string name="delete_selected_notes_permanently">Delete selected notes permanently</string>
+    <string name="restore_selected_notes">Restore selected notes</string>
+    <string name="sorting_note_titles_on_screen">Sorting note titles on the screen</string>
+    <string name="exit_application">Exit application</string>
+    <string name="nothing_on_clipboard">There is nothing on the clipboard</string>
+    <string name="authentication_error">Authentication failed: %1$s. Error code: %2$s. Please report the error code to the program developer.</string>
+    <string name="authentication_failed">Authentication Error! Please check the integrity of the authentication equipment.</string>
+
+</resources>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_note_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:orientation="vertical">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_note_view_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_note_view_title_note"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        android:textColor="?attr/colorOnPrimary"
+                        tools:text="Title Note" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:background="?attr/colorPrimary"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="4dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:padding="3dp"
+                        android:background="@android:color/transparent"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/iv_note_view_create"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="4dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/ic_pencil_black_36dp" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_note_view_fulldate"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textStyle="bold|italic"
+                            android:layout_weight="1"
+                            android:lines="1"
+                            android:textColor="?attr/colorOnPrimary"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="2sp"
+                            tools:text="13.10.1961 23:23" />
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/iv_note_view_lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/ic_lock_black_36dp"
+                            android:visibility="visible"
+                            android:layout_marginStart="10dp"/>
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_note_view_lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textStyle="bold|italic"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="4dp"
+                            android:lines="1"
+                            android:textColor="?attr/colorOnPrimary"
+                            app:autoSizeTextType="uniform"
+                            app:autoSizeMaxTextSize="16sp"
+                            app:autoSizeMinTextSize="8sp"
+                            app:autoSizeStepGranularity="2sp"
+                            tools:text="Locked" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_note_view_itself_note"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:elevation="5dp"
+                app:cardCornerRadius="5dp"
+                app:strokeColor="?android:attr/colorPrimary"
+                app:strokeWidth="1dp">
+
+                <ScrollView
+                    android:id="@+id/sv_note_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fillViewport="true"
+                    android:scrollbars="vertical">
+
+                    <view
+                        android:id="@+id/tv_note_view_itself_note"
+                        class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@android:color/transparent"
+                        android:textSize="20sp"
+                        android:textColor="?attr/colorOnPrimary"
+                        />
+                </ScrollView>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_view"
+        style="@style/MyBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
+        app:fabAlignmentMode="end"
+        app:fabAnimationMode="scale"
+        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+        app:hideOnScroll="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_view_delete_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_delete_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_view_send_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_send_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_view_copy_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_content_copy_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_view_edit_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_application_edit_outline_black_36dp" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_view_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        android:contentDescription="@string/description_leave_note_view"
+        app:layout_anchor="@id/bab_note_view"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

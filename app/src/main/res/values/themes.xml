@@ -1,0 +1,16 @@
+<resources >
+    <!-- Base application theme. -->
+    <style name="Theme.ClosedNotepad" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColorDay</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColorDay</item>
+        <item name="colorOnPrimary">@color/primaryTextColorDay</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/secondaryColorDay</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColorDay</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorDay</item>
+        <!-- Status bar color. -->
+        <!-- item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item -->
+        <!-- Customize your theme here. -->
+    </style>
+</resources>

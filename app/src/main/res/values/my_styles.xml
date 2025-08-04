@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MyToolbar" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:layout_gravity">top</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:contextClickable">false</item>
+    </style>
+
+    <style name="MyBottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="android:layout_gravity">bottom</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="ColorButtonNoteList" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center_horizontal|bottom</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+    </style>
+
+    <style name="FabColorNoteEditOneLine" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+    </style>
+
+    <style name="ColorButtonNoteTwoLine" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">20dp</item>
+        <item name="android:visibility">invisible</item>
+        <item name="android:clickable">false</item>
+        <item name="android:scaleX">0</item>
+        <item name="android:scaleY">0</item>
+        <item name="android:alpha">0</item>
+
+    </style>
+
+    <style name="ColorButtonLand" parent="Widget.AppCompat.Button">
+        <item name="android:layout_width">220dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:layout_gravity">end|bottom</item>
+        <item name="android:layout_marginEnd">-220dp</item>
+        <item name="android:textStyle">italic|bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:elevation">5dp</item>
+    </style>
+
+    <style name="OrderButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">180dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:elevation">20dp</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+    <style name="OrderButtonsLand" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">140dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textSize">8sp</item>
+        <item name="android:elevation">20dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+    <style name="SettingsButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textAlignment">center</item>
+        <item name="strokeColor">?attr/colorPrimaryVariant</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="autoSizeMaxTextSize">14sp</item>
+        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="autoSizeTextType">uniform</item>
+    </style>
+
+    <style name="SettingsColorButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:elevation">20dp</item>
+        <item name="cornerRadius">5dp</item>
+        <item name="strokeColor">?attr/colorPrimaryVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="SettingsColorButtonsLand" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginStart">5dp</item>
+        <item name="android:layout_marginEnd">5dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="backgroundTint">@color/blue_gray_100</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:elevation">20dp</item>
+        <item name="cornerRadius">5dp</item>
+    </style>
+
+    <style name="SettingsDaysSetButtons" parent="Widget.MaterialComponents.Button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:clickable">false</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:elevation">20dp</item>
+        <item name="cornerRadius">5dp</item>
+        <item name="strokeColor">?attr/colorPrimaryVariant</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- Style for TextView for title in view and edit fragment layout -->
+    <style name="ViewAndEditTitleTextTextViewStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLength">25</item>
+    </style>
+
+</resources>

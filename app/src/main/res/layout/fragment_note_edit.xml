@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_note_entry_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="top"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_note_edit_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:elevation="5dp"
+            app:cardCornerRadius="5dp"
+            app:strokeColor="?android:attr/colorPrimary"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_note_edit_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="2dp"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:hint="@string/enter_note_title"
+                    android:inputType="textCapSentences"
+                    android:maxLength="25"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="?attr/colorPrimary" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@android:color/transparent"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_note_edit_create"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="2dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:backgroundTintMode="screen"
+                        app:cardCornerRadius="5dp"
+                        app:strokeColor="?android:attr/colorPrimary"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="start"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginBottom="1dp"
+                            android:background="@android:color/transparent"
+                            android:gravity="start|center_vertical"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/iv_note_edit_create"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="4dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_pencil_black_36dp" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_note_edit_full_date"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start|center_vertical"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:padding="3dp"
+                                android:textStyle="bold|italic"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:autoSizeMaxTextSize="16sp"
+                                app:autoSizeMinTextSize="8sp"
+                                app:autoSizeStepGranularity="2sp"
+                                app:autoSizeTextType="uniform"
+                                tools:text="13.10.1961 23:23" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_note_edit_lock"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:backgroundTintMode="screen"
+                        app:cardCornerRadius="5dp"
+                        app:strokeColor="?android:attr/colorPrimary"
+                        app:strokeWidth="1dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginTop="1dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_marginBottom="1dp"
+                            android:background="@android:color/transparent"
+                            android:gravity="end|center_vertical"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_note_edit_lock"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="2dp"
+                                android:layout_weight="1"
+                                android:lines="1"
+                                android:textStyle="bold|italic"
+                                android:textColor="?attr/colorOnPrimary"
+                                app:autoSizeMaxTextSize="16sp"
+                                app:autoSizeMinTextSize="8sp"
+                                app:autoSizeStepGranularity="2sp"
+                                app:autoSizeTextType="uniform"
+                                tools:text="Разблокировано" />
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/iv_note_edit_lock"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="5dp"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_lock_black_36dp"
+                                android:visibility="visible" />
+
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_note_edit_itself"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="4dp"
+            android:elevation="5dp"
+            android:paddingBottom="2dp"
+            app:cardCornerRadius="5dp"
+            app:strokeColor="?android:attr/colorPrimary"
+            app:strokeWidth="1dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_note_edit_itself"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="?android:attr/actionBarSize"
+                android:background="@android:color/transparent"
+                android:fitsSystemWindows="true"
+                android:gravity="fill_horizontal|top"
+                android:hint="@string/enter_note_text"
+                android:inputType="textCapSentences|textMultiLine"
+                android:overScrollMode="always"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:textSize="22sp" />
+
+            <view
+                android:id="@+id/tv_note_edit_itself"
+                class="info.sergeikolinichenko.closednotepad.presentation.utils.DrawLines"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="4dp"
+                android:background="@android:color/transparent"
+                android:textSize="22sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_edit"
+        style="@style/MyBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
+        app:elevation="10dp"
+        app:fabAlignmentMode="end"
+        app:fabCradleRoundedCornerRadius="2dp"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_select_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/choose_all"
+                android:src="@drawable/ic_select_all_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_cut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/cut_the_selected_text"
+                android:src="@drawable/ic_content_cut_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_copy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/copy_the_selected_text"
+                android:src="@drawable/ic_content_copy_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_paste"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/paste_text_from_clipboard"
+                android:src="@drawable/ic_content_paste_black_36dp" />
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_edit_pallet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="100dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:contentDescription="@string/change_note_color"
+                android:src="@drawable/ic_palette_black_36dp" />
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:contentDescription="@string/exit_fragment"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp"
+        app:behavior_hideable="true"
+        app:elevation="15dp"
+        app:layout_anchor="@id/bab_note_edit"
+        app:layout_behavior="com.google.android.material.floatingactionbutton.FloatingActionButton$Behavior"
+        app:layout_dodgeInsetEdges="bottom" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:clickable="false"
+        android:contentDescription="@string/save_note"
+        android:src="@drawable/ic_content_save_black_48dp"
+        android:visibility="visible"
+        app:elevation="10dp"
+        app:layout_dodgeInsetEdges="bottom" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_note_edit_not_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:clickable="false"
+        android:contentDescription="@string/don_t_save_note"
+        android:src="@drawable/ic_content_save_off_black_48dp"
+        android:visibility="visible"
+        app:elevation="10dp"
+        app:layout_dodgeInsetEdges="bottom" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_edit_color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_insetEdge="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_pink"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/pink_100"
+            android:contentDescription="@string/set_note_color_to_pink"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_purple"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_purple"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/purple_100"
+            android:contentDescription="@string/set_note_color_to_purple"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_pink"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_indigo"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/indigo_100"
+            android:contentDescription="@string/set_note_color_indigo"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_green"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_pink"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_green"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/green_100"
+            android:contentDescription="@string/set_note_color_green"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_indigo"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_purple"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_orange"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/orange_100"
+            android:contentDescription="@string/set_note_color_orange"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_brown"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_indigo"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_brown"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/brown_100"
+            android:contentDescription="@string/set_note_color_brown"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_orange"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_green"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/gray_100"
+            android:contentDescription="@string/set_note_color_gray"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_edit_color_blue_gray"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_orange"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_edit_color_blue_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/blue_gray_100"
+            android:contentDescription="@string/set_note_color_blue_gray"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_edit_color_gray"
+            app:layout_constraintTop_toBottomOf="@id/mb_note_edit_color_brown"
+            app:strokeColor="?attr/colorPrimary"
+            app:strokeWidth="1dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

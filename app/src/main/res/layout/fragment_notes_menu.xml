@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.screens.NotesMenuFragment">
+
+    <LinearLayout
+        android:id="@+id/ll_title_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:orientation="vertical"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title_settings_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="5dp"
+            android:text="@string/title_application_menu"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <View
+            android:id="@+id/view_settings_1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="10dp"
+            android:background="?attr/colorPrimary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_default_color"
+            style="@style/SettingsButtons"
+            android:text="@string/settings_default_note_color"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_palette_black_48dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_days_before_delete"
+            style="@style/SettingsButtons"
+            android:text="@string/days_before_deletion"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_delete_clock_outline_black_48dp"
+            app:autoSizeMaxTextSize="16sp"
+            app:autoSizeMinTextSize="8sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_wastebasket"
+            style="@style/SettingsButtons"
+            android:text="@string/settings_wastebasket"
+            app:cornerRadius="5dp"
+            app:icon="@drawable/ic_delete_black_48dp" />
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_settings_color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_insetEdge="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_pink"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/pink_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_settings_purple"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_purple"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/purple_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_settings_pink"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_indigo"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/indigo_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_settings_green"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_pink"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_green"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/green_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_settings_indigo"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_purple"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_orange"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/orange_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_settings_brown"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_indigo"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_brown"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/brown_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_settings_orange"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_green"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toStartOf="@+id/mb_settings_blue_gray"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_orange"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_settings_blue_gray"
+            style="@style/SettingsColorButtons"
+            android:backgroundTint="@color/blue_gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/mb_settings_gray"
+            app:layout_constraintTop_toBottomOf="@id/mb_settings_brown"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_menu_day_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_gravity="bottom"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_insetEdge="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_no"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/no_days_before_deletion"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mb_menu_day_set_30"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_10"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/days_before_deletion_10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_no"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mb_menu_day_set_30" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_30"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/days_before_deletion_30"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_90"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_menu_day_set_no"
+            app:layout_constraintBottom_toTopOf="@id/mb_menu_day_set_180"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_90"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/days_before_deletion_90"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_30"
+            app:layout_constraintTop_toBottomOf="@id/mb_menu_day_set_10"
+            app:layout_constraintBottom_toTopOf="@id/mb_menu_day_set_360"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_180"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/days_before_deletion_180"
+            app:layout_constraintEnd_toStartOf="@id/mb_menu_day_set_360"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mb_menu_day_set_30"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_menu_day_set_360"
+            style="@style/SettingsDaysSetButtons"
+            android:text="@string/days_before_deletion_360"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_menu_day_set_180"
+            app:layout_constraintTop_toBottomOf="@id/mb_menu_day_set_90" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_notes_menu_exit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:contentDescription="@string/description_leave_note_view"
+        android:src="@drawable/ic_arrow_left_bold_black_48dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

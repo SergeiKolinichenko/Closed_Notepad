@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Order buttons -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_list_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="-800dp"
+        android:clickable="false"
+        android:elevation="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_time_stamp_sort_ascending"
+            style="@style/OrderButtonsLand"
+            android:layout_marginTop="5dp"
+            android:contentDescription="@string/description_sort_time_stamp_ascending"
+            android:text="@string/sort_shown_by_time_stamp"
+            app:icon="@drawable/ic_sort_ascending_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_time_stamp_sort_descending"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/sort_shown_by_time_stamp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_time_stamp_sort_descending"
+            style="@style/OrderButtonsLand"
+            android:contentDescription="@string/description_sort_time_stamp_descending"
+            android:text="@string/sort_shown_by_time_stamp"
+            app:icon="@drawable/ic_sort_descending_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_title_alphabet_sort_ascending"
+            app:layout_constraintStart_toEndOf="@id/mb_time_stamp_sort_ascending"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimary"
+            tools:text="@string/sort_shown_by_time_stamp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_title_alphabet_sort_ascending"
+            style="@style/OrderButtonsLand"
+            android:contentDescription="@string/description_sort_title_ascending"
+            android:text="@string/sort_shown_by_title"
+            app:icon="@drawable/ic_sort_alphabetical_ascending_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_title_alphabet_sort_descending"
+            app:layout_constraintStart_toEndOf="@id/mb_time_stamp_sort_descending"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimary"
+            tools:text="@string/sort_shown_by_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_title_alphabet_sort_descending"
+            style="@style/OrderButtonsLand"
+            android:contentDescription="@string/description_sort_title_descending"
+            android:text="@string/sort_shown_by_title"
+            app:icon="@drawable/ic_sort_alphabetical_descending_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mb_palette_sort"
+            app:layout_constraintStart_toEndOf="@id/mb_title_alphabet_sort_ascending"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimary"
+            tools:text="@string/sort_shown_by_title" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_palette_sort"
+            style="@style/OrderButtonsLand"
+            android:contentDescription="@string/sort_list_by_palette"
+            android:text="@string/sort_shown_by_palette"
+            app:icon="@drawable/ic_palette_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mb_title_alphabet_sort_descending"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="?attr/colorOnPrimary"
+            tools:text="@string/sort_shown_by_palette" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- AppBarLayout -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/tool_bar_note_list"
+        style="@style/MyToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="?android:attr/colorPrimary"
+        app:contentInsetEnd="4dp"
+        app:contentInsetStart="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_outline_note_list"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_exit_to_app_black_36dp"
+                android:tint="?attr/colorOnPrimary"
+                android:contentDescription="@string/exit_application"/>
+
+            <TextView
+                android:id="@+id/tv_toolbar_note_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/title_note_list"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_note_list_sort_shown"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_filter_variant_black_36dp"
+                android:tint="?attr/colorOnPrimary"
+                android:contentDescription="@string/sorting_note_titles_on_screen"/>
+        </LinearLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?android:attr/actionBarSize"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_dodgeInsetEdges="bottom"
+        app:spanCount="2"
+        tools:listitem="@layout/note_list_item" />
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bab_note_list"
+        style="@style/MyBottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentInsetEnd="5dp"
+        app:contentInsetStart="5dp"
+        app:fabAlignmentMode="center"
+        app:fabAnimationMode="scale"
+        app:fabCradleRoundedCornerRadius="@dimen/cardview_default_radius"
+        app:hideOnScroll="true"
+        app:layout_dodgeInsetEdges="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_menu_black_36dp"
+                android:contentDescription="@string/settings_and_trash_can"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_palette"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="65dp"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:clickable="false"
+                android:src="@drawable/ic_palette_grey600_36dp"
+                android:contentDescription="@string/change_the_color_of_selected_notes"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:clickable="false"
+                android:src="@drawable/ic_delete_grey600_36dp"
+                android:contentDescription="@string/move_selected_notes_to_trash"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/ib_note_list_magnify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:src="@drawable/ic_magnify_black_36dp"
+                android:contentDescription="@string/search_for_a_note"/>
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_note_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        android:contentDescription="@string/description_add_note"
+        android:elevation="10dp"
+        android:src="@drawable/ic_plus_thick_black_48dp"
+        app:layout_anchor="@id/bab_note_list"
+        app:layout_dodgeInsetEdges="bottom" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_note_list_color_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="4dp"
+        app:behavior_hideable="true"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:layout_insetEdge="bottom">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_pink"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/pink_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_purple"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_to_pink"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_purple"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/purple_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_indigo"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_pink"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_to_purple"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_indigo"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/indigo_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_green"
+            app:layout_constraintStart_toEndOf="@id/mb_note_list_color_purple"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_indigo"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_green"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/green_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_orange"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_indigo"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_green"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_orange"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/orange_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_brown"
+            app:layout_constraintStart_toEndOf="@id/mb_note_list_color_green"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_orange"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_brown"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/brown_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_gray"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_orange"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_brown"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_gray"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/mb_note_list_color_blue_gray"
+            app:layout_constraintStart_toEndOf="@id/mb_note_list_color_brown"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_gray"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mb_note_list_color_blue_gray"
+            style="@style/SettingsColorButtonsLand"
+            android:backgroundTint="@color/blue_gray_100"
+            app:cornerRadius="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mb_note_list_color_gray"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="?attr/colorPrimary"
+            android:contentDescription="@string/set_note_color_blue_gray"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
