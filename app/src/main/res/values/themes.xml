@@ -1,16 +1,6 @@
-<resources >
-    <!-- Base application theme. -->
-    <style name="Theme.ClosedNotepad" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryColorDay</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColorDay</item>
-        <item name="colorOnPrimary">@color/primaryTextColorDay</item>
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryColorDay</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColorDay</item>
-        <item name="colorOnSecondary">@color/secondaryTextColorDay</item>
-        <!-- Status bar color. -->
-        <!-- item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item -->
-        <!-- Customize your theme here. -->
+<resources>
+    <!-- The window theme only; screens are drawn by Compose (see ui/theme/Theme.kt) -->
+    <style name="Theme.ClosedNotepad" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/window_background</item>
     </style>
 </resources>

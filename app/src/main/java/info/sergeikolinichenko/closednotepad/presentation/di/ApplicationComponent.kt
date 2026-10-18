@@ -4,7 +4,11 @@ import android.app.Application
 import dagger.BindsInstance
 import dagger.Component
 import info.sergeikolinichenko.closednotepad.presentation.NotesApp
-import info.sergeikolinichenko.closednotepad.presentation.screens.*
+import info.sergeikolinichenko.closednotepad.presentation.security.NoteLock
+import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessages
+import info.sergeikolinichenko.closednotepad.presentation.viewmodels.ViewModelNotesFactory
+import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
+import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepository
 
 /** Created by Sergei Kolinichenko on 25.11.2022 at 19:05 (GMT+3) **/
 
@@ -19,13 +23,11 @@ import info.sergeikolinichenko.closednotepad.presentation.screens.*
 )
 interface ApplicationComponent {
 
-    fun inject(fragment: NotesMenuFragment)
-    fun inject(fragment: NoteViewFragment)
-    fun inject(fragment: TrashCanListFragment)
-    fun inject(fragment: TrashCanViewFragment)
-    fun inject(fragment: NoteEditFragment)
-    fun inject(fragment: NoteListFragment)
-    fun inject(fragment: NoteSearchFragment)
+    fun viewModelFactory(): ViewModelNotesFactory
+    fun noteLock(): NoteLock
+    fun uiMessages(): UiMessages
+    fun notesRepository(): NotesRepository
+    fun preferencesRepository(): PreferencesRepository
 
     fun inject(application: NotesApp)
 

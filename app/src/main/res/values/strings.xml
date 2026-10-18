@@ -1,105 +1,171 @@
-<resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Notepad</string>
+    <string name="share_target_label">Save to notepad</string>
 
-    <string name="test_text_view">Test TextView</string>
-    <string name="remove_note_from_notes">Remove</string>
-    <string name="add_note_in_notes">Add</string>
-    <string name="settings_notes">Settings</string>
-    <string name="title_note_list">Notepad</string>
-    <string name="confirm_deletion_notes">Confirm deletion of selected notes</string>
-    <string name="confirm_deletion_note">Confirm the deletion of the selected note</string>
-    <string name="delete_note">Delete</string>
-    <string name="move_note">Move</string>
-    <string name="edit_note">Edit</string>
-    <string name="copy_itsels_note">Copy</string>
-    <string name="send_itself_note">Send</string>
-    <string name="lock_note">Blocked</string>
-    <string name="unlock_note">Unlocked</string>
-    <string name="select_text_to_copy">Select text to copy</string>
+    <!-- Home -->
+    <string name="notes_title">Notes</string>
+    <string name="search">Search</string>
+    <string name="show_as_list">Show as list</string>
+    <string name="show_as_grid">Show as grid</string>
+    <string name="more_options">More options</string>
+    <string name="sort">Sort</string>
+    <string name="trash">Trash</string>
+    <string name="settings">Settings</string>
+    <string name="create_note">Create note</string>
+    <string name="create">Create</string>
+    <string name="cancel_selection">Cancel selection</string>
+    <string name="pin">Pin</string>
+    <string name="unpin">Unpin</string>
+    <string name="pinned">Pinned</string>
+    <string name="locked">Locked</string>
+    <string name="note_color">Note color</string>
+    <string name="move_to_trash">Move to trash</string>
+    <string name="filter_all">All</string>
+    <string name="filter_text">Texts</string>
+    <string name="filter_checklist">Lists</string>
+    <string name="filter_shopping">Shopping</string>
+    <string name="group_pinned">Pinned</string>
+    <string name="group_today">Today</string>
+    <string name="group_yesterday">Yesterday</string>
+    <string name="group_earlier">Earlier</string>
+    <string name="group_others">Others</string>
+    <string name="empty_title">Write down your first note</string>
+    <string name="empty_body">Texts, to-do lists and shopping lists live here. Lock a note to hide it behind your fingerprint or screen lock.</string>
+    <string name="empty_filter_title">No notes of this type yet</string>
+    <string name="untitled">Untitled</string>
+    <string name="more_items" tools:ignore="PluralsCandidate">+%d more</string>
+    <string name="undo">Undo</string>
 
-    <!-- Entries Colors -->
-    <string name="note_color_pink">Pink</string>
-    <string name="note_color_purple">Purple</string>
-    <string name="note_color_indigo">Indigo</string>
-    <string name="note_color_green">Green</string>
-    <string name="note_color_orange">Orange</string>
-    <string name="note_color_brown">Brown</string>
-    <string name="note_color_gray">Gray</string>
-    <string name="note_color_blue_gray">Blue-gray</string>
+    <string name="sort_updated">Recently changed</string>
+    <string name="sort_created_desc">Newest first</string>
+    <string name="sort_created_asc">Oldest first</string>
+    <string name="sort_title_asc">Title A–Z</string>
+    <string name="sort_title_desc">Title Z–A</string>
+    <string name="sort_color">Color</string>
 
+    <!-- Note types -->
+    <string name="type_text">Text</string>
+    <string name="type_text_hint">A note, a thought, an idea</string>
+    <string name="type_checklist">List</string>
+    <string name="type_checklist_hint">To-dos with check boxes</string>
+    <string name="type_shopping">Shopping</string>
+    <string name="type_shopping_hint">Quantities, prices and store sections</string>
+    <string name="more_types_soon">More types are coming: reminders, recipes and others.</string>
 
-    <string name="copy_text_clipboard">Note text copied to clipboard</string>
-    <string name="sel_text_copied_clipboard">Selected text copied to clipboard</string>
-    <string name="exit_fragment">Exit fragment</string>
-    <string name="save_note">Save note</string>
-    <string name="don_t_save_note">Don\'t save note</string>
+    <!-- Editor -->
+    <string name="back">Back</string>
+    <string name="saved">Saved</string>
+    <string name="saving">Saving…</string>
+    <string name="lock_note">Lock note</string>
+    <string name="unlock_note">Unlock note</string>
+    <string name="lock_needs_screen_lock">Set up a screen lock or fingerprint in the phone settings to lock notes</string>
+    <string name="share">Share</string>
+    <string name="copy_text">Copy text</string>
+    <string name="copied">Copied</string>
+    <string name="convert_to_list">Turn into a list</string>
+    <string name="convert_to_text">Turn into text</string>
+    <string name="uncheck_all">Uncheck all</string>
+    <string name="remove_checked">Remove checked</string>
+    <string name="title_hint">Title</string>
+    <string name="text_hint">Note</string>
+    <string name="item_hint">List item</string>
+    <string name="add_item">Add item</string>
+    <string name="remove_item">Remove</string>
+    <string name="reorder">Drag to reorder</string>
+    <string name="checked_count">Done (%d)</string>
+    <string name="done_of" tools:ignore="PluralsCandidate">%1$d of %2$d done</string>
+    <string name="all_done">All done</string>
+    <string name="list_is_empty">The list is empty</string>
 
-    <string name="set_note_color_to_pink">Set note color pink</string>
-    <string name="set_note_color_to_purple">Set note color purple</string>
-    <string name="set_note_color_indigo">Set note color indigo</string>
-    <string name="set_note_color_green">Set note color green</string>
-    <string name="set_note_color_orange">Set note color orange</string>
-    <string name="set_note_color_brown">Set note color brown</string>
-    <string name="set_note_color_gray">Set note color gray</string>
-    <string name="set_note_color_blue_gray">Set note color blue gray</string>
+    <!-- Shopping -->
+    <string name="bought_of" tools:ignore="PluralsCandidate">%1$d of %2$d bought</string>
+    <string name="all_bought">Everything is bought</string>
+    <string name="total_price">≈ %s</string>
+    <string name="add_product_hint">Add a product</string>
+    <string name="add">Add</string>
+    <string name="voice_input">Voice input</string>
+    <string name="no_section">No section</string>
+    <string name="in_cart_count">In the cart (%d)</string>
+    <string name="edit_product">Product</string>
+    <string name="product_name">Name</string>
+    <string name="quantity">Quantity</string>
+    <string name="quantity_hint">2 kg</string>
+    <string name="price">Price</string>
+    <string name="section">Store section</string>
+    <string name="section_hint">Dairy</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="store_mode">In the store</string>
+    <string name="store_mode_hint">The screen stays on. Tap or swipe right to mark as bought.</string>
+    <string name="close_store_mode">Leave store mode</string>
+    <string name="finish_shopping">Finish shopping</string>
+    <string name="bought">Bought</string>
+    <string name="not_bought">Not bought</string>
 
-    <!-- Sort notes -->
-    <string name="sort_shown_by_time_stamp">Time of creation</string>
-    <string name="sort_shown_by_title">Title</string>
-    <string name="sort_shown_by_palette">Color</string>
-    <string name="description_sort_time_stamp_ascending">Sort the list by creation time in ascending order</string>
-    <string name="description_sort_time_stamp_descending">Sort the list by creation time in descending order</string>
-    <string name="description_sort_title_ascending">Sort the list by titles in ascending order</string>
-    <string name="description_sort_title_descending">Sort the list by titles in descending order</string>
-    <string name="sort_list_by_palette">Sort list by note color</string>
-    <string name="description_add_note">Add note</string>
-    <string name="hint_search_enter_search_words">Enter search words</string>
-    <string name="description_leave_search">Leave search</string>
-    <string name="description_leave_note_view">Leave page</string>
-    <string name="please_enter_search_text">Enter search text</string>
+    <!-- Locked notes -->
+    <string name="note_is_locked">This note is locked</string>
+    <string name="unlock">Unlock</string>
+    <string name="auth_title">Locked note</string>
+    <string name="auth_subtitle">Confirm it\'s you to open the note</string>
+    <string name="auth_unavailable">The fingerprint sensor is unavailable right now. Try again later.</string>
 
-    <string name="title_application_menu">Configuration</string>
-    <string name="settings_default_note_color">Default note color</string>
-    <string name="settings_wastebasket">Wastebasket</string>
-    <string name="confirm_recovery_notes">Confirm recovery of selected notes</string>
-    <string name="confirm_recovery_note">Confirm the restoration of the selected note</string>
-    <string name="recovery_note">Recovery</string>
-    <string name="confirm_remove_notes">Move selected notes to trash</string>
-    <string name="confirm_remove_note">Move note to trash</string>
-    <string name="days_before_deletion">days before auto-delete from wastebasket</string>
-    <string name="no_days_before_deletion">no auto-delete</string>
-    <string name="days_before_deletion_10">10 days</string>
-    <string name="days_before_deletion_30">30 days</string>
-    <string name="days_before_deletion_90">90 days</string>
-    <string name="days_before_deletion_180">180 days</string>
-    <string name="days_before_deletion_360">360 days</string>
-    <string name="no_blocking_method">There is no blocking method in the \"Security - Device protection\" settings.</string>
-    <string name="hardware_unavailable_later">The hardware is unavailable. Try again later.</string>
-    <string name="hardware_not_available">Biometric hardware is not available on this device.</string>
-    <string name="biometrical_error_security">A security vulnerability has been discovered and the sensor is unavailable until a security update has addressed this issue.</string>
-    <string name="biometric_status_unknoun">Unknown status of the biometric equipment, contact the device vendor.</string>
-    <string name="boimetric_error_unsuported">Unable to authenticate because the specified settings are incompatible with the current version of Android.</string>
-    <string name="authentication_required">Authentication!</string>
-    <string name="please_authenticate">Please authenticate to be able to view locked notes.</string>
-    <string name="important_authentication">Required authentication</string>
-    <string name="manual_delete_trash">Self-deleting notes from the trash</string>
-    <string name="enter_note_text">Enter note text</string>
-    <string name="enter_note_title">Enter title</string>
-    <string name="copy_the_selected_text">Copy the selected text</string>
-    <string name="cut_the_selected_text">Cut the selected text</string>
-    <string name="change_note_color">Change note color</string>
-    <string name="paste_text_from_clipboard">Paste text from clipboard</string>
-    <string name="choose_all">Choose all</string>
-    <string name="move_selected_notes_to_trash">Move selected notes to trash</string>
-    <string name="search_for_a_note">Search for a note</string>
-    <string name="settings_and_trash_can">Settings and trash can</string>
-    <string name="change_the_color_of_selected_notes">Change the color of selected notes</string>
-    <string name="delete_selected_notes_permanently">Delete selected notes permanently</string>
-    <string name="restore_selected_notes">Restore selected notes</string>
-    <string name="sorting_note_titles_on_screen">Sorting note titles on the screen</string>
-    <string name="exit_application">Exit application</string>
-    <string name="nothing_on_clipboard">There is nothing on the clipboard</string>
-    <string name="authentication_error">Authentication failed: %1$s. Error code: %2$s. Please report the error code to the program developer.</string>
-    <string name="authentication_failed">Authentication Error! Please check the integrity of the authentication equipment.</string>
+    <!-- Search -->
+    <string name="search_hint">Search notes</string>
+    <string name="clear_search">Clear</string>
+    <string name="nothing_found">Nothing found. Locked notes are searched by title only.</string>
 
+    <!-- Trash -->
+    <string name="empty_trash">Empty</string>
+    <string name="trash_is_empty">The trash is empty</string>
+    <string name="restore">Restore</string>
+    <string name="delete_forever">Delete forever</string>
+    <string name="confirm_empty_trash">Delete all notes in the trash forever?</string>
+    <string name="trash_hint_forever">Notes stay in the trash until you delete them.</string>
+    <string name="kept_forever">Kept until you delete it</string>
+    <string name="deleted_soon">Will be deleted soon</string>
+
+    <!-- Settings -->
+    <string name="default_note_color">Color of new notes</string>
+    <string name="trash_auto_delete">Empty the trash automatically</string>
+    <string name="trash_auto_delete_hint">Notes are deleted forever this long after they were moved to the trash.</string>
+    <string name="never_delete">Never</string>
+    <string name="about_locked_notes">Locked notes</string>
+    <string name="about_locked_notes_body">A locked note opens only after your fingerprint, face or screen lock. Its text is not shown in lists, search or screenshots, and it is locked again when you leave the app.</string>
+    <string name="version">Version %s</string>
+
+    <!-- Colors -->
+    <string name="color_pink">Pink</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_green">Green</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_brown">Brown</string>
+    <string name="color_gray">Gray</string>
+    <string name="color_blue_gray">Blue gray</string>
+
+    <plurals name="moved_to_trash">
+        <item quantity="one">Note moved to trash</item>
+        <item quantity="other">%d notes moved to trash</item>
+    </plurals>
+    <plurals name="restored">
+        <item quantity="one">Note restored</item>
+        <item quantity="other">%d notes restored</item>
+    </plurals>
+    <plurals name="confirm_delete_forever">
+        <item quantity="one">Delete this note forever?</item>
+        <item quantity="other">Delete %d notes forever?</item>
+    </plurals>
+    <plurals name="deleted_in_days">
+        <item quantity="one">Will be deleted in %d day</item>
+        <item quantity="other">Will be deleted in %d days</item>
+    </plurals>
+    <plurals name="trash_hint_days">
+        <item quantity="one">Notes are deleted forever %d day after they were moved here.</item>
+        <item quantity="other">Notes are deleted forever %d days after they were moved here.</item>
+    </plurals>
+    <plurals name="after_days">
+        <item quantity="one">After %d day</item>
+        <item quantity="other">After %d days</item>
+    </plurals>
 </resources>

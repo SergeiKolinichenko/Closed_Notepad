@@ -1,16 +1,21 @@
 package info.sergeikolinichenko.closednotepad.repositories
 
+import info.sergeikolinichenko.closednotepad.models.NotesLayout
+import info.sergeikolinichenko.closednotepad.models.Settings
+import info.sergeikolinichenko.closednotepad.models.SortOrder
+import kotlinx.coroutines.flow.Flow
+
 interface PreferencesRepository {
 
-    fun setPrefOrderNoteList(order: String)
+    val settings: Flow<Settings>
 
-    fun getPrefOrderNoteList(): String
+    fun current(): Settings
 
-    fun setPrefColorIndex(index: Int)
+    fun setSortOrder(order: SortOrder)
 
-    fun getPrefColorIndex(): Int
+    fun setDefaultColorIndex(index: Int)
 
-    fun getPrefAutoDelReNote(): Int
+    fun setDaysBeforeDeletion(days: Int)
 
-    fun setPrefAutoDelReNote(days: Int)
+    fun setLayout(layout: NotesLayout)
 }

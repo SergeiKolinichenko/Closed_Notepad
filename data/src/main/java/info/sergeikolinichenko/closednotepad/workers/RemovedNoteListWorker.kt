@@ -1,82 +1,62 @@
 package info.sergeikolinichenko.closednotepad.workers
 
 import android.content.Context
-import androidx.work.*
-import info.sergeikolinichenko.closednotepad.database.NotesDao
-import info.sergeikolinichenko.closednotepad.models.RemovedNote
-import info.sergeikolinichenko.closednotepad.usecases.preferences.GetPrefAutoDelReNoteUseCase
-import info.sergeikolinichenko.closednotepad.utils.RemovedNoteMapper
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
-import java.util.*
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ListenableWorker
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
+import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
+import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepository
+import info.sergeikolinichenko.closednotepad.usecases.TrashPolicy
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /** Created by Sergei Kolinichenko on 03.12.2022 at 21:42 (GMT+3) **/
 
+// Deletes notes that have been in the trash longer than the user allows
 class RemovedNoteListWorker(
     context: Context,
     workerParameters: WorkerParameters,
-    private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
-    private val notesDao: NotesDao,
-    private val mapper: RemovedNoteMapper
-) : Worker(context, workerParameters) {
+    private val notesRepository: NotesRepository,
+    private val preferencesRepository: PreferencesRepository
+) : CoroutineWorker(context, workerParameters) {
 
-    private val coroutineScope= CoroutineScope(Dispatchers.Default)
-
-    override fun doWork(): Result {
-        val days = getPrefDayBeforeDelete.invoke()
-        val list: List<RemovedNote> = mapper.mapListDbModelToListEntity(notesDao.getRemovedNoteList())
-
-        if ( days > 0 && list.isNotEmpty()) {
-            for (item in list) {
-                if ( (item.timeStamp).getDiffDays() > days) {
-                    coroutineScope.launch {
-                        notesDao.deleteRemovedNote(item.timeStamp)
-                    }
-                }
-            }
+    override suspend fun doWork(): Result {
+        val days = preferencesRepository.current().daysBeforeDeletion
+        TrashPolicy.deleteBefore(System.currentTimeMillis(), days)?.let { time ->
+            notesRepository.deleteTrashedBefore(time)
         }
         return Result.success()
-    }
-
-    override fun onStopped() {
-        super.onStopped()
-        coroutineScope.cancel()
-    }
-
-    private fun Long.getDiffDays(): Int {
-        val oneDay = 1000 * 60 * 60 * 24
-        val result = ((Date().time - this) / oneDay) + 1
-        return result.toInt()
     }
 
     companion object {
 
         const val WORKER_NAME = "RemovedNoteListWorker"
 
-        fun makeRequest(): OneTimeWorkRequest {
-            return OneTimeWorkRequestBuilder<RemovedNoteListWorker>().build()
+        fun schedule(workManager: WorkManager) {
+            val request = PeriodicWorkRequestBuilder<RemovedNoteListWorker>(1, TimeUnit.DAYS).build()
+            workManager.enqueueUniquePeriodicWork(
+                WORKER_NAME,
+                ExistingPeriodicWorkPolicy.UPDATE,
+                request
+            )
         }
     }
 
     class Factory @Inject constructor(
-        private val getPrefDayBeforeDelete: GetPrefAutoDelReNoteUseCase,
-        private val notesDao: NotesDao,
-        private val mapper: RemovedNoteMapper
+        private val notesRepository: NotesRepository,
+        private val preferencesRepository: PreferencesRepository
     ) : ChildWorkerFactory {
         override fun create(
             context: Context,
             workerParameters: WorkerParameters
-        ): ListenableWorker {
-            return RemovedNoteListWorker(
-                context,
-                workerParameters,
-                getPrefDayBeforeDelete,
-                notesDao,
-                mapper
-            )
-        }
+        ): ListenableWorker = RemovedNoteListWorker(
+            context,
+            workerParameters,
+            notesRepository,
+            preferencesRepository
+        )
     }
 }
