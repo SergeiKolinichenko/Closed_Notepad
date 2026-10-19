@@ -13,6 +13,11 @@
     <string name="trash">Trash</string>
     <string name="settings">Settings</string>
     <string name="create_note">Create note</string>
+    <string name="write_hint">Write a note…</string>
+    <string name="save_note">Save note</string>
+    <string name="new_checklist">New to-do list</string>
+    <string name="new_shopping">New shopping list</string>
+    <string name="sealed">Sealed</string>
     <string name="create">Create</string>
     <string name="cancel_selection">Cancel selection</string>
     <string name="pin">Pin</string>
@@ -104,7 +109,7 @@
     <string name="not_bought">Not bought</string>
 
     <!-- Locked notes -->
-    <string name="note_is_locked">This note is locked</string>
+    <string name="note_is_locked">This note is sealed</string>
     <string name="unlock">Unlock</string>
     <string name="auth_title">Locked note</string>
     <string name="auth_subtitle">Confirm it\'s you to open the note</string>
@@ -135,14 +140,14 @@
     <string name="version">Version %s</string>
 
     <!-- Colors -->
-    <string name="color_pink">Pink</string>
-    <string name="color_purple">Purple</string>
-    <string name="color_indigo">Indigo</string>
-    <string name="color_green">Green</string>
-    <string name="color_orange">Orange</string>
-    <string name="color_brown">Brown</string>
-    <string name="color_gray">Gray</string>
-    <string name="color_blue_gray">Blue gray</string>
+    <string name="color_pink">Rose</string>
+    <string name="color_purple">Lavender</string>
+    <string name="color_indigo">Sky</string>
+    <string name="color_green">Sage</string>
+    <string name="color_orange">Apricot</string>
+    <string name="color_brown">Sand</string>
+    <string name="color_gray">Paper</string>
+    <string name="color_blue_gray">Mist</string>
 
     <plurals name="moved_to_trash">
         <item quantity="one">Note moved to trash</item>

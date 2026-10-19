@@ -13,6 +13,11 @@
     <string name="trash">Корзина</string>
     <string name="settings">Настройки</string>
     <string name="create_note">Создать заметку</string>
+    <string name="write_hint">Записать…</string>
+    <string name="save_note">Сохранить заметку</string>
+    <string name="new_checklist">Новый список дел</string>
+    <string name="new_shopping">Новый список покупок</string>
+    <string name="sealed">Под печатью</string>
     <string name="create">Создать</string>
     <string name="cancel_selection">Снять выделение</string>
     <string name="pin">Закрепить</string>
@@ -104,7 +109,7 @@
     <string name="not_bought">Не куплено</string>
 
     <!-- Locked notes -->
-    <string name="note_is_locked">Заметка закрыта</string>
+    <string name="note_is_locked">Заметка под печатью</string>
     <string name="unlock">Открыть</string>
     <string name="auth_title">Закрытая заметка</string>
     <string name="auth_subtitle">Подтвердите, что это вы</string>
@@ -135,14 +140,14 @@
     <string name="version">Версия %s</string>
 
     <!-- Colors -->
-    <string name="color_pink">Розовый</string>
-    <string name="color_purple">Фиолетовый</string>
-    <string name="color_indigo">Индиго</string>
-    <string name="color_green">Зелёный</string>
-    <string name="color_orange">Оранжевый</string>
-    <string name="color_brown">Коричневый</string>
-    <string name="color_gray">Серый</string>
-    <string name="color_blue_gray">Сине-серый</string>
+    <string name="color_pink">Роза</string>
+    <string name="color_purple">Лаванда</string>
+    <string name="color_indigo">Небо</string>
+    <string name="color_green">Шалфей</string>
+    <string name="color_orange">Абрикос</string>
+    <string name="color_brown">Песок</string>
+    <string name="color_gray">Лист</string>
+    <string name="color_blue_gray">Туман</string>
 
     <plurals name="moved_to_trash">
         <item quantity="one">%d заметка перемещена в корзину</item>

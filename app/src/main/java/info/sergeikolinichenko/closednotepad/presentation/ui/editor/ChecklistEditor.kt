@@ -56,6 +56,7 @@ import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.NoteItem
 import info.sergeikolinichenko.closednotepad.presentation.ui.home.progressText
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.NoteColorScheme
+import info.sergeikolinichenko.closednotepad.presentation.ui.theme.SansFamily
 import sh.calvin.reorderable.ReorderableItem
 import sh.calvin.reorderable.rememberReorderableLazyListState
 
@@ -221,6 +222,7 @@ private fun ItemRow(
                 if (text.contains('\n')) onNext() else onText(text)
             },
             textStyle = TextStyle(
+                fontFamily = SansFamily,
                 fontSize = 17.sp,
                 color = if (item.isChecked) colors.contentVariant else colors.content,
                 textDecoration = if (item.isChecked) TextDecoration.LineThrough else null

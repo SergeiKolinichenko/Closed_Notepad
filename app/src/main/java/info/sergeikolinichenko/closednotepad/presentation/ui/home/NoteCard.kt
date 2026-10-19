@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckBox
 import androidx.compose.material.icons.outlined.CheckBoxOutlineBlank
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,7 +26,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -35,14 +33,15 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ProgressLine
+import info.sergeikolinichenko.closednotepad.presentation.ui.common.Seal
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.formatShortDate
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.icon
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.NoteColorScheme
+import info.sergeikolinichenko.closednotepad.presentation.ui.theme.NoteTitleStyle
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.noteColorScheme
 import info.sergeikolinichenko.closednotepad.usecases.NoteText
 
 private const val MAX_PREVIEW_ITEMS = 4
-private const val LOCKED_PLACEHOLDER = "••••••••"
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,8 +58,8 @@ fun NoteCard(
     Surface(
         color = colors.container,
         contentColor = colors.content,
-        shape = RoundedCornerShape(16.dp),
-        border = if (selected) BorderStroke(3.dp, MaterialTheme.colorScheme.onSurface) else null,
+        shape = RoundedCornerShape(20.dp),
+        border = if (selected) BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface) else null,
         modifier = modifier
             .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
@@ -74,13 +73,12 @@ private fun CardTitle(note: Note, colors: NoteColorScheme, maxLines: Int) {
     val title = NoteText.displayTitle(note).ifEmpty { stringResource(R.string.untitled) }
     Row(verticalAlignment = Alignment.Top) {
         if (note.type != NoteType.TEXT) {
-            Icon(note.type.icon, contentDescription = null, modifier = Modifier.size(18.dp).padding(top = 1.dp))
-            Spacer(Modifier.width(6.dp))
+            Icon(note.type.icon, contentDescription = null, modifier = Modifier.size(18.dp).padding(top = 3.dp))
+            Spacer(Modifier.width(8.dp))
         }
         Text(
             title,
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
+            style = NoteTitleStyle,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
@@ -93,24 +91,20 @@ private fun CardTitle(note: Note, colors: NoteColorScheme, maxLines: Int) {
                 modifier = Modifier.size(16.dp)
             )
         }
-        if (note.isLocked) {
-            Icon(
-                Icons.Outlined.Lock,
-                contentDescription = stringResource(R.string.locked),
-                tint = colors.contentVariant,
-                modifier = Modifier.padding(start = 4.dp).size(16.dp)
-            )
-        }
     }
 }
 
 @Composable
 private fun FullContent(note: Note, colors: NoteColorScheme, dateOverride: String?) {
-    Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         CardTitle(note, colors, maxLines = 3)
         when {
-            // The content of locked notes is never shown in lists
-            note.isLocked -> Text(LOCKED_PLACEHOLDER, color = colors.contentVariant)
+            // The content of locked notes is never shown in lists, only the seal
+            note.isLocked -> Row(verticalAlignment = Alignment.CenterVertically) {
+                Seal(size = 28.dp)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.sealed), style = MaterialTheme.typography.bodyMedium, color = colors.contentVariant)
+            }
             note.type == NoteType.TEXT -> {
                 val body = note.body.trim()
                 if (body.isNotEmpty() && body != note.title.trim()) {
@@ -180,13 +174,13 @@ private fun ItemsPreview(note: Note, colors: NoteColorScheme) {
 @Composable
 private fun CompactContent(note: Note, colors: NoteColorScheme, dateOverride: String?) {
     Row(
-        Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+        Modifier.padding(horizontal = 18.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             CardTitle(note, colors, maxLines = 1)
             val summary = when {
-                note.isLocked -> LOCKED_PLACEHOLDER
+                note.isLocked -> stringResource(R.string.sealed)
                 note.type == NoteType.TEXT ->
                     note.body.lineSequence().map { it.trim() }.firstOrNull { it.isNotEmpty() }.orEmpty()
                 else -> {
@@ -204,8 +198,9 @@ private fun CompactContent(note: Note, colors: NoteColorScheme, dateOverride: St
                 )
             }
         }
-        Spacer(Modifier.width(8.dp))
-        Text(
+        Spacer(Modifier.width(12.dp))
+        if (note.isLocked) Seal(size = 36.dp)
+        else Text(
             dateOverride ?: formatShortDate(note.updatedAt),
             style = MaterialTheme.typography.labelSmall,
             color = colors.contentVariant

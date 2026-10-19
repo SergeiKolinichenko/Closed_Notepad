@@ -7,7 +7,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
 import info.sergeikolinichenko.closednotepad.R
 
-// The eight note colors of version 2.x, kept under the same indexes as in the database
+// The eight note colors keep the indexes of version 2.x, now as muted tinted paper
 data class NoteColor(
     @StringRes val name: Int,
     val light: Color,
@@ -25,14 +25,14 @@ data class NoteColorScheme(
 object NoteColors {
 
     val all = listOf(
-        NoteColor(R.string.color_pink, Color(0xFFF8BBD0), Color(0xFF880E4F)),
-        NoteColor(R.string.color_purple, Color(0xFFE1BEE7), Color(0xFF4A148C)),
-        NoteColor(R.string.color_indigo, Color(0xFFC5CAE9), Color(0xFF1A237E)),
-        NoteColor(R.string.color_green, Color(0xFFC8E6C9), Color(0xFF1B5E20)),
-        NoteColor(R.string.color_orange, Color(0xFFFFCCBC), Color(0xFFBF360C)),
-        NoteColor(R.string.color_brown, Color(0xFFD7CCC8), Color(0xFF3E2723)),
-        NoteColor(R.string.color_gray, Color(0xFFEDEBE8), Color(0xFF2E2C2A)),
-        NoteColor(R.string.color_blue_gray, Color(0xFFCFD8DC), Color(0xFF263238))
+        NoteColor(R.string.color_pink, Color(0xFFF2DDD7), Color(0xFF45302C)),
+        NoteColor(R.string.color_purple, Color(0xFFE5DFEE), Color(0xFF36304A)),
+        NoteColor(R.string.color_indigo, Color(0xFFDAE3EC), Color(0xFF28344A)),
+        NoteColor(R.string.color_green, Color(0xFFDEE6D6), Color(0xFF2E3A2C)),
+        NoteColor(R.string.color_orange, Color(0xFFF4E1CD), Color(0xFF45362A)),
+        NoteColor(R.string.color_brown, Color(0xFFEAE1D3), Color(0xFF3D352B)),
+        NoteColor(R.string.color_gray, Color(0xFFFFFDF8), Color(0xFF262422)),
+        NoteColor(R.string.color_blue_gray, Color(0xFFDFE5E5), Color(0xFF2B3335))
     )
 
     fun get(index: Int): NoteColor = all.getOrElse(index) { all[6] }
@@ -43,7 +43,7 @@ object NoteColors {
             NoteColorScheme(
                 container = color.dark,
                 content = color.light,
-                contentVariant = color.light.copy(alpha = 0.75f),
+                contentVariant = color.light.copy(alpha = 0.8f),
                 line = color.light.copy(alpha = 0.16f),
                 accent = color.light
             )
@@ -51,7 +51,7 @@ object NoteColors {
             NoteColorScheme(
                 container = color.light,
                 content = color.dark,
-                contentVariant = color.dark.copy(alpha = 0.75f),
+                contentVariant = color.dark.copy(alpha = 0.8f),
                 line = color.dark.copy(alpha = 0.16f),
                 accent = color.dark
             )

@@ -1,53 +1,70 @@
 package info.sergeikolinichenko.closednotepad.presentation.ui.home
 
+import android.text.format.DateFormat
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.Sort
 import androidx.compose.material.icons.automirrored.outlined.ViewList
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.GridView
-import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -56,7 +73,15 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +93,12 @@ import info.sergeikolinichenko.closednotepad.models.SortOrder
 import info.sergeikolinichenko.closednotepad.presentation.navigation.LocalAppComponent
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ColorPicker
+import info.sergeikolinichenko.closednotepad.presentation.ui.common.icon
+import info.sergeikolinichenko.closednotepad.presentation.ui.theme.GroupHeaderStyle
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +114,6 @@ fun HomeScreen(
     val authenticator = LocalAuthenticator.current
     val noteLock = LocalAppComponent.current.noteLock()
     val unlocked by noteLock.unlocked.collectAsStateWithLifecycle()
-    var showCreateSheet by rememberSaveable { mutableStateOf(false) }
     var showColorSheet by rememberSaveable { mutableStateOf(false) }
     val selecting = state.selected.isNotEmpty()
 
@@ -111,7 +140,7 @@ fun HomeScreen(
                     onDelete = { withUnlocked(state.selectedNotes) { viewModel.trashSelected() } }
                 )
             } else {
-                HomeTopBar(
+                HomeHeader(
                     layout = state.settings.layout,
                     sortOrder = state.settings.sortOrder,
                     onSearch = onSearch,
@@ -122,15 +151,12 @@ fun HomeScreen(
                 )
             }
         },
-        floatingActionButton = {
+        bottomBar = {
             if (!selecting) {
-                FloatingActionButton(
-                    onClick = { showCreateSheet = true },
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ) {
-                    Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.create_note))
-                }
+                QuickBar(
+                    onSave = viewModel::saveQuickNote,
+                    onCreate = { type -> viewModel.createNote(type, onOpenNote) }
+                )
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) }
@@ -141,7 +167,7 @@ fun HomeScreen(
                 !state.loaded -> Unit
                 state.notes.isEmpty() -> EmptyState(
                     hasAnyNotes = state.hasAnyNotes,
-                    onCreate = { showCreateSheet = true }
+                    onCreate = { viewModel.createNote(NoteType.TEXT, onOpenNote) }
                 )
                 else -> NotesContent(
                     state = state,
@@ -152,16 +178,6 @@ fun HomeScreen(
                 )
             }
         }
-    }
-
-    if (showCreateSheet) {
-        CreateNoteSheet(
-            onDismiss = { showCreateSheet = false },
-            onCreate = { type ->
-                showCreateSheet = false
-                viewModel.createNote(type, onOpenNote)
-            }
-        )
     }
 
     if (showColorSheet) {
@@ -181,9 +197,9 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+// A large title with today's date instead of an app bar: the screen is a sheet of paper
 @Composable
-private fun HomeTopBar(
+private fun HomeHeader(
     layout: NotesLayout,
     sortOrder: SortOrder,
     onSearch: () -> Unit,
@@ -194,54 +210,148 @@ private fun HomeTopBar(
 ) {
     var menu by remember { mutableStateOf(false) }
     var sortMenu by remember { mutableStateOf(false) }
-    TopAppBar(
-        title = { Text(stringResource(R.string.notes_title)) },
-        actions = {
-            IconButton(onClick = onSearch) {
-                Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.search))
+    val today = remember { todayText() }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.statusBars)
+            .padding(start = 20.dp, end = 8.dp, top = 20.dp),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(today, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                stringResource(R.string.notes_title),
+                style = MaterialTheme.typography.headlineLarge,
+                modifier = Modifier.semantics { heading() }
+            )
+        }
+        IconButton(onClick = onSearch) {
+            Icon(Icons.Outlined.Search, contentDescription = stringResource(R.string.search))
+        }
+        Box {
+            IconButton(onClick = { menu = true }) {
+                Icon(Icons.Outlined.Menu, contentDescription = stringResource(R.string.more_options))
             }
-            if (layout == NotesLayout.GRID) {
-                IconButton(onClick = { onLayout(NotesLayout.LIST) }) {
-                    Icon(Icons.AutoMirrored.Outlined.ViewList, contentDescription = stringResource(R.string.show_as_list))
+            DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+                if (layout == NotesLayout.GRID) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.show_as_list)) },
+                        leadingIcon = { Icon(Icons.AutoMirrored.Outlined.ViewList, null) },
+                        onClick = { menu = false; onLayout(NotesLayout.LIST) }
+                    )
+                } else {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.show_as_grid)) },
+                        leadingIcon = { Icon(Icons.Outlined.GridView, null) },
+                        onClick = { menu = false; onLayout(NotesLayout.GRID) }
+                    )
                 }
-            } else {
-                IconButton(onClick = { onLayout(NotesLayout.GRID) }) {
-                    Icon(Icons.Outlined.GridView, contentDescription = stringResource(R.string.show_as_grid))
-                }
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.sort)) },
+                    leadingIcon = { Icon(Icons.AutoMirrored.Outlined.Sort, null) },
+                    onClick = { menu = false; sortMenu = true }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.trash)) },
+                    leadingIcon = { Icon(Icons.Outlined.Delete, null) },
+                    onClick = { menu = false; onTrash() }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.settings)) },
+                    leadingIcon = { Icon(Icons.Outlined.Settings, null) },
+                    onClick = { menu = false; onSettings() }
+                )
             }
-            Box {
-                IconButton(onClick = { menu = true }) {
-                    Icon(Icons.Outlined.MoreVert, contentDescription = stringResource(R.string.more_options))
-                }
-                DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
+            DropdownMenu(expanded = sortMenu, onDismissRequest = { sortMenu = false }) {
+                SortOrder.entries.forEach { order ->
                     DropdownMenuItem(
-                        text = { Text(stringResource(R.string.sort)) },
-                        leadingIcon = { Icon(Icons.AutoMirrored.Outlined.Sort, null) },
-                        onClick = { menu = false; sortMenu = true }
+                        text = { Text(stringResource(order.label)) },
+                        trailingIcon = { if (order == sortOrder) Icon(Icons.Outlined.Check, null) },
+                        onClick = { sortMenu = false; onSort(order) }
                     )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.trash)) },
-                        leadingIcon = { Icon(Icons.Outlined.Delete, null) },
-                        onClick = { menu = false; onTrash() }
-                    )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.settings)) },
-                        leadingIcon = { Icon(Icons.Outlined.Settings, null) },
-                        onClick = { menu = false; onSettings() }
-                    )
-                }
-                DropdownMenu(expanded = sortMenu, onDismissRequest = { sortMenu = false }) {
-                    SortOrder.entries.forEach { order ->
-                        DropdownMenuItem(
-                            text = { Text(stringResource(order.label)) },
-                            trailingIcon = { if (order == sortOrder) Icon(Icons.Outlined.Check, null) },
-                            onClick = { sortMenu = false; onSort(order) }
-                        )
-                    }
                 }
             }
         }
-    )
+    }
+}
+
+// "Monday, 19 October" in the language of the phone
+private fun todayText(): String {
+    val locale = Locale.getDefault()
+    val pattern = DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM")
+    return SimpleDateFormat(pattern, locale).format(Date())
+        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+}
+
+// The main action is always at hand: type a line and save it, or start a list
+@Composable
+private fun QuickBar(onSave: (String) -> Unit, onCreate: (NoteType) -> Unit) {
+    var text by rememberSaveable { mutableStateOf("") }
+    val colors = MaterialTheme.colorScheme
+    val style = MaterialTheme.typography.bodyLarge.copy(color = colors.onSurface)
+    fun save() {
+        onSave(text)
+        text = ""
+    }
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .windowInsetsPadding(WindowInsets.navigationBars.union(WindowInsets.ime))
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 16.dp),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Row(
+            Modifier
+                .weight(1f)
+                .heightIn(min = 56.dp)
+                .clip(RoundedCornerShape(28.dp))
+                .background(colors.surfaceContainerHigh)
+                .border(1.dp, colors.outlineVariant, RoundedCornerShape(28.dp))
+                .padding(start = 20.dp, end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BasicTextField(
+                value = text,
+                onValueChange = { text = it },
+                textStyle = style,
+                cursorBrush = SolidColor(colors.tertiary),
+                maxLines = 5,
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+                modifier = Modifier.weight(1f).padding(vertical = 14.dp),
+                decorationBox = { inner ->
+                    if (text.isEmpty()) {
+                        Text(stringResource(R.string.write_hint), style = style, color = colors.onSurfaceVariant)
+                    }
+                    inner()
+                }
+            )
+            if (text.isEmpty()) {
+                IconButton(onClick = { onCreate(NoteType.CHECKLIST) }) {
+                    Icon(NoteType.CHECKLIST.icon, contentDescription = stringResource(R.string.new_checklist), tint = colors.onSurfaceVariant)
+                }
+                IconButton(onClick = { onCreate(NoteType.SHOPPING) }) {
+                    Icon(NoteType.SHOPPING.icon, contentDescription = stringResource(R.string.new_shopping), tint = colors.onSurfaceVariant)
+                }
+            }
+        }
+        FilledIconButton(
+            onClick = { if (text.isBlank()) onCreate(NoteType.TEXT) else save() },
+            shape = CircleShape,
+            colors = IconButtonDefaults.filledIconButtonColors(
+                containerColor = colors.primary,
+                contentColor = colors.onPrimary
+            ),
+            modifier = Modifier.size(56.dp)
+        ) {
+            if (text.isBlank()) {
+                Icon(Icons.Outlined.Add, contentDescription = stringResource(R.string.create_note))
+            } else {
+                Icon(Icons.Outlined.Check, contentDescription = stringResource(R.string.save_note))
+            }
+        }
+    }
 }
 
 val SortOrder.label: Int
@@ -289,16 +399,37 @@ private fun SelectionTopBar(
 
 @Composable
 private fun FilterRow(selected: NoteFilter, onSelect: (NoteFilter) -> Unit) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(horizontal = 8.dp)
+            .selectableGroup()
     ) {
-        items(NoteFilter.entries) { filter ->
-            FilterChip(
-                selected = filter == selected,
-                onClick = { onSelect(filter) },
-                label = { Text(stringResource(filter.label)) }
-            )
+        NoteFilter.entries.forEach { filter ->
+            val isSelected = filter == selected
+            Column(
+                Modifier
+                    .selectable(selected = isSelected, role = Role.Tab, onClick = { onSelect(filter) })
+                    .heightIn(min = 48.dp)
+                    .padding(horizontal = 12.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    stringResource(filter.label),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
+                    color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(6.dp))
+                Box(
+                    Modifier
+                        .width(24.dp)
+                        .height(2.dp)
+                        .background(if (isSelected) MaterialTheme.colorScheme.tertiary else Color.Transparent)
+                )
+            }
         }
     }
 }
@@ -317,13 +448,13 @@ private fun NotesContent(
     onClick: (Note) -> Unit,
     onLongClick: (Note) -> Unit
 ) {
-    val bottomPadding = 96.dp
+    val bottomPadding = 16.dp
     if (state.settings.layout == NotesLayout.GRID) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(160.dp),
-            contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = bottomPadding),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalItemSpacing = 8.dp,
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = bottomPadding),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalItemSpacing = 10.dp,
             modifier = Modifier.fillMaxSize()
         ) {
             items(state.notes, key = { it.id }) { note ->
@@ -340,18 +471,18 @@ private fun NotesContent(
     } else {
         val groups = groupNotes(state.notes, state.settings.sortOrder)
         LazyColumn(
-            contentPadding = PaddingValues(start = 12.dp, end = 12.dp, top = 8.dp, bottom = bottomPadding),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = bottomPadding),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.fillMaxSize()
         ) {
             groups.forEach { (group, notes) ->
                 if (group != null) {
                     item(key = "header-$group") {
                         Text(
-                            stringResource(group.label),
-                            style = MaterialTheme.typography.labelLarge,
+                            stringResource(group.label).uppercase(),
+                            style = GroupHeaderStyle,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 4.dp, top = 10.dp, bottom = 2.dp).animateItem()
+                            modifier = Modifier.padding(start = 6.dp, top = 14.dp, bottom = 2.dp).animateItem()
                         )
                     }
                 }
@@ -417,16 +548,9 @@ private fun EmptyState(hasAnyNotes: Boolean, onCreate: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            Icons.Outlined.EditNote,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(56.dp)
-        )
-        Spacer(Modifier.height(16.dp))
         Text(
             stringResource(if (hasAnyNotes) R.string.empty_filter_title else R.string.empty_title),
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
         if (!hasAnyNotes) {
@@ -438,39 +562,9 @@ private fun EmptyState(hasAnyNotes: Boolean, onCreate: () -> Unit) {
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(16.dp))
-            androidx.compose.material3.FilledTonalButton(onClick = onCreate) {
+            TextButton(onClick = onCreate) {
                 Text(stringResource(R.string.create_note))
             }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CreateNoteSheet(onDismiss: () -> Unit, onCreate: (NoteType) -> Unit) {
-    ModalBottomSheet(
-        onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    ) {
-        Column(
-            Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(bottom = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                stringResource(R.string.create),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(start = 8.dp, bottom = 8.dp)
-            )
-            CreateTile(NoteType.TEXT, R.string.type_text_hint, colorIndex = 1, onCreate)
-            CreateTile(NoteType.CHECKLIST, R.string.type_checklist_hint, colorIndex = 2, onCreate)
-            CreateTile(NoteType.SHOPPING, R.string.type_shopping_hint, colorIndex = 4, onCreate)
-            HorizontalDivider(Modifier.padding(vertical = 4.dp), color = MaterialTheme.colorScheme.outlineVariant)
-            Text(
-                stringResource(R.string.more_types_soon),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
         }
     }
 }

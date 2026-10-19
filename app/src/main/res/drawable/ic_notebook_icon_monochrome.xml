@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A sheet of paper with a wax seal: the note is yours and closed -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:pivotX="53"
+        android:pivotY="55"
+        android:rotation="-6">
+        <path
+            android:pathData="M36,30 H62 L70,38 V80 H36 Z"
+            android:fillColor="#00000000"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2.4" />
+        <path
+            android:pathData="M43,45 H62"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2.4"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M43,52.5 H64"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2.4"
+            android:strokeLineCap="round" />
+        <path
+            android:pathData="M43,60 H56"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2.4"
+            android:strokeLineCap="round" />
+    </group>
+    <path
+        android:pathData="M56,70 a11,11 0 1,0 22,0 a11,11 0 1,0 -22,0 M64.7,67.7 a2.3,2.3 0 1,0 4.6,0 a2.3,2.3 0 1,0 -4.6,0 M65.6,68.8 H68.4 L69.1,74.2 H64.9 Z"
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd" />
+</vector>

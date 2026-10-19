@@ -68,6 +68,7 @@ import info.sergeikolinichenko.closednotepad.models.NoteItem
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ProgressLine
 import info.sergeikolinichenko.closednotepad.presentation.ui.home.progressText
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.NoteColorScheme
+import info.sergeikolinichenko.closednotepad.presentation.ui.theme.SansFamily
 import java.text.NumberFormat
 
 @Composable
@@ -232,7 +233,7 @@ private fun AddItemField(
                 value = input,
                 onValueChange = onInput,
                 singleLine = true,
-                textStyle = TextStyle(fontSize = 17.sp, color = colors.content),
+                textStyle = TextStyle(fontFamily = SansFamily, fontSize = 17.sp, color = colors.content),
                 cursorBrush = SolidColor(colors.content),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Sentences,

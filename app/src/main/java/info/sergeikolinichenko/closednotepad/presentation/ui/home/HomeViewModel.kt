@@ -82,6 +82,23 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    // A short note written right on the home screen, without opening the editor
+    fun saveQuickNote(text: String) {
+        if (text.isBlank()) return
+        viewModelScope.launch {
+            val now = System.currentTimeMillis()
+            notesRepository.createNote(
+                Note(
+                    type = NoteType.TEXT,
+                    body = text.trim(),
+                    colorIndex = preferencesRepository.current().defaultColorIndex,
+                    createdAt = now,
+                    updatedAt = now
+                )
+            )
+        }
+    }
+
     fun setFilter(value: NoteFilter) {
         filter.value = value
         clearSelection()

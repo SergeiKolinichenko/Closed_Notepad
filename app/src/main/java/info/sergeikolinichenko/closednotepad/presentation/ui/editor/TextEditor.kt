@@ -35,6 +35,7 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.formatDateTime
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.NoteColorScheme
+import info.sergeikolinichenko.closednotepad.presentation.ui.theme.SansFamily
 
 private val LINE_HEIGHT = 28.sp
 
@@ -90,7 +91,7 @@ fun TitleField(title: String, colors: NoteColorScheme, onTitle: (String) -> Unit
 private fun LinedTextField(text: String, colors: NoteColorScheme, onText: (String) -> Unit) {
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val lineHeightPx = with(LocalDensity.current) { LINE_HEIGHT.toPx() }
-    val style = TextStyle(fontSize = 17.sp, lineHeight = LINE_HEIGHT, color = colors.content)
+    val style = TextStyle(fontFamily = SansFamily, fontSize = 17.sp, lineHeight = LINE_HEIGHT, color = colors.content)
     BasicTextField(
         value = text,
         onValueChange = onText,

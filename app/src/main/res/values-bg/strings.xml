@@ -13,6 +13,11 @@
     <string name="trash">Кошче</string>
     <string name="settings">Настройки</string>
     <string name="create_note">Създай бележка</string>
+    <string name="write_hint">Запиши…</string>
+    <string name="save_note">Запази бележката</string>
+    <string name="new_checklist">Нов списък със задачи</string>
+    <string name="new_shopping">Нов списък за пазаруване</string>
+    <string name="sealed">Запечатана</string>
     <string name="create">Създай</string>
     <string name="cancel_selection">Отмени избора</string>
     <string name="pin">Закачи</string>
@@ -104,7 +109,7 @@
     <string name="not_bought">Не е купено</string>
 
     <!-- Locked notes -->
-    <string name="note_is_locked">Бележката е заключена</string>
+    <string name="note_is_locked">Бележката е запечатана</string>
     <string name="unlock">Отключи</string>
     <string name="auth_title">Заключена бележка</string>
     <string name="auth_subtitle">Потвърдете, че сте вие</string>
@@ -135,14 +140,14 @@
     <string name="version">Версия %s</string>
 
     <!-- Colors -->
-    <string name="color_pink">Розов</string>
-    <string name="color_purple">Лилав</string>
-    <string name="color_indigo">Индиго</string>
-    <string name="color_green">Зелен</string>
-    <string name="color_orange">Оранжев</string>
-    <string name="color_brown">Кафяв</string>
-    <string name="color_gray">Сив</string>
-    <string name="color_blue_gray">Синкавосив</string>
+    <string name="color_pink">Роза</string>
+    <string name="color_purple">Лавандула</string>
+    <string name="color_indigo">Небе</string>
+    <string name="color_green">Градински чай</string>
+    <string name="color_orange">Кайсия</string>
+    <string name="color_brown">Пясък</string>
+    <string name="color_gray">Лист</string>
+    <string name="color_blue_gray">Мъгла</string>
 
     <plurals name="moved_to_trash">
         <item quantity="one">Бележката е преместена в кошчето</item>
