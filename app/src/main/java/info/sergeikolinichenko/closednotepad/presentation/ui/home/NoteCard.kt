@@ -27,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.Hyphens
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import info.sergeikolinichenko.closednotepad.R
@@ -69,7 +71,7 @@ fun NoteCard(
 }
 
 @Composable
-private fun CardTitle(note: Note, colors: NoteColorScheme, maxLines: Int) {
+private fun CardTitle(note: Note, colors: NoteColorScheme, maxLines: Int, showPin: Boolean = true) {
     val title = NoteText.displayTitle(note).ifEmpty { stringResource(R.string.untitled) }
     Row(verticalAlignment = Alignment.Top) {
         if (note.type != NoteType.TEXT) {
@@ -78,26 +80,31 @@ private fun CardTitle(note: Note, colors: NoteColorScheme, maxLines: Int) {
         }
         Text(
             title,
-            style = NoteTitleStyle,
+            // Half-width grid cards are narrow: hyphenate long words instead of breaking them anywhere
+            style = NoteTitleStyle.copy(hyphens = Hyphens.Auto, lineBreak = LineBreak.Paragraph),
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
-        if (note.isPinned) {
-            Icon(
-                Icons.Outlined.PushPin,
-                contentDescription = stringResource(R.string.pinned),
-                tint = colors.contentVariant,
-                modifier = Modifier.size(16.dp)
-            )
-        }
+        if (showPin && note.isPinned) PinMark(colors)
     }
+}
+
+@Composable
+private fun PinMark(colors: NoteColorScheme) {
+    Icon(
+        Icons.Outlined.PushPin,
+        contentDescription = stringResource(R.string.pinned),
+        tint = colors.contentVariant,
+        modifier = Modifier.size(16.dp)
+    )
 }
 
 @Composable
 private fun FullContent(note: Note, colors: NoteColorScheme, dateOverride: String?) {
     Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        CardTitle(note, colors, maxLines = 3)
+        // The pin goes down to the date, so the title gets the whole width of a narrow grid card
+        CardTitle(note, colors, maxLines = 3, showPin = false)
         when {
             // The content of locked notes is never shown in lists, only the seal
             note.isLocked -> Row(verticalAlignment = Alignment.CenterVertically) {
@@ -119,11 +126,15 @@ private fun FullContent(note: Note, colors: NoteColorScheme, dateOverride: Strin
             }
             else -> ItemsPreview(note, colors)
         }
-        Text(
-            dateOverride ?: formatShortDate(note.updatedAt),
-            style = MaterialTheme.typography.labelSmall,
-            color = colors.contentVariant
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                dateOverride ?: formatShortDate(note.updatedAt),
+                style = MaterialTheme.typography.labelSmall,
+                color = colors.contentVariant,
+                modifier = Modifier.weight(1f)
+            )
+            if (note.isPinned) PinMark(colors)
+        }
     }
 }
 

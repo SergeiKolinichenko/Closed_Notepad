@@ -7,3 +7,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/store-listing/raw/
+/store-listing/google-play-assets.zip

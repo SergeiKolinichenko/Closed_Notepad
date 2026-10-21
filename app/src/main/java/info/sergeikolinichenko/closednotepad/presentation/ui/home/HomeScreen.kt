@@ -282,7 +282,8 @@ private fun HomeHeader(
 // "Monday, 19 October" in the language of the phone
 private fun todayText(): String {
     val locale = Locale.getDefault()
-    val pattern = DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM")
+    // ICU may answer with the stand-alone weekday "cccc", which older java.text.SimpleDateFormat rejects
+    val pattern = DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM").replace('c', 'E')
     return SimpleDateFormat(pattern, locale).format(Date())
         .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
 }
@@ -457,7 +458,7 @@ private fun NotesContent(
     }
     if (state.settings.layout == NotesLayout.GRID) {
         LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(160.dp),
+            columns = StaggeredGridCells.Adaptive(150.dp),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = bottomPadding),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalItemSpacing = 10.dp,
