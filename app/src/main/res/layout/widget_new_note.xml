@@ -35,11 +35,13 @@
             android:textColor="@color/widget_ink"
             android:textSize="16sp" />
 
-        <View
+        <!-- Widgets may only use the views RemoteViews allows, so the dot is an ImageView -->
+        <ImageView
             android:layout_width="6dp"
             android:layout_height="6dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/widget_seal" />
+            android:importantForAccessibility="no"
+            android:src="@drawable/widget_seal" />
     </LinearLayout>
 
     <ImageView
