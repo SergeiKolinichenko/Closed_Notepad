@@ -32,4 +32,15 @@ data class Note(
 
     val isInTrash: Boolean
         get() = removedAt != null
+
+    companion object {
+        // An empty note to start writing in; lists get one empty item to type into
+        fun blank(type: NoteType, colorIndex: Int, now: Long, newItemId: () -> String): Note = Note(
+            type = type,
+            colorIndex = colorIndex,
+            items = if (type == NoteType.TEXT) emptyList() else listOf(NoteItem(id = newItemId(), text = "")),
+            createdAt = now,
+            updatedAt = now
+        )
+    }
 }

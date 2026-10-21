@@ -12,11 +12,13 @@ import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.presentation.navigation.AppNavHost
 import info.sergeikolinichenko.closednotepad.presentation.navigation.LocalAppComponent
 import info.sergeikolinichenko.closednotepad.presentation.security.Authenticator
+import info.sergeikolinichenko.closednotepad.presentation.shortcuts.NewNoteIntents
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.ClosedNotepadTheme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 // FragmentActivity is needed by BiometricPrompt
 class MainActivity : FragmentActivity() {
@@ -38,13 +40,32 @@ class MainActivity : FragmentActivity() {
                 }
             }
         }
-        // After a rotation the shared note is already open
-        if (savedInstanceState == null) handleSharedText(intent)
+        // After a rotation the shared or new note is already open
+        if (savedInstanceState == null) handleIntent(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handleSharedText(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        val newNoteType = NewNoteIntents.typeOf(intent)
+        if (newNoteType != null) createNote(newNoteType) else handleSharedText(intent)
+    }
+
+    // "New note" from the widget, the quick settings tile or a launcher shortcut
+    private fun createNote(type: NoteType) {
+        setIntent(Intent(this, MainActivity::class.java))
+        lifecycleScope.launch {
+            val note = Note.blank(
+                type = type,
+                colorIndex = component.preferencesRepository().current().defaultColorIndex,
+                now = System.currentTimeMillis(),
+                newItemId = { UUID.randomUUID().toString() }
+            )
+            openNoteRequests.send(component.notesRepository().createNote(note))
+        }
     }
 
     // Text shared from another app becomes a new text note

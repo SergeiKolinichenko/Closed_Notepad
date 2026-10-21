@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="window_background">#F3EFE7</color>
+
+    <!-- Home screen widget, the same paper and seal as the app -->
+    <color name="widget_background">#FFFDF8</color>
+    <color name="widget_line">#DDD5C8</color>
+    <color name="widget_ink">#22201E</color>
+    <color name="widget_ink_soft">#6B645B</color>
+    <color name="widget_seal">#B5412F</color>
 </resources>

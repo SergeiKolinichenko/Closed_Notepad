@@ -28,6 +28,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -95,6 +96,8 @@ import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenti
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ColorPicker
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.icon
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.GroupHeaderStyle
+import info.sergeikolinichenko.closednotepad.usecases.NoteGroup
+import info.sergeikolinichenko.closednotepad.usecases.NoteGrouper
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -449,6 +452,9 @@ private fun NotesContent(
     onLongClick: (Note) -> Unit
 ) {
     val bottomPadding = 16.dp
+    val groups = remember(state.notes, state.settings.sortOrder) {
+        NoteGrouper.group(state.notes, state.settings.sortOrder)
+    }
     if (state.settings.layout == NotesLayout.GRID) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(160.dp),
@@ -457,19 +463,25 @@ private fun NotesContent(
             verticalItemSpacing = 10.dp,
             modifier = Modifier.fillMaxSize()
         ) {
-            items(state.notes, key = { it.id }) { note ->
-                NoteCard(
-                    note = note,
-                    selected = note.id in state.selected,
-                    compact = false,
-                    onClick = { onClick(note) },
-                    onLongClick = { onLongClick(note) },
-                    modifier = Modifier.animateItem()
-                )
+            groups.forEach { (group, notes) ->
+                if (group != null) {
+                    item(key = "header-$group", span = StaggeredGridItemSpan.FullLine) {
+                        GroupHeader(group, Modifier.animateItem())
+                    }
+                }
+                items(notes, key = { it.id }) { note ->
+                    NoteCard(
+                        note = note,
+                        selected = note.id in state.selected,
+                        compact = false,
+                        onClick = { onClick(note) },
+                        onLongClick = { onLongClick(note) },
+                        modifier = Modifier.animateItem()
+                    )
+                }
             }
         }
     } else {
-        val groups = groupNotes(state.notes, state.settings.sortOrder)
         LazyColumn(
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = bottomPadding),
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -478,12 +490,7 @@ private fun NotesContent(
             groups.forEach { (group, notes) ->
                 if (group != null) {
                     item(key = "header-$group") {
-                        Text(
-                            stringResource(group.label).uppercase(),
-                            style = GroupHeaderStyle,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(start = 6.dp, top = 14.dp, bottom = 2.dp).animateItem()
-                        )
+                        GroupHeader(group, Modifier.animateItem())
                     }
                 }
                 items(notes, key = { it.id }) { note ->
@@ -501,44 +508,39 @@ private fun NotesContent(
     }
 }
 
-enum class NoteGroup(val label: Int) {
-    PINNED(R.string.group_pinned),
-    TODAY(R.string.group_today),
-    YESTERDAY(R.string.group_yesterday),
-    EARLIER(R.string.group_earlier),
-    OTHERS(R.string.group_others)
+@Composable
+private fun GroupHeader(group: NoteGroup, modifier: Modifier = Modifier) {
+    Text(
+        group.label().uppercase(),
+        style = GroupHeaderStyle,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier
+            .padding(start = 6.dp, top = 14.dp, bottom = 2.dp)
+            .semantics { heading() }
+    )
 }
 
-// Feed groups: pinned first, then by the day of the last change when sorted by it
-fun groupNotes(
-    notes: List<Note>,
-    order: SortOrder,
-    now: Long = System.currentTimeMillis()
-): List<Pair<NoteGroup?, List<Note>>> {
-    val pinned = notes.filter { it.isPinned }
-    val others = notes.filter { !it.isPinned }
-    val result = mutableListOf<Pair<NoteGroup?, List<Note>>>()
-    if (pinned.isNotEmpty()) result += NoteGroup.PINNED to pinned
-    if (order != SortOrder.UPDATED_DESC) {
-        if (others.isNotEmpty()) result += (if (pinned.isEmpty()) null else NoteGroup.OTHERS) to others
-        return result
+@Composable
+private fun NoteGroup.label(): String = when (this) {
+    NoteGroup.Pinned -> stringResource(R.string.group_pinned)
+    NoteGroup.Others -> stringResource(R.string.group_others)
+    NoteGroup.Today -> stringResource(R.string.group_today)
+    NoteGroup.Yesterday -> stringResource(R.string.group_yesterday)
+    NoteGroup.ThisWeek -> stringResource(R.string.group_this_week)
+    NoteGroup.ThisMonth -> stringResource(R.string.group_this_month)
+    is NoteGroup.Month -> {
+        val locale = Locale.getDefault()
+        remember(this, locale) { monthText(year, month, locale) }
     }
-    val startOfToday = Calendar.getInstance().apply {
-        timeInMillis = now
-        set(Calendar.HOUR_OF_DAY, 0); set(Calendar.MINUTE, 0); set(Calendar.SECOND, 0); set(Calendar.MILLISECOND, 0)
-    }.timeInMillis
-    val startOfYesterday = Calendar.getInstance().apply {
-        timeInMillis = startOfToday
-        add(Calendar.DAY_OF_YEAR, -1)
-    }.timeInMillis
-    others.groupBy { note ->
-        when {
-            note.updatedAt >= startOfToday -> NoteGroup.TODAY
-            note.updatedAt >= startOfYesterday -> NoteGroup.YESTERDAY
-            else -> NoteGroup.EARLIER
-        }
-    }.toSortedMap().forEach { (group, list) -> result += group to list }
-    return result
+}
+
+// "September" for this year, "September 2025" for earlier ones, in the language of the phone
+private fun monthText(year: Int, month: Int, locale: Locale): String {
+    val calendar = Calendar.getInstance()
+    val pattern = if (year == calendar.get(Calendar.YEAR)) "LLLL" else "LLLL yyyy"
+    calendar.clear()
+    calendar.set(year, month, 1)
+    return SimpleDateFormat(pattern, locale).format(calendar.time)
 }
 
 @Composable

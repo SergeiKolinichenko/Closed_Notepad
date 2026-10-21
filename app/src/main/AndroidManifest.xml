@@ -35,7 +35,33 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
         </activity>
+
+        <receiver
+            android:name=".presentation.shortcuts.NewNoteWidget"
+            android:exported="false"
+            android:label="@string/new_note">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_new_note_info" />
+        </receiver>
+
+        <service
+            android:name=".presentation.shortcuts.NewNoteTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_new_note"
+            android:label="@string/new_note"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
 
         <!-- WorkManager is configured by NotesApp through Configuration.Provider -->
         <provider

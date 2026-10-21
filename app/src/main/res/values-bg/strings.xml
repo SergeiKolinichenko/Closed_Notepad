@@ -3,6 +3,10 @@
     <string name="app_name">Бележник</string>
     <string name="share_target_label">Запази в бележника</string>
 
+    <!-- Widget, quick settings tile and launcher shortcuts -->
+    <string name="new_note">Нова бележка</string>
+    <string name="widget_description">Бележка, списък със задачи или за пазаруване с едно докосване</string>
+
     <!-- Home -->
     <string name="notes_title">Бележки</string>
     <string name="search">Търсене</string>
@@ -33,7 +37,8 @@
     <string name="group_pinned">Закачени</string>
     <string name="group_today">Днес</string>
     <string name="group_yesterday">Вчера</string>
-    <string name="group_earlier">По-рано</string>
+    <string name="group_this_week">Тази седмица</string>
+    <string name="group_this_month">Този месец</string>
     <string name="group_others">Други</string>
     <string name="empty_title">Запишете първата си бележка</string>
     <string name="empty_body">Тук живеят текстове, списъци със задачи и списъци за пазаруване. Заключената бележка се отваря само с пръстов отпечатък или заключване на екрана.</string>
@@ -135,6 +140,14 @@
     <string name="trash_auto_delete">Автоматично изпразване на кошчето</string>
     <string name="trash_auto_delete_hint">Колко време след преместването в кошчето бележката се изтрива завинаги.</string>
     <string name="never_delete">Никога</string>
+    <string name="export_import">Износ и внос</string>
+    <string name="export_import_hint">Всяка бележка се записва като отделен файл .md в нова папка в избраната. Вносът приема файлове .md и .txt и пропуска бележките, които вече ги има.</string>
+    <string name="export_include_locked_hint">Текстът им ще бъде във файловете без защита</string>
+    <string name="export_notes">Износ</string>
+    <string name="import_notes">Внос</string>
+    <string name="import_nothing_new">В тези файлове няма нови бележки</string>
+    <string name="transfer_failed">Файловете не можаха да бъдат прочетени или записани</string>
+
     <string name="about_locked_notes">Заключени бележки</string>
     <string name="about_locked_notes_body">Заключената бележка се отваря само след пръстов отпечатък, лице или заключване на екрана. Текстът ѝ не се вижда в списъците, търсенето и екранните снимки, а при излизане от приложението тя отново се заключва.</string>
     <string name="version">Версия %s</string>
@@ -172,5 +185,17 @@
     <plurals name="after_days">
         <item quantity="one">След %d ден</item>
         <item quantity="other">След %d дни</item>
+    </plurals>
+    <plurals name="export_include_locked">
+        <item quantity="one">Включи %d заключена бележка</item>
+        <item quantity="other">Включи %d заключени бележки</item>
+    </plurals>
+    <plurals name="exported_notes">
+        <item quantity="one">Изнесена е %d бележка</item>
+        <item quantity="other">Изнесени са %d бележки</item>
+    </plurals>
+    <plurals name="imported_notes">
+        <item quantity="one">Внесена е %d бележка</item>
+        <item quantity="other">Внесени са %d бележки</item>
     </plurals>
 </resources>

@@ -3,6 +3,10 @@
     <string name="app_name">Notepad</string>
     <string name="share_target_label">Save to notepad</string>
 
+    <!-- Widget, quick settings tile and launcher shortcuts -->
+    <string name="new_note">New note</string>
+    <string name="widget_description">A note, a to-do list or a shopping list in one tap</string>
+
     <!-- Home -->
     <string name="notes_title">Notes</string>
     <string name="search">Search</string>
@@ -33,7 +37,8 @@
     <string name="group_pinned">Pinned</string>
     <string name="group_today">Today</string>
     <string name="group_yesterday">Yesterday</string>
-    <string name="group_earlier">Earlier</string>
+    <string name="group_this_week">This week</string>
+    <string name="group_this_month">This month</string>
     <string name="group_others">Others</string>
     <string name="empty_title">Write down your first note</string>
     <string name="empty_body">Texts, to-do lists and shopping lists live here. Lock a note to hide it behind your fingerprint or screen lock.</string>
@@ -135,6 +140,14 @@
     <string name="trash_auto_delete">Empty the trash automatically</string>
     <string name="trash_auto_delete_hint">Notes are deleted forever this long after they were moved to the trash.</string>
     <string name="never_delete">Never</string>
+    <string name="export_import">Export and import</string>
+    <string name="export_import_hint">Each note is saved as a separate .md file in a new folder inside the one you pick. Import takes .md and .txt files and skips notes the app already has.</string>
+    <string name="export_include_locked_hint">Their text will be in the files without protection</string>
+    <string name="export_notes">Export</string>
+    <string name="import_notes">Import</string>
+    <string name="import_nothing_new">No new notes in these files</string>
+    <string name="transfer_failed">Couldn\'t read or write the files</string>
+
     <string name="about_locked_notes">Locked notes</string>
     <string name="about_locked_notes_body">A locked note opens only after your fingerprint, face or screen lock. Its text is not shown in lists, search or screenshots, and it is locked again when you leave the app.</string>
     <string name="version">Version %s</string>
@@ -172,5 +185,17 @@
     <plurals name="after_days">
         <item quantity="one">After %d day</item>
         <item quantity="other">After %d days</item>
+    </plurals>
+    <plurals name="export_include_locked">
+        <item quantity="one">Include %d locked note</item>
+        <item quantity="other">Include %d locked notes</item>
+    </plurals>
+    <plurals name="exported_notes">
+        <item quantity="one">%d note exported</item>
+        <item quantity="other">%d notes exported</item>
+    </plurals>
+    <plurals name="imported_notes">
+        <item quantity="one">%d note imported</item>
+        <item quantity="other">%d notes imported</item>
     </plurals>
 </resources>

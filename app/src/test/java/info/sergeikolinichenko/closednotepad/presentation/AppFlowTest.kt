@@ -51,7 +51,6 @@ class AppFlowTest {
     fun createTextNote_isSavedAndShownOnHome() {
         waitForText("Write down your first note")
         compose.onNodeWithContentDescription("Create note").performClick()
-        compose.onNodeWithText("A note, a thought, an idea").performClick()
 
         waitForText("Title")
         compose.onNode(hasSetTextAction() and hasText("Title")).performTextInput("Meeting")
@@ -71,7 +70,6 @@ class AppFlowTest {
     fun typing_isSavedWithoutLeavingTheEditor() {
         waitForText("Write down your first note")
         compose.onNodeWithContentDescription("Create note").performClick()
-        compose.onNodeWithText("A note, a thought, an idea").performClick()
         waitForText("Title")
         compose.onNode(hasSetTextAction() and hasText("Note")).performTextInput("Draft")
 
@@ -84,8 +82,7 @@ class AppFlowTest {
     @Test
     fun emptyNote_isNotKept() {
         waitForText("Write down your first note")
-        compose.onNodeWithContentDescription("Create note").performClick()
-        compose.onNodeWithText("To-dos with check boxes").performClick()
+        compose.onNodeWithContentDescription("New to-do list").performClick()
         waitForText("Add item")
         compose.onNodeWithContentDescription("Back").performClick()
         waitForSave()
@@ -95,8 +92,7 @@ class AppFlowTest {
     @Test
     fun shoppingList_parsesQuantityAndChecksItem() {
         waitForText("Write down your first note")
-        compose.onNodeWithContentDescription("Create note").performClick()
-        compose.onNodeWithText("Quantities, prices and store sections").performClick()
+        compose.onNodeWithContentDescription("New shopping list").performClick()
 
         waitForText("Add a product")
         val input = compose.onNode(hasSetTextAction() and hasImeAction(ImeAction.Done))
@@ -127,7 +123,6 @@ class AppFlowTest {
     fun movingToTrash_canBeUndone() {
         waitForText("Write down your first note")
         compose.onNodeWithContentDescription("Create note").performClick()
-        compose.onNodeWithText("A note, a thought, an idea").performClick()
         waitForText("Title")
         compose.onNode(hasSetTextAction() and hasText("Title")).performTextInput("Shopping ideas")
         waitForSave()

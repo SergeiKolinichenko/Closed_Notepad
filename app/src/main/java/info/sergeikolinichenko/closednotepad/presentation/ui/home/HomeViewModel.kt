@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
-import info.sergeikolinichenko.closednotepad.models.NoteItem
 import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.models.NotesLayout
 import info.sergeikolinichenko.closednotepad.models.Settings
@@ -69,14 +68,11 @@ class HomeViewModel @Inject constructor(
 
     fun createNote(type: NoteType, onCreated: (Long) -> Unit) {
         viewModelScope.launch {
-            val now = System.currentTimeMillis()
-            val note = Note(
+            val note = Note.blank(
                 type = type,
                 colorIndex = preferencesRepository.current().defaultColorIndex,
-                items = if (type == NoteType.TEXT) emptyList()
-                else listOf(NoteItem(id = UUID.randomUUID().toString(), text = "")),
-                createdAt = now,
-                updatedAt = now
+                now = System.currentTimeMillis(),
+                newItemId = { UUID.randomUUID().toString() }
             )
             onCreated(notesRepository.createNote(note))
         }

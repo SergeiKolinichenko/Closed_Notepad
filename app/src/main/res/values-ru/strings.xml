@@ -3,6 +3,10 @@
     <string name="app_name">Очень простой блокнот</string>
     <string name="share_target_label">Сохранить в блокнот</string>
 
+    <!-- Widget, quick settings tile and launcher shortcuts -->
+    <string name="new_note">Новая заметка</string>
+    <string name="widget_description">Заметка, список дел или покупок в одно касание</string>
+
     <!-- Home -->
     <string name="notes_title">Заметки</string>
     <string name="search">Поиск</string>
@@ -33,7 +37,8 @@
     <string name="group_pinned">Закреплённые</string>
     <string name="group_today">Сегодня</string>
     <string name="group_yesterday">Вчера</string>
-    <string name="group_earlier">Ранее</string>
+    <string name="group_this_week">На этой неделе</string>
+    <string name="group_this_month">В этом месяце</string>
     <string name="group_others">Остальные</string>
     <string name="empty_title">Запишите первую заметку</string>
     <string name="empty_body">Здесь живут тексты, списки дел и списки покупок. Закройте заметку — и она откроется только по отпечатку или блокировке экрана.</string>
@@ -135,6 +140,14 @@
     <string name="trash_auto_delete">Автоматическая очистка корзины</string>
     <string name="trash_auto_delete_hint">Через сколько времени после перемещения в корзину заметка удаляется навсегда.</string>
     <string name="never_delete">Никогда</string>
+    <string name="export_import">Экспорт и импорт</string>
+    <string name="export_import_hint">Каждая заметка сохраняется отдельным файлом .md в новую папку внутри выбранной. Импорт принимает файлы .md и .txt и пропускает заметки, которые уже есть.</string>
+    <string name="export_include_locked_hint">Их текст попадёт в файлы без защиты</string>
+    <string name="export_notes">Экспорт</string>
+    <string name="import_notes">Импорт</string>
+    <string name="import_nothing_new">В этих файлах нет новых заметок</string>
+    <string name="transfer_failed">Не удалось прочитать или записать файлы</string>
+
     <string name="about_locked_notes">Закрытые заметки</string>
     <string name="about_locked_notes_body">Закрытая заметка открывается только после отпечатка, распознавания лица или блокировки экрана. Её текст не виден в списках, поиске и на скриншотах, а при выходе из приложения она снова закрывается.</string>
     <string name="version">Версия %s</string>
@@ -184,5 +197,23 @@
         <item quantity="few">Через %d дня</item>
         <item quantity="many">Через %d дней</item>
         <item quantity="other">Через %d дня</item>
+    </plurals>
+    <plurals name="export_include_locked">
+        <item quantity="one">Включить %d закрытую заметку</item>
+        <item quantity="few">Включить %d закрытые заметки</item>
+        <item quantity="many">Включить %d закрытых заметок</item>
+        <item quantity="other">Включить %d закрытой заметки</item>
+    </plurals>
+    <plurals name="exported_notes">
+        <item quantity="one">Экспортирована %d заметка</item>
+        <item quantity="few">Экспортировано %d заметки</item>
+        <item quantity="many">Экспортировано %d заметок</item>
+        <item quantity="other">Экспортировано %d заметки</item>
+    </plurals>
+    <plurals name="imported_notes">
+        <item quantity="one">Импортирована %d заметка</item>
+        <item quantity="few">Импортировано %d заметки</item>
+        <item quantity="many">Импортировано %d заметок</item>
+        <item quantity="other">Импортировано %d заметки</item>
     </plurals>
 </resources>
