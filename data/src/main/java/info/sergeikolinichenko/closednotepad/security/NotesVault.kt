@@ -15,7 +15,7 @@ import java.security.PublicKey
 class NotesVault(
     private val prefs: SharedPreferences,
     private val deviceKey: DeviceKey,
-    private val passwordIterations: Int = PASSWORD_ITERATIONS
+    private val passwordIterations: Int = KDF_ITERATIONS
 ) {
 
     private val _isSetUp = MutableStateFlow(readIsSetUp())
@@ -43,7 +43,7 @@ class NotesVault(
         val saved = prefs.edit()
             .putInt(KEY_VERSION, VERSION)
             .putString(KEY_PUBLIC, NoteCipher.encode(pair.public.encoded))
-            .putString(KEY_BY_PASSWORD, NoteCipher.wrapWithPassword(pair.private.encoded, password, passwordIterations))
+            .putString(KEY_SPARE_WRAP, NoteCipher.wrapWithPassword(pair.private.encoded, password, passwordIterations))
             .remove(KEY_BY_DEVICE)
             .commit()
         check(saved) { "Can't save the vault" }
@@ -69,7 +69,7 @@ class NotesVault(
 
     // Slow (the password hashing), call it off the main thread. False means a wrong password.
     fun unlockWithPassword(password: CharArray): Boolean {
-        val wrapped = prefs.getString(KEY_BY_PASSWORD, null) ?: return false
+        val wrapped = prefs.getString(KEY_SPARE_WRAP, null) ?: return false
         val encoded = NoteCipher.unwrapWithPassword(wrapped, password) ?: return false
         return synchronized(this) { privateKey != null || openWith(encoded) }
     }
@@ -107,7 +107,7 @@ class NotesVault(
     fun changePassword(newPassword: CharArray): Boolean {
         val key = privateKey ?: return false
         val wrapped = NoteCipher.wrapWithPassword(key.encoded, newPassword, passwordIterations)
-        return prefs.edit().putString(KEY_BY_PASSWORD, wrapped).commit()
+        return prefs.edit().putString(KEY_SPARE_WRAP, wrapped).commit()
     }
 
     fun lock() {
@@ -135,7 +135,7 @@ class NotesVault(
         return NoteCipher.publicKey(NoteCipher.decode(encoded)).also { publicKey = it }
     }
 
-    private fun readIsSetUp(): Boolean = prefs.contains(KEY_PUBLIC) && prefs.contains(KEY_BY_PASSWORD)
+    private fun readIsSetUp(): Boolean = prefs.contains(KEY_PUBLIC) && prefs.contains(KEY_SPARE_WRAP)
 
     companion object {
         // Stored apart from the settings; it is in the backup too, so the password opens notes on a new phone
@@ -143,14 +143,14 @@ class NotesVault(
         const val MIN_PASSWORD_LENGTH = 6
 
         // OWASP's figure for PBKDF2-HMAC-SHA256
-        const val PASSWORD_ITERATIONS = 600_000
+        const val KDF_ITERATIONS = 600_000
 
         private const val TAG = "NotesVault"
         private const val VERSION = 1
         private const val CACHE_SIZE = 64
         private const val KEY_VERSION = "version"
         private const val KEY_PUBLIC = "public_key"
-        private const val KEY_BY_PASSWORD = "private_key_by_password"
+        private const val KEY_SPARE_WRAP = "private_key_spare_wrap"
         private const val KEY_BY_DEVICE = "private_key_by_device"
     }
 }
