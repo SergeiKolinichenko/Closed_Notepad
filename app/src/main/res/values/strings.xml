@@ -69,7 +69,6 @@
     <string name="saving">Saving…</string>
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
-    <string name="lock_needs_screen_lock">Set up a screen lock or fingerprint in the phone settings to lock notes</string>
     <string name="share">Share</string>
     <string name="copy_text">Copy text</string>
     <string name="copied">Copied</string>
@@ -120,6 +119,32 @@
     <string name="auth_subtitle">Confirm it\'s you to open the note</string>
     <string name="auth_unavailable">The fingerprint sensor is unavailable right now. Try again later.</string>
 
+    <!-- Encryption of locked notes -->
+    <string name="about_locked_notes_body_plain">A locked note opens only after your fingerprint, face or screen lock, but its text is still stored unencrypted. Set a password to encrypt locked notes.</string>
+    <string name="note_encrypted_title_open">Note encrypted. Its title stays readable, for search.</string>
+    <string name="vault_setup_title">Encrypt locked notes</string>
+    <string name="vault_setup_body">Locked notes will be stored encrypted. They will open with your fingerprint or screen lock, as before. The password is a spare key: you need it if the fingerprint and screen lock stop opening the notes, for example after the screen lock is turned off or on a new phone.</string>
+    <string name="vault_encrypt">Encrypt</string>
+    <string name="vault_set_password">Set password</string>
+    <string name="vault_change_password">Change password</string>
+    <string name="vault_password_changed">Password changed</string>
+    <string name="vault_unlock_title">Password for locked notes</string>
+    <string name="vault_unlock_body">The fingerprint and screen lock can\'t open locked notes right now. Enter the password you set for them.</string>
+    <string name="vault_password">Password</string>
+    <string name="vault_password_repeat">Repeat password</string>
+    <string name="vault_password_short">At least 6 characters</string>
+    <string name="vault_password_mismatch">Passwords don\'t match</string>
+    <string name="vault_wrong_password">Wrong password</string>
+    <string name="vault_understand">I understand that a forgotten password can\'t be recovered</string>
+    <string name="vault_warning_titles">Titles of locked notes are not encrypted: they are visible in the list, and search finds notes by them. Don\'t put anything secret in a title.</string>
+    <string name="vault_warning_no_recovery">If you forget the password and the fingerprint and screen lock no longer open the notes, locked notes can\'t be recovered. Nobody can reset the password, not even the developer.</string>
+    <string name="vault_show_password">Show password</string>
+    <string name="vault_hide_password">Hide password</string>
+    <string name="vault_enable_device">Confirm to open locked notes with your fingerprint or screen lock again</string>
+    <string name="vault_banner_title">Locked notes are not encrypted yet</string>
+    <string name="vault_banner_body">Set a password and they will be encrypted. It takes a few seconds.</string>
+    <string name="encryption_failed">Couldn\'t encrypt locked notes. Nothing was changed.</string>
+
     <!-- Search -->
     <string name="search_hint">Search notes</string>
     <string name="clear_search">Clear</string>
@@ -149,7 +174,7 @@
     <string name="transfer_failed">Couldn\'t read or write the files</string>
 
     <string name="about_locked_notes">Locked notes</string>
-    <string name="about_locked_notes_body">A locked note opens only after your fingerprint, face or screen lock. Its text is not shown in lists, search or screenshots, and it is locked again when you leave the app.</string>
+    <string name="about_locked_notes_body">Locked notes are stored encrypted. They open with your fingerprint, face or screen lock, and with your password if those stop working. Their text is not shown in lists, search or screenshots, and they are locked again when you leave the app.</string>
     <string name="version">Version %s</string>
 
     <!-- Colors -->
@@ -197,5 +222,9 @@
     <plurals name="imported_notes">
         <item quantity="one">%d note imported</item>
         <item quantity="other">%d notes imported</item>
+    </plurals>
+    <plurals name="notes_encrypted">
+        <item quantity="one">%d locked note encrypted</item>
+        <item quantity="other">%d locked notes encrypted</item>
     </plurals>
 </resources>

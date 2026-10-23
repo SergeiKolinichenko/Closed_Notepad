@@ -28,7 +28,8 @@ class NotesTransfer @Inject constructor(
     // Writes every note (not the trash) to a new folder inside the picked one; returns how many
     suspend fun export(treeUri: Uri, includeLocked: Boolean): Int = withContext(Dispatchers.IO) {
         val notes = notesRepository.observeNotes().first()
-            .filter { !it.isBlank && (includeLocked || !it.isLocked) }
+            // A sealed note can't be read now; it is never written out empty
+            .filter { !it.isBlank && !it.isSealed && (includeLocked || !it.isLocked) }
         val resolver = application.contentResolver
         val parent = DocumentsContract.buildDocumentUriUsingTree(treeUri, DocumentsContract.getTreeDocumentId(treeUri))
         val stamp = SimpleDateFormat("yyyy-MM-dd HH-mm", Locale.US).format(Date())

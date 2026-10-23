@@ -1,5 +1,6 @@
 package info.sergeikolinichenko.closednotepad.presentation.ui.settings
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.Password
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,9 +38,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,8 +56,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Settings
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
+import info.sergeikolinichenko.closednotepad.presentation.security.VaultWarnings
 import info.sergeikolinichenko.closednotepad.presentation.transfer.NotesTransfer
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ColorPicker
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,12 +130,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, snackbarHostState: SnackbarHost
 
             HorizontalDivider(Modifier.padding(vertical = 24.dp))
 
-            Text(stringResource(R.string.about_locked_notes), style = MaterialTheme.typography.titleMedium)
-            Text(
-                stringResource(R.string.about_locked_notes_body),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+            LockedNotesSection(viewModel, snackbarHostState)
             if (version != null) {
                 Spacer(Modifier.height(24.dp))
                 Text(
@@ -151,8 +152,18 @@ private fun TransferSection(viewModel: SettingsViewModel) {
     val authenticator = LocalAuthenticator.current
     var includeLocked by rememberSaveable { mutableStateOf(false) }
 
+    // The check comes after the folder is picked: while the picker is open the app is in the
+    // background, and locked notes are locked again. It waits for the screen to be back in front,
+    // the fingerprint dialog can't be shown before that.
+    var pendingExport by remember { mutableStateOf<Uri?>(null) }
     val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
-        if (uri != null) viewModel.export(uri, includeLocked && lockedCount > 0)
+        if (uri == null) return@rememberLauncherForActivityResult
+        if (includeLocked && lockedCount > 0) pendingExport = uri else viewModel.export(uri, false)
+    }
+    LaunchedEffect(pendingExport) {
+        val uri = pendingExport ?: return@LaunchedEffect
+        pendingExport = null
+        authenticator.authenticate(onSuccess = { viewModel.export(uri, true) }, onError = {})
     }
     val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
         viewModel.import(uris)
@@ -188,14 +199,8 @@ private fun TransferSection(viewModel: SettingsViewModel) {
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         OutlinedButton(
             enabled = !transferring,
-            onClick = {
-                // Writing locked notes out in plain text needs the same check as opening them
-                if (includeLocked && lockedCount > 0) {
-                    authenticator.authenticate(onSuccess = { exportLauncher.launch(null) }, onError = {})
-                } else {
-                    exportLauncher.launch(null)
-                }
-            }
+            // Writing locked notes out in plain text needs the same check as opening them, see exportLauncher
+            onClick = { exportLauncher.launch(null) }
         ) {
             Icon(Icons.Outlined.FileUpload, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
             Spacer(Modifier.width(ButtonDefaults.IconSpacing))
@@ -213,5 +218,34 @@ private fun TransferSection(viewModel: SettingsViewModel) {
     if (transferring) {
         Spacer(Modifier.height(12.dp))
         LinearProgressIndicator(Modifier.fillMaxWidth())
+    }
+}
+
+// How locked notes are protected, and the password that is the spare key to them
+@Composable
+private fun LockedNotesSection(viewModel: SettingsViewModel, snackbarHostState: SnackbarHostState) {
+    val encrypted by viewModel.encrypted.collectAsStateWithLifecycle()
+    val authenticator = LocalAuthenticator.current
+    val scope = rememberCoroutineScope()
+    val showError: (String) -> Unit = { scope.launch { snackbarHostState.showSnackbar(it) } }
+
+    Text(stringResource(R.string.about_locked_notes), style = MaterialTheme.typography.titleMedium)
+    Text(
+        stringResource(if (encrypted) R.string.about_locked_notes_body else R.string.about_locked_notes_body_plain),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant
+    )
+    Spacer(Modifier.height(12.dp))
+    VaultWarnings()
+    Spacer(Modifier.height(12.dp))
+    OutlinedButton(
+        onClick = {
+            if (encrypted) authenticator.changePassword(onError = showError)
+            else authenticator.setUp(onDone = {}, onError = showError)
+        }
+    ) {
+        Icon(Icons.Outlined.Password, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+        Spacer(Modifier.width(ButtonDefaults.IconSpacing))
+        Text(stringResource(if (encrypted) R.string.vault_change_password else R.string.vault_set_password))
     }
 }

@@ -11,6 +11,7 @@ import info.sergeikolinichenko.closednotepad.presentation.security.NoteLock
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessage
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessages
 import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
+import info.sergeikolinichenko.closednotepad.security.NotesVault
 import info.sergeikolinichenko.closednotepad.usecases.NoteConverter
 import info.sergeikolinichenko.closednotepad.usecases.ShoppingInputParser
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -38,6 +40,7 @@ sealed interface EditorState {
 class EditorViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
     private val noteLock: NoteLock,
+    private val vault: NotesVault,
     private val uiMessages: UiMessages,
     @AppCoroutineScope private val appScope: CoroutineScope
 ) : ViewModel() {
@@ -76,9 +79,20 @@ class EditorViewModel @Inject constructor(
         noteId = id
         noteLock.noteOpened(id)
         viewModelScope.launch {
-            val loaded = notesRepository.getNote(id)
+            var loaded = notesRepository.getNote(id)
             _state.value = if (loaded == null || loaded.isInTrash) EditorState.NotFound else EditorState.Ready(loaded)
             if (loaded?.type == NoteType.SHOPPING) loadSuggestions()
+            // An encrypted note is read again once the user has unlocked it
+            while (loaded != null && loaded.isSealed) {
+                vault.unlocked.first { it }
+                loaded = notesRepository.getNote(id)
+                if (loaded == null || loaded.isInTrash) {
+                    _state.value = EditorState.NotFound
+                    return@launch
+                }
+                if (!loaded.isSealed) _state.value = EditorState.Ready(loaded)
+                else vault.unlocked.first { !it }
+            }
         }
     }
 
@@ -90,7 +104,8 @@ class EditorViewModel @Inject constructor(
 
     private fun update(transform: (Note) -> Note) {
         val current = note ?: return
-        if (closed) return
+        // Nothing can be changed before the content of an encrypted note is read
+        if (closed || current.isSealed) return
         val changed = transform(current)
         if (changed == current) return
         _state.value = EditorState.Ready(changed.copy(updatedAt = System.currentTimeMillis()))
