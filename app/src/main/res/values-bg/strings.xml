@@ -1,97 +1,201 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Бележник</string>
-    <string name="remove_note_from_notes">Изтрий</string>
-    <string name="add_note_in_notes">Добавете</string>
-    <string name="settings_notes">Настройки</string>
-    <string name="title_note_list">Бележник</string>
-    <string name="test_text_view">Тествайте TextView</string>
-    <string name="confirm_deletion_notes">Потвърдете изтриването на избраните бележки</string>
-    <string name="delete_note">Изтрий</string>
-    <string name="confirm_deletion_note">Потвърдете изтриването на избраната бележка</string>
-    <string name="edit_note">Редактиране</string>
-    <string name="copy_itsels_note">Копие</string>
-    <string name="send_itself_note">Изпратете</string>
-    <string name="lock_note">Отблокиран</string>
-    <string name="unlock_note">Отключена</string>
+    <string name="share_target_label">Запази в бележника</string>
 
-    <string name="note_color_pink">Розово</string>
-    <string name="note_color_purple">Лилаво</string>
-    <string name="note_color_indigo">Индиго</string>
-    <string name="note_color_green">Зелено</string>
-    <string name="note_color_orange">Портокал</string>
-    <string name="note_color_brown">Кафяво</string>
-    <string name="note_color_gray">Сив</string>
-    <string name="note_color_blue_gray">Сиво-синьо</string>
-    <string name="copy_text_clipboard">Текстът на бележката е копиран в клипборда</string>
-    <string name="select_text_to_copy">Изберете текст за копиране</string>
-    <string name="sel_text_copied_clipboard">Избраният текст е копиран в клипборда</string>
-    <string name="exit_fragment">Изходен фрагмент</string>
-    <string name="save_note">Запазете бележката</string>
-    <string name="don_t_save_note">Не запазвайте бележката</string>
-    <string name="set_note_color_to_pink">Задайте розов цвят на бележката</string>
-    <string name="set_note_color_to_purple">Задайте лилав цвят на бележката</string>
-    <string name="set_note_color_indigo">Задайте индиго цвят на бележката</string>
-    <string name="set_note_color_green">Задайте зелен цвят на бележката</string>
-    <string name="set_note_color_orange">Задайте оранжев цвят на бележката</string>
-    <string name="set_note_color_brown">Задайте кафяв цвят на бележката</string>
-    <string name="set_note_color_gray">Задайте сив цвят на бележката</string>
-    <string name="set_note_color_blue_gray">Задайте синьо сив цвят на бележката</string>
-    <string name="sort_shown_by_time_stamp">Време на създаване</string>
-    <string name="sort_shown_by_title">Заглавка</string>
-    <string name="sort_shown_by_palette">Цвят</string>
-    <string name="description_sort_time_stamp_ascending">Сортирайте списъка по време на създаване във възходящ ред</string>
-    <string name="description_sort_time_stamp_descending">Сортирайте списъка по време на създаване в низходящ ред</string>
-    <string name="description_sort_title_ascending">Сортирайте списъка по заглавия във възходящ ред</string>
-    <string name="description_sort_title_descending">Сортирайте списъка по заглавия в низходящ ред</string>
-    <string name="sort_list_by_palette">Сортирайте списъка по цвят на бележката</string>
-    <string name="description_add_note">Добави бележка</string>
-    <string name="hint_search_enter_search_words">Въведете думи за търсене</string>
-    <string name="description_leave_search">Оставете търсенето</string>
-    <string name="please_enter_search_text">Въведете текст за търсене</string>
-    <string name="title_application_menu">Конфигурация</string>
-    <string name="settings_default_note_color">Цвят на бележката по подразбиране</string>
-    <string name="settings_wastebasket">Кошница</string>
-    <string name="description_leave_note_view">Напусни страницата</string>
-    <string name="confirm_recovery_notes">Потвърдете възстановяването на избраните бележки</string>
-    <string name="confirm_recovery_note">Потвърдете възстановяването на избраната бележка</string>
-    <string name="confirm_remove_notes">Преместете избраните бележки в кошчето</string>
-    <string name="confirm_remove_note">Преместете бележката в кошчето</string>
-    <string name="recovery_note">Възстановете</string>
-    <string name="move_note">Ход</string>
-    <string name="days_before_deletion">дни преди автоматично изтриване от кошницата</string>
-    <string name="no_days_before_deletion">няма авто-изтриване</string>
-    <string name="days_before_deletion_10">10 дни</string>
-    <string name="days_before_deletion_30">30 дни</string>
-    <string name="days_before_deletion_90">90 дни</string>
-    <string name="days_before_deletion_180">180 дни</string>
-    <string name="days_before_deletion_360">360 дни</string>
-    <string name="hardware_not_available">Биометричният хардуер не е наличен на това устройство.</string>
-    <string name="hardware_unavailable_later">Хардуерът не е наличен. Опитайте отново по-късно.</string>
-    <string name="biometrical_error_security">Беше открита уязвимост в сигурността и сензорът не е достъпен, докато актуализацията на защитата не реши този проблем.</string>
-    <string name="biometric_status_unknoun">Неизвестно състояние на биметричното оборудване, свържете се с доставчика на устройството.</string>
-    <string name="boimetric_error_unsuported">Не може да се удостовери, защото посочените настройки са несъвместими с текущата версия на Android.</string>
-    <string name="authentication_required">Оторизация!</string>
-    <string name="please_authenticate">Моля, влезте, за да можете да видите заключените бележки.</string>
-    <string name="important_authentication">Изисква се автентификация.</string>
-    <string name="no_blocking_method">В настройките \"Сигурност - Защита на устройството\" няма метод за блокиране.</string>
-    <string name="manual_delete_trash">Самоизтриване на бележки от кошчето</string>
-    <string name="enter_note_text">Въведете текст на бележката</string>
-    <string name="enter_note_title">Въведете заглавие</string>
-    <string name="copy_the_selected_text">Копирайте избрания текст</string>
-    <string name="cut_the_selected_text">Изрязване на избрания текст</string>
-    <string name="change_note_color">Промяна на цвета на бележката</string>
-    <string name="paste_text_from_clipboard">Поставяне на текст от клипборда</string>
-    <string name="choose_all">Изберете всички</string>
-    <string name="move_selected_notes_to_trash">Преместете избраните бележки в кошчето</string>
-    <string name="search_for_a_note">Потърсете бележка</string>
-    <string name="settings_and_trash_can">Настройки и кошче</string>
-    <string name="change_the_color_of_selected_notes">Променете цвета на избраните бележки</string>
-    <string name="delete_selected_notes_permanently">Изтрийте избраните бележки за постоянно</string>
-    <string name="restore_selected_notes">Възстановяване на избрани бележки</string>
-    <string name="sorting_note_titles_on_screen">Сортиране на заглавия на бележки на екрана</string>
-    <string name="exit_application">Излезте от приложението</string>
-    <string name="nothing_on_clipboard">Няма нищо в клипборда</string>
-    <string name="authentication_error">Неуспешна идентификация: %1$s. Код на грешка: %2$s. Моля, съобщете кода на грешката на разработчика на програмата.</string>
-    <string name="authentication_failed">Грешка при удостоверяване! Моля, проверете целостта на оборудването за удостоверяване.</string>
+    <!-- Widget, quick settings tile and launcher shortcuts -->
+    <string name="new_note">Нова бележка</string>
+    <string name="widget_description">Бележка, списък със задачи или за пазаруване с едно докосване</string>
+
+    <!-- Home -->
+    <string name="notes_title">Бележки</string>
+    <string name="search">Търсене</string>
+    <string name="show_as_list">Покажи като списък</string>
+    <string name="show_as_grid">Покажи като мрежа</string>
+    <string name="more_options">Още</string>
+    <string name="sort">Сортиране</string>
+    <string name="trash">Кошче</string>
+    <string name="settings">Настройки</string>
+    <string name="create_note">Създай бележка</string>
+    <string name="write_hint">Запиши…</string>
+    <string name="save_note">Запази бележката</string>
+    <string name="new_checklist">Нов списък със задачи</string>
+    <string name="new_shopping">Нов списък за пазаруване</string>
+    <string name="sealed">Запечатана</string>
+    <string name="create">Създай</string>
+    <string name="cancel_selection">Отмени избора</string>
+    <string name="pin">Закачи</string>
+    <string name="unpin">Откачи</string>
+    <string name="pinned">Закачена</string>
+    <string name="locked">Заключена</string>
+    <string name="note_color">Цвят на бележката</string>
+    <string name="move_to_trash">В кошчето</string>
+    <string name="filter_all">Всички</string>
+    <string name="filter_text">Текстове</string>
+    <string name="filter_checklist">Списъци</string>
+    <string name="filter_shopping">Пазаруване</string>
+    <string name="group_pinned">Закачени</string>
+    <string name="group_today">Днес</string>
+    <string name="group_yesterday">Вчера</string>
+    <string name="group_this_week">Тази седмица</string>
+    <string name="group_this_month">Този месец</string>
+    <string name="group_others">Други</string>
+    <string name="empty_title">Запишете първата си бележка</string>
+    <string name="empty_body">Тук живеят текстове, списъци със задачи и списъци за пазаруване. Заключената бележка се отваря само с пръстов отпечатък или заключване на екрана.</string>
+    <string name="empty_filter_title">Все още няма бележки от този вид</string>
+    <string name="untitled">Без заглавие</string>
+    <string name="more_items">още %d</string>
+    <string name="undo">Отмени</string>
+
+    <string name="sort_updated">Последно променени</string>
+    <string name="sort_created_desc">Първо новите</string>
+    <string name="sort_created_asc">Първо старите</string>
+    <string name="sort_title_asc">Заглавие А–Я</string>
+    <string name="sort_title_desc">Заглавие Я–А</string>
+    <string name="sort_color">По цвят</string>
+
+    <!-- Note types -->
+    <string name="type_text">Текст</string>
+    <string name="type_text_hint">Бележка, мисъл, идея</string>
+    <string name="type_checklist">Списък</string>
+    <string name="type_checklist_hint">Задачи с отметки</string>
+    <string name="type_shopping">Пазаруване</string>
+    <string name="type_shopping_hint">Количество, цена, щандове в магазина</string>
+    <string name="more_types_soon">Скоро ще има още видове: напомняния, рецепти и други.</string>
+
+    <!-- Editor -->
+    <string name="back">Назад</string>
+    <string name="saved">Запазено</string>
+    <string name="saving">Запазване…</string>
+    <string name="lock_note">Заключи бележката</string>
+    <string name="unlock_note">Отключи бележката</string>
+    <string name="lock_needs_screen_lock">За да заключвате бележки, включете заключване на екрана или пръстов отпечатък в настройките на телефона</string>
+    <string name="share">Сподели</string>
+    <string name="copy_text">Копирай текста</string>
+    <string name="copied">Копирано</string>
+    <string name="convert_to_list">Превърни в списък</string>
+    <string name="convert_to_text">Превърни в текст</string>
+    <string name="uncheck_all">Махни всички отметки</string>
+    <string name="remove_checked">Изтрий отметнатите</string>
+    <string name="title_hint">Заглавие</string>
+    <string name="text_hint">Бележка</string>
+    <string name="item_hint">Елемент от списъка</string>
+    <string name="add_item">Добави елемент</string>
+    <string name="remove_item">Изтрий</string>
+    <string name="reorder">Плъзнете, за да промените реда</string>
+    <string name="checked_count">Изпълнени (%d)</string>
+    <string name="done_of">Изпълнени %1$d от %2$d</string>
+    <string name="all_done">Всичко е изпълнено</string>
+    <string name="list_is_empty">Списъкът е празен</string>
+
+    <!-- Shopping -->
+    <string name="bought_of">Купени %1$d от %2$d</string>
+    <string name="all_bought">Всичко е купено</string>
+    <string name="total_price">≈ %s</string>
+    <string name="add_product_hint">Добави продукт</string>
+    <string name="add">Добави</string>
+    <string name="voice_input">Гласово въвеждане</string>
+    <string name="no_section">Без щанд</string>
+    <string name="in_cart_count">В количката (%d)</string>
+    <string name="edit_product">Продукт</string>
+    <string name="product_name">Име</string>
+    <string name="quantity">Количество</string>
+    <string name="quantity_hint">2 кг</string>
+    <string name="price">Цена</string>
+    <string name="section">Щанд в магазина</string>
+    <string name="section_hint">Млечни</string>
+    <string name="save">Запази</string>
+    <string name="cancel">Отказ</string>
+    <string name="store_mode">В магазина</string>
+    <string name="store_mode_hint">Екранът не изгасва. Докоснете или плъзнете надясно — продуктът е купен.</string>
+    <string name="close_store_mode">Изход от режим „В магазина“</string>
+    <string name="finish_shopping">Приключи пазаруването</string>
+    <string name="bought">Купено</string>
+    <string name="not_bought">Не е купено</string>
+
+    <!-- Locked notes -->
+    <string name="note_is_locked">Бележката е запечатана</string>
+    <string name="unlock">Отключи</string>
+    <string name="auth_title">Заключена бележка</string>
+    <string name="auth_subtitle">Потвърдете, че сте вие</string>
+    <string name="auth_unavailable">Сензорът за отпечатък не е достъпен в момента. Опитайте по-късно.</string>
+
+    <!-- Search -->
+    <string name="search_hint">Търсене в бележките</string>
+    <string name="clear_search">Изчисти</string>
+    <string name="nothing_found">Нищо не е намерено. Заключените бележки се търсят само по заглавие.</string>
+
+    <!-- Trash -->
+    <string name="empty_trash">Изпразни</string>
+    <string name="trash_is_empty">Кошчето е празно</string>
+    <string name="restore">Възстанови</string>
+    <string name="delete_forever">Изтрий завинаги</string>
+    <string name="confirm_empty_trash">Да се изтрият ли завинаги всички бележки в кошчето?</string>
+    <string name="trash_hint_forever">Бележките остават в кошчето, докато не ги изтриете.</string>
+    <string name="kept_forever">Пази се, докато не я изтриете</string>
+    <string name="deleted_soon">Скоро ще бъде изтрита</string>
+
+    <!-- Settings -->
+    <string name="default_note_color">Цвят на новите бележки</string>
+    <string name="trash_auto_delete">Автоматично изпразване на кошчето</string>
+    <string name="trash_auto_delete_hint">Колко време след преместването в кошчето бележката се изтрива завинаги.</string>
+    <string name="never_delete">Никога</string>
+    <string name="export_import">Износ и внос</string>
+    <string name="export_import_hint">Всяка бележка се записва като отделен файл .md в нова папка в избраната. Вносът приема файлове .md и .txt и пропуска бележките, които вече ги има.</string>
+    <string name="export_include_locked_hint">Текстът им ще бъде във файловете без защита</string>
+    <string name="export_notes">Износ</string>
+    <string name="import_notes">Внос</string>
+    <string name="import_nothing_new">В тези файлове няма нови бележки</string>
+    <string name="transfer_failed">Файловете не можаха да бъдат прочетени или записани</string>
+
+    <string name="about_locked_notes">Заключени бележки</string>
+    <string name="about_locked_notes_body">Заключената бележка се отваря само след пръстов отпечатък, лице или заключване на екрана. Текстът ѝ не се вижда в списъците, търсенето и екранните снимки, а при излизане от приложението тя отново се заключва.</string>
+    <string name="version">Версия %s</string>
+
+    <!-- Colors -->
+    <string name="color_pink">Роза</string>
+    <string name="color_purple">Лавандула</string>
+    <string name="color_indigo">Небе</string>
+    <string name="color_green">Градински чай</string>
+    <string name="color_orange">Кайсия</string>
+    <string name="color_brown">Пясък</string>
+    <string name="color_gray">Лист</string>
+    <string name="color_blue_gray">Мъгла</string>
+
+    <plurals name="moved_to_trash">
+        <item quantity="one">Бележката е преместена в кошчето</item>
+        <item quantity="other">%d бележки са преместени в кошчето</item>
+    </plurals>
+    <plurals name="restored">
+        <item quantity="one">Бележката е възстановена</item>
+        <item quantity="other">%d бележки са възстановени</item>
+    </plurals>
+    <plurals name="confirm_delete_forever">
+        <item quantity="one">Да се изтрие ли бележката завинаги?</item>
+        <item quantity="other">Да се изтрият ли %d бележки завинаги?</item>
+    </plurals>
+    <plurals name="deleted_in_days">
+        <item quantity="one">Ще бъде изтрита след %d ден</item>
+        <item quantity="other">Ще бъде изтрита след %d дни</item>
+    </plurals>
+    <plurals name="trash_hint_days">
+        <item quantity="one">Бележките се изтриват завинаги %d ден след преместването им тук.</item>
+        <item quantity="other">Бележките се изтриват завинаги %d дни след преместването им тук.</item>
+    </plurals>
+    <plurals name="after_days">
+        <item quantity="one">След %d ден</item>
+        <item quantity="other">След %d дни</item>
+    </plurals>
+    <plurals name="export_include_locked">
+        <item quantity="one">Включи %d заключена бележка</item>
+        <item quantity="other">Включи %d заключени бележки</item>
+    </plurals>
+    <plurals name="exported_notes">
+        <item quantity="one">Изнесена е %d бележка</item>
+        <item quantity="other">Изнесени са %d бележки</item>
+    </plurals>
+    <plurals name="imported_notes">
+        <item quantity="one">Внесена е %d бележка</item>
+        <item quantity="other">Внесени са %d бележки</item>
+    </plurals>
 </resources>

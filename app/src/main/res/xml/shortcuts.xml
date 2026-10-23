@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:icon="@drawable/ic_shortcut_text"
+        android:shortcutId="new_text"
+        android:shortcutShortLabel="@string/new_note">
+        <intent
+            android:action="info.sergeikolinichenko.closednotepad.action.NEW_NOTE"
+            android:targetClass="info.sergeikolinichenko.closednotepad.presentation.MainActivity"
+            android:targetPackage="info.sergeikolinichenko.closednotepad">
+            <extra android:name="type" android:value="TEXT" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_checklist"
+        android:shortcutId="new_checklist"
+        android:shortcutShortLabel="@string/new_checklist">
+        <intent
+            android:action="info.sergeikolinichenko.closednotepad.action.NEW_NOTE"
+            android:targetClass="info.sergeikolinichenko.closednotepad.presentation.MainActivity"
+            android:targetPackage="info.sergeikolinichenko.closednotepad">
+            <extra android:name="type" android:value="CHECKLIST" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_shopping"
+        android:shortcutId="new_shopping"
+        android:shortcutShortLabel="@string/new_shopping">
+        <intent
+            android:action="info.sergeikolinichenko.closednotepad.action.NEW_NOTE"
+            android:targetClass="info.sergeikolinichenko.closednotepad.presentation.MainActivity"
+            android:targetPackage="info.sergeikolinichenko.closednotepad">
+            <extra android:name="type" android:value="SHOPPING" />
+        </intent>
+    </shortcut>
+</shortcuts>

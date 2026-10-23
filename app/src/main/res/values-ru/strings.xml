@@ -1,97 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Очень простой блокнот</string>
-    <string name="remove_note_from_notes">Удалить</string>
-    <string name="add_note_in_notes">Добавить</string>
-    <string name="settings_notes">Настройки</string>
-    <string name="title_note_list">Блокнот</string>
-    <string name="test_text_view">Тест TextView</string>
-    <string name="confirm_deletion_notes">Подтвердите удаление выбранных заметок</string>
-    <string name="delete_note">Удалить</string>
-    <string name="confirm_deletion_note">Подтвердите удаление выбранной заметки</string>
-    <string name="edit_note">Редактировать</string>
-    <string name="copy_itsels_note">Копировать</string>
-    <string name="send_itself_note">Отправить</string>
-    <string name="lock_note">Заблокировано</string>
-    <string name="unlock_note">Разблокировано</string>
+    <string name="share_target_label">Сохранить в блокнот</string>
 
-    <string name="note_color_pink">Розовый</string>
-    <string name="note_color_purple">Пурпурный</string>
-    <string name="note_color_indigo">Индиго</string>
-    <string name="note_color_green">Зеленый</string>
-    <string name="note_color_orange">Оранжевый</string>
-    <string name="note_color_brown">Коричневый</string>
-    <string name="note_color_gray">Серый</string>
-    <string name="note_color_blue_gray">" Серо-голубой"</string>
-    <string name="copy_text_clipboard">Текст заметки скопирован в буфер обмена</string>
-    <string name="select_text_to_copy">Необходимо выделить текст для копирования</string>
-    <string name="sel_text_copied_clipboard">Выделенный текст скопирован в буфер обмена</string>
-    <string name="exit_fragment">Выйти из фрагмента</string>
+    <!-- Widget, quick settings tile and launcher shortcuts -->
+    <string name="new_note">Новая заметка</string>
+    <string name="widget_description">Заметка, список дел или покупок в одно касание</string>
+
+    <!-- Home -->
+    <string name="notes_title">Заметки</string>
+    <string name="search">Поиск</string>
+    <string name="show_as_list">Показать лентой</string>
+    <string name="show_as_grid">Показать сеткой</string>
+    <string name="more_options">Ещё</string>
+    <string name="sort">Сортировка</string>
+    <string name="trash">Корзина</string>
+    <string name="settings">Настройки</string>
+    <string name="create_note">Создать заметку</string>
+    <string name="write_hint">Записать…</string>
     <string name="save_note">Сохранить заметку</string>
-    <string name="don_t_save_note">Не сохранять заметку</string>
-    <string name="set_note_color_to_pink">Установить розовый цвет заметки</string>
-    <string name="set_note_color_to_purple">Установить фиолетовый цвет заметки</string>
-    <string name="set_note_color_indigo">Установить цвет заметки индиго</string>
-    <string name="set_note_color_green">Установить зеленый цвет заметки</string>
-    <string name="set_note_color_orange">Установить оранжевый цвет заметки</string>
-    <string name="set_note_color_brown">Установить коричневый цвет заметки</string>
-    <string name="set_note_color_gray">Установить светло - серый цвет заметки</string>
-    <string name="set_note_color_blue_gray">Установить серый цвет заметки</string>
-    <string name="sort_shown_by_time_stamp">Время создания</string>
-    <string name="sort_shown_by_title">Заголовок</string>
-    <string name="sort_shown_by_palette">Цвет</string>
-    <string name="description_sort_time_stamp_ascending">Отсортировать список по времени создания в порядке возрастания</string>
-    <string name="description_sort_time_stamp_descending">Отсортировать список по времени создания в порядке убывания</string>
-    <string name="description_sort_title_ascending">Отсортировать список по заголовкам в порядке возрастания</string>
-    <string name="description_sort_title_descending">Отсортировать список по названиям в порядке убывания</string>
-    <string name="sort_list_by_palette">"Сортировать список по цвету заметки "</string>
-    <string name="description_add_note">Добавить заметку</string>
-    <string name="hint_search_enter_search_words">Введите искомые слова</string>
-    <string name="description_leave_search">Покинуть поиск</string>
-    <string name="please_enter_search_text">Введите искомый текст</string>
-    <string name="title_application_menu">Конфигурация</string>
-    <string name="settings_default_note_color">Цвет заметки по умолчанию</string>
-    <string name="settings_wastebasket">Корзина</string>
-    <string name="description_leave_note_view">Покинуть страницу</string>
-    <string name="confirm_recovery_notes">Подтвердите восстановление выбранных заметок</string>
-    <string name="confirm_recovery_note">Подтвердите восстановление выбранной заметки</string>
-    <string name="confirm_remove_notes">Переместить выбранные заметки в корзину</string>
-    <string name="confirm_remove_note">Переместить заметку в корзину</string>
-    <string name="recovery_note">Восстановить</string>
-    <string name="move_note">Переместить</string>
-    <string name="days_before_deletion">дней до автоудаления из корзины</string>
-    <string name="no_days_before_deletion">Нет автоудаления</string>
-    <string name="days_before_deletion_10">10 дней</string>
-    <string name="days_before_deletion_30">30 дней</string>
-    <string name="days_before_deletion_90">90 дней</string>
-    <string name="days_before_deletion_180">180 дней</string>
-    <string name="days_before_deletion_360">360 дней</string>
-    <string name="manual_delete_trash">Самостоятельное удаление заметок из корзины</string>
-    <string name="enter_note_text">Введите текст заметки</string>
-    <string name="enter_note_title">Введите заголовок</string>
-    <string name="copy_the_selected_text">Скопируйте выделенный текст</string>
-    <string name="cut_the_selected_text">Вырезать выделенный текст</string>
-    <string name="change_note_color">Измените цвет заметки</string>
-    <string name="paste_text_from_clipboard">Вставить текст из буфера обмена</string>
-    <string name="choose_all">Выбрать всё</string>
-    <string name="move_selected_notes_to_trash">Переместить выбранные заметки в корзину</string>
-    <string name="search_for_a_note">Поиск заметки</string>
-    <string name="settings_and_trash_can">Настройки и мусорная корзина</string>
-    <string name="change_the_color_of_selected_notes">Поменяйте цвет выбранных заметок</string>
-    <string name="delete_selected_notes_permanently">Удалить выбранные заметки безвозвратно</string>
-    <string name="restore_selected_notes">Востановить выбранные заметки</string>
-    <string name="sorting_note_titles_on_screen">Сортировка заголовков заметок на экране</string>
-    <string name="exit_application">Выйти из приложения</string>
-    <string name="nothing_on_clipboard">В буфере обмена ничего нет</string>
-    <string name="hardware_not_available">Биометрическое оборудование отсутствует на этом устройстве.</string>
-    <string name="hardware_unavailable_later">Аппаратное обеспечение недоступно. Попробуйте позже.</string>
-    <string name="no_blocking_method">В настройках \"Безопасность - Защита устройства\" отсутствует способ блокировки.</string>
-    <string name="biometrical_error_security">Обнаружена уязвимость в системе безопасности, и датчик недоступен, пока эта проблема не будет устранена в обновлении для системы безопасности.</string>
-    <string name="biometric_status_unknoun">Неизвестный статус биметрического оборудования, обратитесь к поставщику устройства.</string>
-    <string name="boimetric_error_unsuported">Невозможно пройти аутентификацию, поскольку указанные параметры несовместимы с текущей версией Android.</string>
-    <string name="please_authenticate">Пожалуйста, авторизируйтесь, чтобы иметь возможность просматривать заблокированные заметки.</string>
-    <string name="important_authentication">Требуется аутентификация.</string>
-    <string name="authentication_required">Авторизация!</string>
-    <string name="authentication_error">Ошибка аутентификации: %1$s. Код ошибки: %2$s. Сообщите, пожалуйста, код ошибки разработчику программы.</string>
-    <string name="authentication_failed">Ошибка аутентификации! Проверьте, пожалуйста, исправность оборудования аутентификации.</string>
+    <string name="new_checklist">Новый список дел</string>
+    <string name="new_shopping">Новый список покупок</string>
+    <string name="sealed">Под печатью</string>
+    <string name="create">Создать</string>
+    <string name="cancel_selection">Снять выделение</string>
+    <string name="pin">Закрепить</string>
+    <string name="unpin">Открепить</string>
+    <string name="pinned">Закреплена</string>
+    <string name="locked">Закрыта</string>
+    <string name="note_color">Цвет заметки</string>
+    <string name="move_to_trash">В корзину</string>
+    <string name="filter_all">Все</string>
+    <string name="filter_text">Тексты</string>
+    <string name="filter_checklist">Списки</string>
+    <string name="filter_shopping">Покупки</string>
+    <string name="group_pinned">Закреплённые</string>
+    <string name="group_today">Сегодня</string>
+    <string name="group_yesterday">Вчера</string>
+    <string name="group_this_week">На этой неделе</string>
+    <string name="group_this_month">В этом месяце</string>
+    <string name="group_others">Остальные</string>
+    <string name="empty_title">Запишите первую заметку</string>
+    <string name="empty_body">Здесь живут тексты, списки дел и списки покупок. Закройте заметку — и она откроется только по отпечатку или блокировке экрана.</string>
+    <string name="empty_filter_title">Заметок такого типа пока нет</string>
+    <string name="untitled">Без названия</string>
+    <string name="more_items">ещё %d</string>
+    <string name="undo">Отменить</string>
+
+    <string name="sort_updated">Недавно изменённые</string>
+    <string name="sort_created_desc">Сначала новые</string>
+    <string name="sort_created_asc">Сначала старые</string>
+    <string name="sort_title_asc">Название А–Я</string>
+    <string name="sort_title_desc">Название Я–А</string>
+    <string name="sort_color">По цвету</string>
+
+    <!-- Note types -->
+    <string name="type_text">Текст</string>
+    <string name="type_text_hint">Заметка, мысль, идея</string>
+    <string name="type_checklist">Список</string>
+    <string name="type_checklist_hint">Дела с галочками</string>
+    <string name="type_shopping">Покупки</string>
+    <string name="type_shopping_hint">Количество, цена, отделы магазина</string>
+    <string name="more_types_soon">Скоро появятся и другие типы: напоминания, рецепты и не только.</string>
+
+    <!-- Editor -->
+    <string name="back">Назад</string>
+    <string name="saved">Сохранено</string>
+    <string name="saving">Сохранение…</string>
+    <string name="lock_note">Закрыть заметку</string>
+    <string name="unlock_note">Открыть заметку</string>
+    <string name="lock_needs_screen_lock">Чтобы закрывать заметки, включите блокировку экрана или отпечаток пальца в настройках телефона</string>
+    <string name="share">Поделиться</string>
+    <string name="copy_text">Копировать текст</string>
+    <string name="copied">Скопировано</string>
+    <string name="convert_to_list">Превратить в список</string>
+    <string name="convert_to_text">Превратить в текст</string>
+    <string name="uncheck_all">Снять все отметки</string>
+    <string name="remove_checked">Удалить отмеченные</string>
+    <string name="title_hint">Название</string>
+    <string name="text_hint">Заметка</string>
+    <string name="item_hint">Пункт списка</string>
+    <string name="add_item">Добавить пункт</string>
+    <string name="remove_item">Удалить</string>
+    <string name="reorder">Перетащите, чтобы поменять порядок</string>
+    <string name="checked_count">Выполнено (%d)</string>
+    <string name="done_of">Выполнено %1$d из %2$d</string>
+    <string name="all_done">Всё выполнено</string>
+    <string name="list_is_empty">Список пуст</string>
+
+    <!-- Shopping -->
+    <string name="bought_of">Куплено %1$d из %2$d</string>
+    <string name="all_bought">Всё куплено</string>
+    <string name="total_price">≈ %s</string>
+    <string name="add_product_hint">Добавить товар</string>
+    <string name="add">Добавить</string>
+    <string name="voice_input">Голосовой ввод</string>
+    <string name="no_section">Без отдела</string>
+    <string name="in_cart_count">В корзине (%d)</string>
+    <string name="edit_product">Товар</string>
+    <string name="product_name">Название</string>
+    <string name="quantity">Количество</string>
+    <string name="quantity_hint">2 кг</string>
+    <string name="price">Цена</string>
+    <string name="section">Отдел магазина</string>
+    <string name="section_hint">Молочное</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="store_mode">В магазине</string>
+    <string name="store_mode_hint">Экран не гаснет. Нажмите или смахните вправо — товар куплен.</string>
+    <string name="close_store_mode">Выйти из режима «В магазине»</string>
+    <string name="finish_shopping">Завершить покупки</string>
+    <string name="bought">Куплено</string>
+    <string name="not_bought">Не куплено</string>
+
+    <!-- Locked notes -->
+    <string name="note_is_locked">Заметка под печатью</string>
+    <string name="unlock">Открыть</string>
+    <string name="auth_title">Закрытая заметка</string>
+    <string name="auth_subtitle">Подтвердите, что это вы</string>
+    <string name="auth_unavailable">Сканер отпечатка сейчас недоступен. Попробуйте позже.</string>
+
+    <!-- Search -->
+    <string name="search_hint">Поиск по заметкам</string>
+    <string name="clear_search">Очистить</string>
+    <string name="nothing_found">Ничего не найдено. Закрытые заметки ищутся только по названию.</string>
+
+    <!-- Trash -->
+    <string name="empty_trash">Очистить</string>
+    <string name="trash_is_empty">Корзина пуста</string>
+    <string name="restore">Восстановить</string>
+    <string name="delete_forever">Удалить навсегда</string>
+    <string name="confirm_empty_trash">Удалить навсегда все заметки из корзины?</string>
+    <string name="trash_hint_forever">Заметки хранятся в корзине, пока вы их не удалите.</string>
+    <string name="kept_forever">Хранится, пока вы не удалите</string>
+    <string name="deleted_soon">Скоро будет удалена</string>
+
+    <!-- Settings -->
+    <string name="default_note_color">Цвет новых заметок</string>
+    <string name="trash_auto_delete">Автоматическая очистка корзины</string>
+    <string name="trash_auto_delete_hint">Через сколько времени после перемещения в корзину заметка удаляется навсегда.</string>
+    <string name="never_delete">Никогда</string>
+    <string name="export_import">Экспорт и импорт</string>
+    <string name="export_import_hint">Каждая заметка сохраняется отдельным файлом .md в новую папку внутри выбранной. Импорт принимает файлы .md и .txt и пропускает заметки, которые уже есть.</string>
+    <string name="export_include_locked_hint">Их текст попадёт в файлы без защиты</string>
+    <string name="export_notes">Экспорт</string>
+    <string name="import_notes">Импорт</string>
+    <string name="import_nothing_new">В этих файлах нет новых заметок</string>
+    <string name="transfer_failed">Не удалось прочитать или записать файлы</string>
+
+    <string name="about_locked_notes">Закрытые заметки</string>
+    <string name="about_locked_notes_body">Закрытая заметка открывается только после отпечатка, распознавания лица или блокировки экрана. Её текст не виден в списках, поиске и на скриншотах, а при выходе из приложения она снова закрывается.</string>
+    <string name="version">Версия %s</string>
+
+    <!-- Colors -->
+    <string name="color_pink">Роза</string>
+    <string name="color_purple">Лаванда</string>
+    <string name="color_indigo">Небо</string>
+    <string name="color_green">Шалфей</string>
+    <string name="color_orange">Абрикос</string>
+    <string name="color_brown">Песок</string>
+    <string name="color_gray">Лист</string>
+    <string name="color_blue_gray">Туман</string>
+
+    <plurals name="moved_to_trash">
+        <item quantity="one">%d заметка перемещена в корзину</item>
+        <item quantity="few">%d заметки перемещены в корзину</item>
+        <item quantity="many">%d заметок перемещено в корзину</item>
+        <item quantity="other">%d заметки перемещено в корзину</item>
+    </plurals>
+    <plurals name="restored">
+        <item quantity="one">%d заметка восстановлена</item>
+        <item quantity="few">%d заметки восстановлены</item>
+        <item quantity="many">%d заметок восстановлено</item>
+        <item quantity="other">%d заметки восстановлено</item>
+    </plurals>
+    <plurals name="confirm_delete_forever">
+        <item quantity="one">Удалить навсегда %d заметку?</item>
+        <item quantity="few">Удалить навсегда %d заметки?</item>
+        <item quantity="many">Удалить навсегда %d заметок?</item>
+        <item quantity="other">Удалить навсегда %d заметки?</item>
+    </plurals>
+    <plurals name="deleted_in_days">
+        <item quantity="one">Удалится через %d день</item>
+        <item quantity="few">Удалится через %d дня</item>
+        <item quantity="many">Удалится через %d дней</item>
+        <item quantity="other">Удалится через %d дня</item>
+    </plurals>
+    <plurals name="trash_hint_days">
+        <item quantity="one">Заметки удаляются навсегда через %d день после перемещения сюда.</item>
+        <item quantity="few">Заметки удаляются навсегда через %d дня после перемещения сюда.</item>
+        <item quantity="many">Заметки удаляются навсегда через %d дней после перемещения сюда.</item>
+        <item quantity="other">Заметки удаляются навсегда через %d дня после перемещения сюда.</item>
+    </plurals>
+    <plurals name="after_days">
+        <item quantity="one">Через %d день</item>
+        <item quantity="few">Через %d дня</item>
+        <item quantity="many">Через %d дней</item>
+        <item quantity="other">Через %d дня</item>
+    </plurals>
+    <plurals name="export_include_locked">
+        <item quantity="one">Включить %d закрытую заметку</item>
+        <item quantity="few">Включить %d закрытые заметки</item>
+        <item quantity="many">Включить %d закрытых заметок</item>
+        <item quantity="other">Включить %d закрытой заметки</item>
+    </plurals>
+    <plurals name="exported_notes">
+        <item quantity="one">Экспортирована %d заметка</item>
+        <item quantity="few">Экспортировано %d заметки</item>
+        <item quantity="many">Экспортировано %d заметок</item>
+        <item quantity="other">Экспортировано %d заметки</item>
+    </plurals>
+    <plurals name="imported_notes">
+        <item quantity="one">Импортирована %d заметка</item>
+        <item quantity="few">Импортировано %d заметки</item>
+        <item quantity="many">Импортировано %d заметок</item>
+        <item quantity="other">Импортировано %d заметки</item>
+    </plurals>
 </resources>

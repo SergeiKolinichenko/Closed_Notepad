@@ -5,10 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import javax.inject.Inject
 import javax.inject.Provider
 
-/**
-ViewModelFactory for ViewModelNoteEdit
-create 28.07.2022 by Sergei Kolinichenko
- **/
+/** Created by Sergei Kolinichenko on 28.07.2022 **/
 
 class ViewModelNotesFactory @Inject constructor(
     private val viewModelProviders:
@@ -17,6 +14,8 @@ class ViewModelNotesFactory @Inject constructor(
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return viewModelProviders[modelClass]?.get() as T
+        val provider = viewModelProviders[modelClass]
+            ?: throw IllegalArgumentException("Unknown ViewModel class ${modelClass.name}")
+        return provider.get() as T
     }
 }
