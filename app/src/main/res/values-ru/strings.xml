@@ -69,7 +69,6 @@
     <string name="saving">Сохранение…</string>
     <string name="lock_note">Закрыть заметку</string>
     <string name="unlock_note">Открыть заметку</string>
-    <string name="lock_needs_screen_lock">Чтобы закрывать заметки, включите блокировку экрана или отпечаток пальца в настройках телефона</string>
     <string name="share">Поделиться</string>
     <string name="copy_text">Копировать текст</string>
     <string name="copied">Скопировано</string>
@@ -120,6 +119,32 @@
     <string name="auth_subtitle">Подтвердите, что это вы</string>
     <string name="auth_unavailable">Сканер отпечатка сейчас недоступен. Попробуйте позже.</string>
 
+    <!-- Encryption of locked notes -->
+    <string name="about_locked_notes_body_plain">Закрытая заметка открывается только после отпечатка, лица или блокировки экрана, но её текст пока хранится незашифрованным. Задайте пароль, чтобы зашифровать закрытые заметки.</string>
+    <string name="note_encrypted_title_open">Заметка зашифрована. Заголовок остаётся открытым, по нему работает поиск.</string>
+    <string name="vault_setup_title">Шифрование закрытых заметок</string>
+    <string name="vault_setup_body">Закрытые заметки будут храниться зашифрованными. Открываться они будут как раньше, отпечатком или блокировкой экрана. Пароль это запасной ключ: он нужен, если отпечаток и блокировка экрана перестанут открывать заметки, например после отключения блокировки экрана или на новом телефоне.</string>
+    <string name="vault_encrypt">Зашифровать</string>
+    <string name="vault_set_password">Задать пароль</string>
+    <string name="vault_change_password">Сменить пароль</string>
+    <string name="vault_password_changed">Пароль изменён</string>
+    <string name="vault_unlock_title">Пароль закрытых заметок</string>
+    <string name="vault_unlock_body">Отпечаток и блокировка экрана сейчас не могут открыть закрытые заметки. Введите пароль, который вы для них задали.</string>
+    <string name="vault_password">Пароль</string>
+    <string name="vault_password_repeat">Повторите пароль</string>
+    <string name="vault_password_short">Не меньше 6 символов</string>
+    <string name="vault_password_mismatch">Пароли не совпадают</string>
+    <string name="vault_wrong_password">Неверный пароль</string>
+    <string name="vault_understand">Я понимаю, что забытый пароль восстановить нельзя</string>
+    <string name="vault_warning_titles">Заголовки закрытых заметок не шифруются: они видны в списке, и по ним работает поиск. Не пишите в заголовок то, что нужно скрыть.</string>
+    <string name="vault_warning_no_recovery">Если забыть пароль, а отпечаток и блокировка экрана перестанут открывать заметки, закрытые заметки восстановить нельзя. Сбросить пароль не может никто, даже разработчик.</string>
+    <string name="vault_show_password">Показать пароль</string>
+    <string name="vault_hide_password">Скрыть пароль</string>
+    <string name="vault_enable_device">Подтвердите, чтобы снова открывать закрытые заметки отпечатком или блокировкой экрана</string>
+    <string name="vault_banner_title">Закрытые заметки ещё не зашифрованы</string>
+    <string name="vault_banner_body">Задайте пароль, и они будут зашифрованы. Это займёт пару секунд.</string>
+    <string name="encryption_failed">Не удалось зашифровать закрытые заметки. Ничего не изменено.</string>
+
     <!-- Search -->
     <string name="search_hint">Поиск по заметкам</string>
     <string name="clear_search">Очистить</string>
@@ -149,7 +174,7 @@
     <string name="transfer_failed">Не удалось прочитать или записать файлы</string>
 
     <string name="about_locked_notes">Закрытые заметки</string>
-    <string name="about_locked_notes_body">Закрытая заметка открывается только после отпечатка, распознавания лица или блокировки экрана. Её текст не виден в списках, поиске и на скриншотах, а при выходе из приложения она снова закрывается.</string>
+    <string name="about_locked_notes_body">Закрытые заметки хранятся в зашифрованном виде. Они открываются отпечатком, лицом или блокировкой экрана, а если это перестанет работать, то паролем. Их текст не виден в списках, поиске и на скриншотах, а при выходе из приложения они снова закрываются.</string>
     <string name="version">Версия %s</string>
 
     <!-- Colors -->
@@ -215,5 +240,11 @@
         <item quantity="few">Импортировано %d заметки</item>
         <item quantity="many">Импортировано %d заметок</item>
         <item quantity="other">Импортировано %d заметки</item>
+    </plurals>
+    <plurals name="notes_encrypted">
+        <item quantity="one">Зашифрована %d закрытая заметка</item>
+        <item quantity="few">Зашифровано %d закрытые заметки</item>
+        <item quantity="many">Зашифровано %d закрытых заметок</item>
+        <item quantity="other">Зашифровано %d закрытой заметки</item>
     </plurals>
 </resources>

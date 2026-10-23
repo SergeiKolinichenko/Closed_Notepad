@@ -65,7 +65,6 @@ import info.sergeikolinichenko.closednotepad.R
 import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.presentation.navigation.LocalAppComponent
-import info.sergeikolinichenko.closednotepad.presentation.security.Authenticator
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ColorPicker
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.LockedContent
@@ -103,7 +102,9 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
     var showColors by rememberSaveable { mutableStateOf(false) }
     var storeMode by rememberSaveable { mutableStateOf(false) }
     val colors = noteColorScheme(note.colorIndex)
-    val hidden = note.isLocked && note.id !in unlocked
+    val needsUnlock = note.isLocked && note.id !in unlocked
+    // Also while an unlocked note is still being decrypted
+    val hidden = needsUnlock || note.isSealed
 
     fun showMessage(text: String) {
         scope.launch { snackbar.showSnackbar(text) }
@@ -117,7 +118,7 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
     }
 
     // Asks right away when a locked note is opened or the app comes back from the background
-    LaunchedEffect(hidden) { if (hidden) unlock() }
+    LaunchedEffect(needsUnlock) { if (needsUnlock) unlock() }
     SecureWindow(enabled = note.isLocked)
 
     if (storeMode && !hidden) {
@@ -157,10 +158,14 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
                             onPin = viewModel::togglePinned,
                             onLock = { lock ->
                                 if (!lock) viewModel.setLocked(false)
-                                else when (authenticator.availability()) {
-                                    Authenticator.Availability.AVAILABLE -> viewModel.setLocked(true)
-                                    else -> showMessage(context.getString(R.string.lock_needs_screen_lock))
-                                }
+                                // The first locked note needs the password to be set
+                                else authenticator.setUp(
+                                    onDone = {
+                                        viewModel.setLocked(true)
+                                        showMessage(context.getString(R.string.note_encrypted_title_open))
+                                    },
+                                    onError = ::showMessage
+                                )
                             },
                             onStoreMode = { storeMode = true },
                             onColor = { showColors = true },

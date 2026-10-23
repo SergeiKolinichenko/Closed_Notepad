@@ -69,7 +69,6 @@
     <string name="saving">Запазване…</string>
     <string name="lock_note">Заключи бележката</string>
     <string name="unlock_note">Отключи бележката</string>
-    <string name="lock_needs_screen_lock">За да заключвате бележки, включете заключване на екрана или пръстов отпечатък в настройките на телефона</string>
     <string name="share">Сподели</string>
     <string name="copy_text">Копирай текста</string>
     <string name="copied">Копирано</string>
@@ -120,6 +119,32 @@
     <string name="auth_subtitle">Потвърдете, че сте вие</string>
     <string name="auth_unavailable">Сензорът за отпечатък не е достъпен в момента. Опитайте по-късно.</string>
 
+    <!-- Encryption of locked notes -->
+    <string name="about_locked_notes_body_plain">Заключената бележка се отваря само след пръстов отпечатък, лице или заключване на екрана, но текстът ѝ все още се пази нешифрован. Задайте парола, за да шифровате заключените бележки.</string>
+    <string name="note_encrypted_title_open">Бележката е шифрована. Заглавието остава видимо, по него работи търсенето.</string>
+    <string name="vault_setup_title">Шифроване на заключените бележки</string>
+    <string name="vault_setup_body">Заключените бележки ще се пазят шифровани. Ще се отварят както досега, с пръстов отпечатък или заключване на екрана. Паролата е резервен ключ: тя е нужна, ако отпечатъкът и заключването на екрана спрат да отварят бележките, например след изключване на заключването на екрана или на нов телефон.</string>
+    <string name="vault_encrypt">Шифровай</string>
+    <string name="vault_set_password">Задай парола</string>
+    <string name="vault_change_password">Смени паролата</string>
+    <string name="vault_password_changed">Паролата е сменена</string>
+    <string name="vault_unlock_title">Парола за заключените бележки</string>
+    <string name="vault_unlock_body">Отпечатъкът и заключването на екрана в момента не могат да отворят заключените бележки. Въведете паролата, която сте задали за тях.</string>
+    <string name="vault_password">Парола</string>
+    <string name="vault_password_repeat">Повторете паролата</string>
+    <string name="vault_password_short">Поне 6 знака</string>
+    <string name="vault_password_mismatch">Паролите не съвпадат</string>
+    <string name="vault_wrong_password">Грешна парола</string>
+    <string name="vault_understand">Разбирам, че забравена парола не може да се възстанови</string>
+    <string name="vault_warning_titles">Заглавията на заключените бележки не се шифроват: те се виждат в списъка и по тях работи търсенето. Не пишете в заглавието нищо тайно.</string>
+    <string name="vault_warning_no_recovery">Ако забравите паролата, а отпечатъкът и заключването на екрана вече не отварят бележките, заключените бележки не могат да се възстановят. Никой не може да нулира паролата, дори разработчикът.</string>
+    <string name="vault_show_password">Покажи паролата</string>
+    <string name="vault_hide_password">Скрий паролата</string>
+    <string name="vault_enable_device">Потвърдете, за да отваряте отново заключените бележки с отпечатък или заключване на екрана</string>
+    <string name="vault_banner_title">Заключените бележки още не са шифровани</string>
+    <string name="vault_banner_body">Задайте парола и те ще бъдат шифровани. Това отнема няколко секунди.</string>
+    <string name="encryption_failed">Заключените бележки не можаха да бъдат шифровани. Нищо не е променено.</string>
+
     <!-- Search -->
     <string name="search_hint">Търсене в бележките</string>
     <string name="clear_search">Изчисти</string>
@@ -149,7 +174,7 @@
     <string name="transfer_failed">Файловете не можаха да бъдат прочетени или записани</string>
 
     <string name="about_locked_notes">Заключени бележки</string>
-    <string name="about_locked_notes_body">Заключената бележка се отваря само след пръстов отпечатък, лице или заключване на екрана. Текстът ѝ не се вижда в списъците, търсенето и екранните снимки, а при излизане от приложението тя отново се заключва.</string>
+    <string name="about_locked_notes_body">Заключените бележки се пазят шифровани. Отварят се с пръстов отпечатък, лице или заключване на екрана, а ако това спре да работи, с парола. Текстът им не се вижда в списъците, търсенето и екранните снимки, а при излизане от приложението те отново се заключват.</string>
     <string name="version">Версия %s</string>
 
     <!-- Colors -->
@@ -197,5 +222,9 @@
     <plurals name="imported_notes">
         <item quantity="one">Внесена е %d бележка</item>
         <item quantity="other">Внесени са %d бележки</item>
+    </plurals>
+    <plurals name="notes_encrypted">
+        <item quantity="one">Шифрована е %d заключена бележка</item>
+        <item quantity="other">Шифровани са %d заключени бележки</item>
     </plurals>
 </resources>

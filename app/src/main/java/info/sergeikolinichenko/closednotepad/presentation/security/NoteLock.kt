@@ -3,6 +3,7 @@ package info.sergeikolinichenko.closednotepad.presentation.security
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import info.sergeikolinichenko.closednotepad.presentation.di.ApplicationScope
+import info.sergeikolinichenko.closednotepad.security.NotesVault
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,9 +11,9 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 // Remembers which locked notes the user has unlocked. Everything is locked again
-// as soon as the app goes to the background.
+// as soon as the app goes to the background, and the key that opens them is forgotten.
 @ApplicationScope
-class NoteLock @Inject constructor() : DefaultLifecycleObserver {
+class NoteLock @Inject constructor(private val vault: NotesVault) : DefaultLifecycleObserver {
 
     private val _unlocked = MutableStateFlow<Set<Long>>(emptySet())
     val unlocked: StateFlow<Set<Long>> = _unlocked.asStateFlow()
@@ -40,5 +41,6 @@ class NoteLock @Inject constructor() : DefaultLifecycleObserver {
 
     override fun onStop(owner: LifecycleOwner) {
         _unlocked.value = emptySet()
+        vault.lock()
     }
 }

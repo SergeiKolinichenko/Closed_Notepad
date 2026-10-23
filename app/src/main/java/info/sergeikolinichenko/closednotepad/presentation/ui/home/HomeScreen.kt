@@ -94,6 +94,7 @@ import info.sergeikolinichenko.closednotepad.models.SortOrder
 import info.sergeikolinichenko.closednotepad.presentation.navigation.LocalAppComponent
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.ColorPicker
+import info.sergeikolinichenko.closednotepad.presentation.ui.common.Seal
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.icon
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.GroupHeaderStyle
 import info.sergeikolinichenko.closednotepad.usecases.NoteGroup
@@ -117,6 +118,7 @@ fun HomeScreen(
     val authenticator = LocalAuthenticator.current
     val noteLock = LocalAppComponent.current.noteLock()
     val unlocked by noteLock.unlocked.collectAsStateWithLifecycle()
+    val offerEncryption by viewModel.offerEncryption.collectAsStateWithLifecycle()
     var showColorSheet by rememberSaveable { mutableStateOf(false) }
     val selecting = state.selected.isNotEmpty()
 
@@ -165,6 +167,9 @@ fun HomeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
+            if (offerEncryption && !selecting) {
+                EncryptionBanner(onSetUp = { authenticator.setUp(onDone = {}, onError = {}) })
+            }
             FilterRow(state.filter, viewModel::setFilter)
             when {
                 !state.loaded -> Unit
@@ -542,6 +547,35 @@ private fun monthText(year: Int, month: Int, locale: Locale): String {
     calendar.clear()
     calendar.set(year, month, 1)
     return SimpleDateFormat(pattern, locale).format(calendar.time)
+}
+
+// Shown after the update until the password is set and the locked notes are encrypted
+@Composable
+private fun EncryptionBanner(onSetUp: () -> Unit) {
+    Row(
+        Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.secondaryContainer)
+            .padding(start = 16.dp, top = 12.dp, bottom = 12.dp, end = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Seal(size = 32.dp)
+        Column(Modifier.weight(1f).padding(horizontal = 12.dp)) {
+            Text(
+                stringResource(R.string.vault_banner_title),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+            Text(
+                stringResource(R.string.vault_banner_body),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
+        TextButton(onClick = onSetUp) { Text(stringResource(R.string.vault_set_password)) }
+    }
 }
 
 @Composable
