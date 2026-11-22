@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.compose'
     id("com.google.devtools.ksp")
 }
@@ -31,8 +30,8 @@ android {
         applicationId "info.sergeikolinichenko.closednotepad"
         minSdk 24
         targetSdk 36
-        versionCode 16
-        versionName "3.3.0"
+        versionCode 17
+        versionName "3.4.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -51,9 +50,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-    kotlin {
-        jvmToolchain(17)
-    }
     buildFeatures {
         compose true
     }
@@ -62,6 +58,10 @@ android {
     testOptions {
         unitTests.includeAndroidResources = true
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {

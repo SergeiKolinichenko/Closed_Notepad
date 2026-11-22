@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.handwriting.handwritingDetector
+import androidx.compose.foundation.text.handwriting.handwritingHandler
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -122,6 +124,8 @@ fun ChecklistEditor(note: Note, colors: NoteColorScheme, viewModel: EditorViewMo
                 Modifier
                     .fillMaxWidth()
                     .clickable { viewModel.addItem() }
+                    // Writing on "Add item" with a stylus starts a new item and puts the handwriting in it
+                    .handwritingDetector { viewModel.focusEmptyOrAddItem() }
                     .padding(start = 48.dp, top = 12.dp, bottom = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -236,7 +240,8 @@ private fun ItemRow(
             modifier = Modifier
                 .weight(1f)
                 .padding(vertical = 10.dp)
-                .focusRequester(focusRequester),
+                .focusRequester(focusRequester)
+                .handwritingHandler(),
             decorationBox = { inner ->
                 if (item.text.isEmpty()) {
                     Text(stringResource(R.string.item_hint), fontSize = 17.sp, color = colors.contentVariant.copy(alpha = 0.5f))
