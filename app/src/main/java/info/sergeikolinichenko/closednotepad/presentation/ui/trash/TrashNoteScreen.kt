@@ -65,7 +65,7 @@ fun TrashNoteScreen(viewModel: TrashViewModel, noteId: Long, onBack: () -> Unit)
         return
     }
     val colors = noteColorScheme(note.colorIndex)
-    val hidden = note.isLocked && note.id !in unlocked
+    val hidden = note.isLocked && (note.id !in unlocked || note.isSealed)
 
     Scaffold(
         containerColor = colors.container,

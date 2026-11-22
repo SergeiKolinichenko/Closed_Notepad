@@ -74,6 +74,28 @@ interface NotesDao {
         return id
     }
 
+    // Locked notes written before they were encrypted, in the trash too
+    @Transaction
+    @Query("SELECT * FROM notes WHERE isLocked = 1 AND body NOT LIKE 'sealed:v1:%'")
+    suspend fun plainLockedNotes(): List<NoteWithItems>
+
+    @Query("UPDATE notes SET body = :newBody WHERE id = :id AND body = :oldBody")
+    suspend fun replaceBody(id: Long, oldBody: String, newBody: String): Int
+
+    // Puts the encrypted content in place of the text and drops the items, all or nothing.
+    // seal throws if the result doesn't open back to the same content, and then nothing is changed.
+    @Transaction
+    suspend fun sealPlainLockedNotes(seal: (NoteWithItems) -> String): Int {
+        var count = 0
+        plainLockedNotes().forEach { note ->
+            if (replaceBody(note.note.id, note.note.body, seal(note)) == 1) {
+                deleteItems(note.note.id)
+                count++
+            }
+        }
+        return count
+    }
+
     @Query("UPDATE notes SET removedAt = :removedAt WHERE id IN (:ids)")
     suspend fun moveToTrash(ids: List<Long>, removedAt: Long)
 

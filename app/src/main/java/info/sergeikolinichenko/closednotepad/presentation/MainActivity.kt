@@ -14,6 +14,7 @@ import info.sergeikolinichenko.closednotepad.presentation.navigation.LocalAppCom
 import info.sergeikolinichenko.closednotepad.presentation.security.Authenticator
 import info.sergeikolinichenko.closednotepad.presentation.shortcuts.NewNoteIntents
 import info.sergeikolinichenko.closednotepad.presentation.security.LocalAuthenticator
+import info.sergeikolinichenko.closednotepad.presentation.security.VaultDialogs
 import info.sergeikolinichenko.closednotepad.presentation.ui.theme.ClosedNotepadTheme
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -29,7 +30,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        val authenticator = Authenticator(this)
+        val authenticator = Authenticator(this, component.notesVault())
         setContent {
             CompositionLocalProvider(
                 LocalAppComponent provides component,
@@ -37,6 +38,7 @@ class MainActivity : FragmentActivity() {
             ) {
                 ClosedNotepadTheme {
                     AppNavHost(component = component, openNoteRequests = openNoteRequests.receiveAsFlow())
+                    VaultDialogs(authenticator)
                 }
             }
         }

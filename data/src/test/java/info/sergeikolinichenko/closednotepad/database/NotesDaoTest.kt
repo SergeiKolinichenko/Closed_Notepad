@@ -6,6 +6,7 @@ import info.sergeikolinichenko.closednotepad.models.Note
 import info.sergeikolinichenko.closednotepad.models.NoteItem
 import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.repositories.NotesRepositoryImpl
+import info.sergeikolinichenko.closednotepad.security.TestVaults
 import info.sergeikolinichenko.closednotepad.utils.NoteMapper
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -32,7 +33,7 @@ class NotesDaoTest {
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
         ).allowMainThreadQueries().build()
-        repository = NotesRepositoryImpl(NoteMapper(), db.notesDao())
+        repository = NotesRepositoryImpl(NoteMapper(), db.notesDao(), TestVaults.vault())
     }
 
     @After

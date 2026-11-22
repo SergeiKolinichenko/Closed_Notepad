@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.handwriting.handwritingDetector
+import androidx.compose.foundation.text.handwriting.handwritingHandler
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
@@ -46,6 +50,7 @@ fun TextEditor(
     onTitle: (String) -> Unit,
     onBody: (String) -> Unit
 ) {
+    val bodyFocus = remember { FocusRequester() }
     Column(
         Modifier
             .fillMaxSize()
@@ -58,9 +63,13 @@ fun TextEditor(
             style = MaterialTheme.typography.labelMedium,
             color = colors.contentVariant
         )
-        Spacer(Modifier.height(8.dp))
-        LinedTextField(note.body, colors, onBody)
-        Spacer(Modifier.height(48.dp))
+        // A stylus can write anywhere on the sheet below the title, not only on the
+        // text lines: the system keyboard (Android 14+) turns the handwriting into text
+        Column(Modifier.handwritingDetector { bodyFocus.requestFocus() }) {
+            Spacer(Modifier.height(8.dp))
+            LinedTextField(note.body, colors, onBody, bodyFocus)
+            Spacer(Modifier.height(48.dp))
+        }
     }
 }
 
@@ -88,7 +97,12 @@ fun TitleField(title: String, colors: NoteColorScheme, onTitle: (String) -> Unit
 
 // Text on lined paper, like the notepad of version 2.x
 @Composable
-private fun LinedTextField(text: String, colors: NoteColorScheme, onText: (String) -> Unit) {
+private fun LinedTextField(
+    text: String,
+    colors: NoteColorScheme,
+    onText: (String) -> Unit,
+    focusRequester: FocusRequester
+) {
     var layout by remember { mutableStateOf<TextLayoutResult?>(null) }
     val lineHeightPx = with(LocalDensity.current) { LINE_HEIGHT.toPx() }
     val style = TextStyle(fontFamily = SansFamily, fontSize = 17.sp, lineHeight = LINE_HEIGHT, color = colors.content)
@@ -102,6 +116,8 @@ private fun LinedTextField(text: String, colors: NoteColorScheme, onText: (Strin
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 400.dp)
+            .focusRequester(focusRequester)
+            .handwritingHandler()
             .drawBehind {
                 val textLines = layout?.lineCount ?: 0
                 val count = maxOf(textLines, (size.height / lineHeightPx).toInt())

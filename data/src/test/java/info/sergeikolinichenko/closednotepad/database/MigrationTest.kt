@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import info.sergeikolinichenko.closednotepad.models.NoteType
 import info.sergeikolinichenko.closednotepad.repositories.NotesRepositoryImpl
+import info.sergeikolinichenko.closednotepad.security.TestVaults
 import info.sergeikolinichenko.closednotepad.utils.NoteMapper
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -52,7 +53,7 @@ class MigrationTest {
             AppDatabase::class.java,
             TEST_DB
         ).addMigrations(MIGRATION_1_2).allowMainThreadQueries().build()
-        val repository = NotesRepositoryImpl(NoteMapper(), db.notesDao())
+        val repository = NotesRepositoryImpl(NoteMapper(), db.notesDao(), TestVaults.vault())
 
         val notes = repository.observeNotes().first().sortedBy { it.createdAt }
         assertEquals(listOf("Shopping", "Wi-Fi"), notes.map { it.title })

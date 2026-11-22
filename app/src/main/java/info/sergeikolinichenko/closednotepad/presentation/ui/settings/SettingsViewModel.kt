@@ -11,6 +11,7 @@ import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessage
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessages
 import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepository
+import info.sergeikolinichenko.closednotepad.security.NotesVault
 import info.sergeikolinichenko.closednotepad.usecases.TrashPolicy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,6 +28,7 @@ class SettingsViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
     private val notesTransfer: NotesTransfer,
     private val uiMessages: UiMessages,
+    vault: NotesVault,
     @AppCoroutineScope private val appScope: CoroutineScope
 ) : ViewModel() {
 
@@ -34,6 +36,9 @@ class SettingsViewModel @Inject constructor(
     val lockedCount: StateFlow<Int> = notesRepository.observeNotes()
         .map { notes -> notes.count { it.isLocked } }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+
+    // Whether locked notes are encrypted, i.e. the password is set
+    val encrypted: StateFlow<Boolean> = vault.isSetUp
 
     private val _transferring = MutableStateFlow(false)
     val transferring: StateFlow<Boolean> = _transferring.asStateFlow()

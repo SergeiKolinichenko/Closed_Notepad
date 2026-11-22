@@ -12,6 +12,7 @@ import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessage
 import info.sergeikolinichenko.closednotepad.presentation.ui.common.UiMessages
 import info.sergeikolinichenko.closednotepad.repositories.NotesRepository
 import info.sergeikolinichenko.closednotepad.repositories.PreferencesRepository
+import info.sergeikolinichenko.closednotepad.security.NotesVault
 import info.sergeikolinichenko.closednotepad.usecases.NoteSorter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,8 +43,18 @@ data class HomeState(
 class HomeViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val uiMessages: UiMessages
+    private val uiMessages: UiMessages,
+    vault: NotesVault
 ) : ViewModel() {
+
+    // Locked notes from before the update stay unencrypted until the password is set
+    val offerEncryption: StateFlow<Boolean> = combine(
+        vault.isSetUp,
+        notesRepository.observeNotes(),
+        notesRepository.observeTrash()
+    ) { setUp, notes, trash ->
+        !setUp && (notes.any { it.isLocked } || trash.any { it.isLocked })
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), false)
 
     private val filter = MutableStateFlow(NoteFilter.ALL)
     private val selected = MutableStateFlow<Set<Long>>(emptySet())

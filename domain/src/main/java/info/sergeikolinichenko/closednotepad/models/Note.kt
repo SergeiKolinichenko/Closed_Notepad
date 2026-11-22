@@ -22,10 +22,13 @@ data class Note(
     val isPinned: Boolean = false,
     val createdAt: Long,
     val updatedAt: Long,
-    val removedAt: Long? = null
+    val removedAt: Long? = null,
+    // A locked note whose content is still encrypted: body and items are empty until it is unlocked
+    val isSealed: Boolean = false
 ) {
+    // A sealed note is never blank, its content is just not readable yet
     val isBlank: Boolean
-        get() = title.isBlank() && body.isBlank() && items.all { it.text.isBlank() }
+        get() = !isSealed && title.isBlank() && body.isBlank() && items.all { it.text.isBlank() }
 
     val checkedCount: Int
         get() = items.count { it.isChecked }
