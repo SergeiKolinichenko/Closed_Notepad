@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.PersistableBundle
 import android.view.WindowManager
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ListAlt
 import androidx.compose.material.icons.automirrored.outlined.Notes
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Lock
@@ -30,6 +32,7 @@ import androidx.compose.material.icons.outlined.RemoveDone
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Storefront
 import androidx.compose.material.icons.outlined.DeleteSweep
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,6 +46,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -77,9 +81,10 @@ import kotlinx.coroutines.launch
 fun EditorScreen(
     viewModel: EditorViewModel,
     noteId: Long,
+    isNew: Boolean,
     onBack: () -> Unit
 ) {
-    LaunchedEffect(noteId) { viewModel.start(noteId) }
+    LaunchedEffect(noteId) { viewModel.start(noteId, isNew) }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when (val current = state) {
@@ -97,6 +102,8 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
     val noteLock = LocalAppComponent.current.noteLock()
     val unlocked by noteLock.unlocked.collectAsStateWithLifecycle()
     val saved by viewModel.saved.collectAsStateWithLifecycle()
+    val hasChanges by viewModel.hasChanges.collectAsStateWithLifecycle()
+    var confirmLeave by rememberSaveable { mutableStateOf(false) }
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var showColors by rememberSaveable { mutableStateOf(false) }
@@ -121,6 +128,29 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
     LaunchedEffect(needsUnlock) { if (needsUnlock) unlock() }
     SecureWindow(enabled = note.isLocked)
 
+    // An existing note with changes asks before it is left
+    fun leave() {
+        if (hasChanges) confirmLeave = true else onBack()
+    }
+    BackHandler(enabled = hasChanges) { confirmLeave = true }
+    if (confirmLeave && hasChanges) {
+        AlertDialog(
+            onDismissRequest = { confirmLeave = false },
+            title = { Text(stringResource(R.string.save_changes_title)) },
+            text = { Text(stringResource(R.string.save_changes_text)) },
+            confirmButton = {
+                TextButton(onClick = { confirmLeave = false; viewModel.saveAndClose(onBack) }) {
+                    Text(stringResource(R.string.yes))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { confirmLeave = false; viewModel.discardAndClose(onBack) }) {
+                    Text(stringResource(R.string.no))
+                }
+            }
+        )
+    }
+
     if (storeMode && !hidden) {
         StoreMode(viewModel = viewModel, note = note, onClose = { storeMode = false })
         return
@@ -139,19 +169,26 @@ private fun NoteEditor(viewModel: EditorViewModel, note: Note, onBack: () -> Uni
                     actionIconContentColor = colors.content
                 ),
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
+                    IconButton(onClick = ::leave) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 title = {
                     if (!hidden) {
-                        Text(
-                            stringResource(if (saved) R.string.saved else R.string.saving),
-                            style = MaterialTheme.typography.labelMedium
-                        )
+                        val status = when {
+                            hasChanges -> R.string.not_saved
+                            saved -> R.string.saved
+                            else -> R.string.saving
+                        }
+                        Text(stringResource(status), style = MaterialTheme.typography.labelMedium)
                     }
                 },
                 actions = {
+                    if (!hidden && hasChanges) {
+                        IconButton(onClick = viewModel::saveChanges) {
+                            Icon(Icons.Outlined.Check, contentDescription = stringResource(R.string.save_changes))
+                        }
+                    }
                     if (!hidden) {
                         EditorActions(
                             note = note,
