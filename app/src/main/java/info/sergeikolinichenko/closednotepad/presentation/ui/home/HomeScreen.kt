@@ -110,6 +110,7 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     snackbarHostState: SnackbarHostState,
     onOpenNote: (Long) -> Unit,
+    onNoteCreated: (Long) -> Unit,
     onSearch: () -> Unit,
     onTrash: () -> Unit,
     onSettings: () -> Unit
@@ -160,7 +161,7 @@ fun HomeScreen(
             if (!selecting) {
                 QuickBar(
                     onSave = viewModel::saveQuickNote,
-                    onCreate = { type -> viewModel.createNote(type, onOpenNote) }
+                    onCreate = { type -> viewModel.createNote(type, onNoteCreated) }
                 )
             }
         },
@@ -175,7 +176,7 @@ fun HomeScreen(
                 !state.loaded -> Unit
                 state.notes.isEmpty() -> EmptyState(
                     hasAnyNotes = state.hasAnyNotes,
-                    onCreate = { viewModel.createNote(NoteType.TEXT, onOpenNote) }
+                    onCreate = { viewModel.createNote(NoteType.TEXT, onNoteCreated) }
                 )
                 else -> NotesContent(
                     state = state,

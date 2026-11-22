@@ -67,6 +67,12 @@
     <string name="back">Назад</string>
     <string name="saved">Запазено</string>
     <string name="saving">Запазване…</string>
+    <string name="not_saved">Не е запазено</string>
+    <string name="save_changes">Запази промените</string>
+    <string name="save_changes_title">Да се запазят ли промените?</string>
+    <string name="save_changes_text">Бележката е променена. Ако отговорите „Не“, промените ще бъдат отхвърлени.</string>
+    <string name="yes">Да</string>
+    <string name="no">Не</string>
     <string name="lock_note">Заключи бележката</string>
     <string name="unlock_note">Отключи бележката</string>
     <string name="share">Сподели</string>

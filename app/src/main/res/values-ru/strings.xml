@@ -67,6 +67,12 @@
     <string name="back">Назад</string>
     <string name="saved">Сохранено</string>
     <string name="saving">Сохранение…</string>
+    <string name="not_saved">Не сохранено</string>
+    <string name="save_changes">Сохранить изменения</string>
+    <string name="save_changes_title">Сохранить изменения?</string>
+    <string name="save_changes_text">Заметка изменена. Если ответить «Нет», правки будут отменены.</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
     <string name="lock_note">Закрыть заметку</string>
     <string name="unlock_note">Открыть заметку</string>
     <string name="share">Поделиться</string>

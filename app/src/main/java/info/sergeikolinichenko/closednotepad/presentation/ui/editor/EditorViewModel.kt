@@ -34,8 +34,12 @@ sealed interface EditorState {
     data class Ready(val note: Note) : EditorState
 }
 
-// Edits one note. Every change is saved automatically a moment later,
-// and the last change is saved even when the screen is closed.
+// Edits one note. A note that was just created is saved automatically a moment
+// after every change, and the last change is saved even when the screen is closed.
+// An existing note keeps its changes in memory until the user confirms them:
+// with the save button or with "Yes" in the dialog shown on leaving the note.
+// Changes that were not confirmed are lost if the system kills the app in the
+// background; they are never written anywhere unencrypted.
 @OptIn(FlowPreview::class)
 class EditorViewModel @Inject constructor(
     private val notesRepository: NotesRepository,
@@ -51,6 +55,10 @@ class EditorViewModel @Inject constructor(
     private val _saved = MutableStateFlow(true)
     val saved: StateFlow<Boolean> = _saved.asStateFlow()
 
+    // An existing note differs from its saved version
+    private val _hasChanges = MutableStateFlow(false)
+    val hasChanges: StateFlow<Boolean> = _hasChanges.asStateFlow()
+
     private val _suggestions = MutableStateFlow<List<String>>(emptyList())
     val suggestions: StateFlow<List<String>> = _suggestions.asStateFlow()
 
@@ -64,6 +72,10 @@ class EditorViewModel @Inject constructor(
     private var dirty = false
     @Volatile
     private var closed = false
+    // True for a note that was just created, false for an existing one
+    private var autoSave = true
+    // The saved version of an existing note
+    private var original: Note? = null
 
     private val note: Note?
         get() = (_state.value as? EditorState.Ready)?.note
@@ -74,13 +86,15 @@ class EditorViewModel @Inject constructor(
         }
     }
 
-    fun start(id: Long) {
+    fun start(id: Long, isNew: Boolean) {
         if (noteId != null) return
         noteId = id
+        autoSave = isNew
         noteLock.noteOpened(id)
         viewModelScope.launch {
             var loaded = notesRepository.getNote(id)
             _state.value = if (loaded == null || loaded.isInTrash) EditorState.NotFound else EditorState.Ready(loaded)
+            original = loaded
             if (loaded?.type == NoteType.SHOPPING) loadSuggestions()
             // An encrypted note is read again once the user has unlocked it
             while (loaded != null && loaded.isSealed) {
@@ -90,7 +104,10 @@ class EditorViewModel @Inject constructor(
                     _state.value = EditorState.NotFound
                     return@launch
                 }
-                if (!loaded.isSealed) _state.value = EditorState.Ready(loaded)
+                if (!loaded.isSealed) {
+                    _state.value = EditorState.Ready(loaded)
+                    original = loaded
+                }
                 else vault.unlocked.first { !it }
             }
         }
@@ -109,9 +126,53 @@ class EditorViewModel @Inject constructor(
         val changed = transform(current)
         if (changed == current) return
         _state.value = EditorState.Ready(changed.copy(updatedAt = System.currentTimeMillis()))
+        if (!autoSave) {
+            _hasChanges.value = differsFromOriginal(changed)
+            return
+        }
         dirty = true
         _saved.value = false
         changes.tryEmit(Unit)
+    }
+
+    // The time of the last change alone is not a change
+    private fun differsFromOriginal(changed: Note): Boolean {
+        val saved = original ?: return true
+        return changed.copy(updatedAt = saved.updatedAt) != saved
+    }
+
+    // Saves the changes of an existing note and stays in the editor
+    fun saveChanges() {
+        if (autoSave || closed || !_hasChanges.value) return
+        val snapshot = note ?: return
+        original = snapshot
+        _hasChanges.value = false
+        appScope.launch { saveMutex.withLock { notesRepository.saveNote(snapshot) } }
+    }
+
+    // "Yes" in the dialog: the changes are saved and the note is closed
+    fun saveAndClose(onDone: () -> Unit) {
+        val id = noteId
+        val snapshot = note
+        if (!autoSave && !closed && _hasChanges.value && id != null && snapshot != null) {
+            closed = true
+            appScope.launch {
+                if (snapshot.isBlank) {
+                    // An emptied note goes to the trash with its saved content, so it can be restored
+                    saveMutex.withLock { notesRepository.moveToTrash(listOf(id), System.currentTimeMillis()) }
+                    uiMessages.show(UiMessage(R.plurals.moved_to_trash, count = 1, undo = { notesRepository.restore(listOf(id)) }))
+                } else {
+                    saveMutex.withLock { notesRepository.saveNote(snapshot) }
+                }
+            }
+        }
+        onDone()
+    }
+
+    // "No" in the dialog: the changes are dropped and the saved note stays as it was
+    fun discardAndClose(onDone: () -> Unit) {
+        if (!autoSave) closed = true
+        onDone()
     }
 
     private fun saveNow() {
@@ -222,7 +283,8 @@ class EditorViewModel @Inject constructor(
 
     fun moveToTrash(onDone: () -> Unit) {
         val id = noteId ?: return
-        saveNow()
+        // Unconfirmed changes of an existing note are dropped with it
+        if (autoSave) saveNow()
         closed = true
         appScope.launch {
             saveMutex.withLock { notesRepository.moveToTrash(listOf(id), System.currentTimeMillis()) }
@@ -234,12 +296,13 @@ class EditorViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         val id = noteId ?: return
-        saveNow()
+        if (autoSave) saveNow()
         val last = note
+        val removeIfBlank = autoSave && !closed
         appScope.launch {
             saveMutex.withLock {
-                // A note that was left empty is not kept
-                if (!closed && last != null && last.isBlank) notesRepository.deleteForever(listOf(id))
+                // A new note that was left empty is not kept
+                if (removeIfBlank && last != null && last.isBlank) notesRepository.deleteForever(listOf(id))
             }
             noteLock.noteClosed(id)
         }

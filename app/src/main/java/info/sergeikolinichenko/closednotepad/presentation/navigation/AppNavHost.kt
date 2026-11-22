@@ -40,14 +40,15 @@ val LocalAppComponent = staticCompositionLocalOf<ApplicationComponent> {
 
 private object Routes {
     const val HOME = "home"
-    const val NOTE = "note/{id}"
+    const val NOTE = "note/{id}?new={new}"
     const val SEARCH = "search"
     const val TRASH = "trash"
     const val TRASH_NOTE = "trash/{id}"
     const val SETTINGS = "settings"
     const val ARG_ID = "id"
+    const val ARG_NEW = "new"
 
-    fun note(id: Long) = "note/$id"
+    fun note(id: Long, isNew: Boolean = false) = "note/$id?new=$isNew"
     fun trashNote(id: Long) = "trash/$id"
 }
 
@@ -62,9 +63,9 @@ fun AppNavHost(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    // Notes shared from other apps open right away
+    // Notes shared from other apps or created from a shortcut open right away
     LaunchedEffect(openNoteRequests) {
-        openNoteRequests.collect { id -> navController.navigate(Routes.note(id)) { launchSingleTop = true } }
+        openNoteRequests.collect { id -> navController.navigate(Routes.note(id, isNew = true)) { launchSingleTop = true } }
     }
 
     LaunchedEffect(Unit) {
@@ -90,6 +91,7 @@ fun AppNavHost(
                 viewModel = viewModel<HomeViewModel>(factory = factory),
                 snackbarHostState = snackbarHostState,
                 onOpenNote = { navController.navigate(Routes.note(it)) },
+                onNoteCreated = { navController.navigate(Routes.note(it, isNew = true)) },
                 onSearch = { navController.navigate(Routes.SEARCH) },
                 onTrash = { navController.navigate(Routes.TRASH) },
                 onSettings = { navController.navigate(Routes.SETTINGS) }
@@ -97,11 +99,15 @@ fun AppNavHost(
         }
         composable(
             Routes.NOTE,
-            arguments = listOf(navArgument(Routes.ARG_ID) { type = NavType.LongType })
+            arguments = listOf(
+                navArgument(Routes.ARG_ID) { type = NavType.LongType },
+                navArgument(Routes.ARG_NEW) { type = NavType.BoolType; defaultValue = false }
+            )
         ) { entry ->
             EditorScreen(
                 viewModel = viewModel<EditorViewModel>(factory = factory),
                 noteId = entry.arguments?.getLong(Routes.ARG_ID) ?: 0L,
+                isNew = entry.arguments?.getBoolean(Routes.ARG_NEW) ?: false,
                 onBack = { navController.popBackStack() }
             )
         }

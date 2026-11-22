@@ -67,6 +67,12 @@
     <string name="back">Back</string>
     <string name="saved">Saved</string>
     <string name="saving">Saving…</string>
+    <string name="not_saved">Not saved</string>
+    <string name="save_changes">Save changes</string>
+    <string name="save_changes_title">Save changes?</string>
+    <string name="save_changes_text">The note was changed. If you answer “No”, your edits will be discarded.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
     <string name="share">Share</string>
