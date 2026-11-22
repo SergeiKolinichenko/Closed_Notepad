@@ -211,6 +211,12 @@ class EditorViewModel @Inject constructor(
         if (text.isEmpty()) _focusItemId.value = item.id
     }
 
+    // Puts the cursor in an empty item left at the end of the open ones, or adds a new item
+    fun focusEmptyOrAddItem() {
+        val last = note?.items?.lastOrNull { !it.isChecked }
+        if (last != null && last.text.isEmpty()) _focusItemId.value = last.id else addItem()
+    }
+
     // New items go after the open ones, above the checked ones
     private fun firstCheckedIndex(items: List<NoteItem>): Int {
         val lastOpen = items.indexOfLast { !it.isChecked }
